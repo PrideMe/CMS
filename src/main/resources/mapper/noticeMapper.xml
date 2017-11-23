@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wangjikai.dao.NoticeDao">
+    <select id="findByPage" parameterType="map" resultType="com.wangjikai.domain.Notice">
+        SELECT * FROM notice
+        <if test="notice != null">
+            <where>
+                <if test="notice.title != null and notice.title != ''">
+                    title LIKE CONCAT('%',#{notice.title},'%')
+                </if>
+                <if test="notice.context != null and notice.context != ''">
+                    AND context LIKE CONCAT ('%',#{notice.context},'%')
+                </if>
+            </where>
+        </if>
+        <if test="page != null">
+            LIMIT #{page.firstLimitParam},#{page.pageSize};
+        </if>
+    </select>
+
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT COUNT(1) FROM notice
+        <if test="notice != null">
+            <where>
+                <if test="notice.title != null and notice.title != ''">
+                    title LIKE CONCAT('%',#{notice.title},'%')
+                </if>
+                <if test="notice.context != null and notice.context != ''">
+                    AND context LIKE CONCAT ('%',#{notice.context},'%')
+                </if>
+            </where>
+        </if>
+    </select>
+    
+    <select id="findById" parameterType="Integer" resultType="com.wangjikai.domain.Notice">
+        SELECT * FROM notice WHERE id = #{id};
+    </select>
+    
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM notice WHERE id = #{id}
+    </delete>
+
+    <insert id="save" parameterType="com.wangjikai.domain.Notice">
+        INSERT INTO notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title,
+            </if>
+            <if test="context != null and context != ''">
+                context,
+            </if>
+            <if test="user != null and user.id != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                #{title},
+            </if>
+            <if test="context != null and context != ''">
+                #{context},
+            </if>
+            <if test="user != null and user.id != null">
+                #{user.id},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.wangjikai.domain.Notice">
+        UPDATE notice
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="context != null and context != ''">
+                context = #{context},
+            </if>
+            <if test="user != null and user.id != ''">
+                user_id = #{user.id},
+            </if>
+        </set>
+    </update>
+</mapper>

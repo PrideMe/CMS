@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wangjikai.dao.DocumentDao">
+    <select id="findByPage" parameterType="map" resultType="com.wangjikai.domain.Document">
+        SELECT * FROM document
+        <if test="document != null">
+            <if test="document.title != null and document.title != ''">
+                WHERE title LIKE CONCAT ('%',#{document.title},'%')
+            </if>
+        </if>
+        <if test="page != null">
+            LIMIT #{page.firstLimitParam},#{page.pageSize};
+        </if>
+    </select>
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT COUNT(1) FROM document
+        <if test="document != null">
+            <if test="document.title != null and document.title != ''">
+                WHERE title LIKE CONCAT ('%',#{document.title},'%')
+            </if>
+        </if>
+    </select>
+    <insert id="save" parameterType="com.wangjikai.domain.Document">
+        INSERT INTO document
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title,
+            </if>
+            <if test="filename !=null and filename != ''">
+                filename,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="user != null and user.id != null">
+                user_id,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                #{title},
+            </if>
+            <if test="filename !=null and filename != ''">
+                #{filename},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark},
+            </if>
+            <if test="user != null and user.id != null">
+                #{user.id},
+            </if>
+        </trim>
+    </insert>
+    <select id="findById" parameterType="Integer" resultType="com.wangjikai.domain.Document">
+        SELECT * FROM document WHERE id = #{id};
+    </select>
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM document WHERE id = #{id};
+    </delete>
+    <update id="update" parameterType="com.wangjikai.domain.Document">
+        UPDATE document
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="filename !=null and filename != ''">
+                filename = #{filename},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="user != null and user.id != null">
+                user_id = #{user.id},
+            </if>
+        </set>
+    </update>
+</mapper>

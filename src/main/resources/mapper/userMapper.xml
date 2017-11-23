@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wangjikai.dao.UserDao">
+    <select id="selectByLoginnameAndPassword" resultType="com.wangjikai.domain.User">
+    SELECT * FROM user WHERE loginname = #{loginname} AND password = #{password};
+</select>
+    <select id="selectById" resultType="com.wangjikai.domain.User" parameterType="Integer">
+        SELECT * FROM user WHERE id = #{id};
+    </select>
+    <delete id="deleteById">
+        DELETE FROM user WHERE id = #{id};
+    </delete>
+    <update id="update" parameterType="com.wangjikai.domain.User">
+        UPDATE user
+        <set>
+            <if test="loginname != null">loginname=#{loginname},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="username != null">username=#{username},</if>
+            <if test="status != null">status=#{status},</if>
+        </set>
+        WHERE id = #{id};
+    </update>
+    <select id="selectByPage" parameterType="map" resultType="com.wangjikai.domain.User">
+        SELECT * FROM user
+        <if test="user != null">
+            <where>
+                <if test="user.loginname != null and user.loginname != ''">
+                    loginname LIKE CONCAT('%',#{user.loginname},'%')
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    AND username LIKE CONCAT('%',#{user.username},'%')
+                </if>
+                <if test="user.status != null and user.status != ''">
+                    AND status LIKE CONCAT('%',#{user.status},'%')
+                </if>
+            </where>
+        </if>
+        <if test="page != null">
+            LIMIT #{page.firstLimitParam},#{page.rowCount};
+        </if>
+    </select>
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT COUNT(*) FROM user
+        <if test="user != null">
+            <where>
+                <if test="user.loginname != null and user.loginname != ''">
+                    loginname LIKE CONCAT('%',#{user.loginname},'%')
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    AND username LIKE CONCAT('%',#{user.username},'%')
+                </if>
+                <if test="user.status != null and user.status != ''">
+                    AND status LIKE CONCAT('%',#{user.status},'%')
+                </if>
+            </where>
+        </if>
+    </select>
+
+    <insert id="insertUser" parameterType="com.wangjikai.domain.User" useGeneratedKeys="true" flushCache="true">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="loginname != null and loginname != ''">
+                loginname,
+            </if>
+            <if test="password != null and password != ''">
+                password,
+            </if>
+            <if test="status != null and status != ''">
+                status,
+            </if>
+            <if test="username != null and username != ''">
+                username,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="loginname != null and loginname != ''">
+                #{loginname},
+            </if>
+            <if test="password != null and password != ''">
+                #{password},
+            </if>
+            <if test="status != null and status != ''">
+                #{status},
+            </if>
+            <if test="username != null and username != ''">
+                #{username},
+            </if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wangjikai.dao.EmployeeDao">
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT COUNT(*) FROM employee
+        <if test="employee != null">
+            <where>
+                <if test="employee.department != null and employee.department.id != null and employee.department.id != 0 ">
+                    dept_id = #{employee.department.id}
+                </if>
+                <if test="employee.job != null and employee.job.id != null and employee.job.id !=0 ">
+                    AND job_id = #{employee.job.id}
+                </if>
+                <if test="employee.name != null and employee.name != ''">
+                    AND name LIKE CONCAT('%',#{employee.name},'%')
+                </if>
+                <if test="employee.phone != null and employee.phone != ''">
+                    AND phone LIKE CONCAT('%',#{employee.phone},'%')
+                </if>
+                <if test="employee.card_id != null and employee.card_id != ''">
+                    AND card_id LIKE CONCAT('%',#{employee.card_id},'%')
+                </if>
+                <if test="employee.sex != null">
+                    AND sex = #{employee.sex}
+                </if>
+            </where>
+        </if>
+    </select>
+
+    <select id="findByPage" parameterType="map" resultMap="employeeResultMap">
+        SELECT * FROM employee
+        <if test="employee != null">
+            <where>
+                <if test="employee.department != null and employee.department.id != null and employee.department.id != 0 ">
+                    dept_id = #{employee.department.id}
+                </if>
+                <if test="employee.job != null and employee.job.id != null and employee.job.id !=0 ">
+                    AND job_id = #{employee.job.id}
+                </if>
+                <if test="employee.name != null and employee.name != ''">
+                    AND name LIKE CONCAT('%',#{employee.name},'%')
+                </if>
+                <if test="employee.phone != null and employee.phone != ''">
+                    AND phone LIKE CONCAT('%',#{employee.phone},'%')
+                </if>
+                <if test="employee.card_id != null and employee.card_id != ''">
+                    AND card_id LIKE CONCAT('%',#{employee.card_id},'%')
+                </if>
+                <if test="employee.sex != null">
+                    AND sex = #{employee.sex}
+                </if>
+            </where>
+        </if>
+        <if test="page != null">
+            LIMIT #{page.firstLimitParam},#{page.pageSize};
+        </if>
+    </select>
+
+    <resultMap id="employeeResultMap" type="com.wangjikai.domain.Employee">
+        <id property="id" column="id"/>
+        <association property="department" column="dept_id" javaType="com.wangjikai.domain.Department" select="com.wangjikai.dao.DepartmentDao.findById"/>
+        <association property="job" column="job_id" javaType="com.wangjikai.domain.Job" select="com.wangjikai.dao.JobDao.findById"/>
+    </resultMap>
+
+    <insert id="save" parameterType="com.wangjikai.domain.Employee" useGeneratedKeys="true" flushCache="true">
+        INSERT INTO employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="department != null">
+                dept_id,
+            </if>
+            <if test="job != null">
+                job_id,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="card_id != null and card_id != ''">
+                card_id,
+            </if>
+            <if test="address != null and address != ''">
+                address,
+            </if>
+            <if test="post_code != null and post_code != ''">
+                post_code,
+            </if>
+            <if test="tel != null and tel != ''">
+                tel,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="qq != null and qq != ''">
+                qq,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="party != null and party != ''">
+                party,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="race != null and race != ''">
+                race,
+            </if>
+            <if test="education != null and education != ''">
+                education,
+            </if>
+            <if test="speciality != null and speciality != ''">
+                speciality,
+            </if>
+            <if test="hobby != null and hobby != ''">
+                hobby,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="createdate != null">
+                createdate,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="department != null">
+                #{department.id},
+            </if>
+            <if test="job != null">
+                #{job.id},
+            </if>
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="card_id != null and card_id != ''">
+                #{card_id},
+            </if>
+            <if test="address != null and address != ''">
+                #{address},
+            </if>
+            <if test="post_code != null and post_code != ''">
+                #{post_code},
+            </if>
+            <if test="tel != null and tel != ''">
+                #{tel},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone},
+            </if>
+            <if test="qq != null and qq != ''">
+                #{qq},
+            </if>
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="party != null and party != ''">
+                #{party},
+            </if>
+            <if test="birthday != null">
+                #{birthday},
+            </if>
+            <if test="race != null and race != ''">
+                #{race},
+            </if>
+            <if test="education != null and education != ''">
+                #{education},
+            </if>
+            <if test="speciality != null and speciality != ''">
+                #{speciality},
+            </if>
+            <if test="hobby != null and hobby != ''">
+                #{hobby},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark},
+            </if>
+            <if test="createdate != null">
+                #{createdate},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM employee WHERE id = #{id};
+    </delete>
+
+    <select id="findById" parameterType="Integer" resultType="com.wangjikai.domain.Employee">
+        SELECT * FROM employee WHERE id = #{id};
+    </select>
+
+    <update id="update" parameterType="com.wangjikai.domain.Employee">
+        UPDATE employee
+        <set>
+            <if test="department != null">
+                dept_id = #{department.id},
+            </if>
+            <if test="job != null">
+                job_id = #{job.id},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="card_id != null and card_id != ''">
+                card_id = #{card_id},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="post_code != null and post_code != ''">
+                post_code = #{post_code},
+            </if>
+            <if test="tel != null and tel != ''">
+                tel = #{tel},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="qq != null and qq != ''">
+                qq = #{qq},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="party != null">
+                party = #{party},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="race != null and race != ''">
+                race = #{race},
+            </if>
+            <if test="education != null and education != ''">
+                education = #{education},
+            </if>
+            <if test="speciality != null and speciality != ''">
+                speciality = #{speciality},
+            </if>
+            <if test="hobby != null and hobby != ''">
+                hobby = #{hobby},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createdate != null">
+                createdate = #{createdate},
+            </if>
+        </set>
+        WHERE id = #{id};
+    </update>
+</mapper>
