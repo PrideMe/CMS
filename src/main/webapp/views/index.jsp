@@ -13,11 +13,14 @@
     <link rel="stylesheet" href="${ctx}/css/metisMenu.css">
     <link rel="stylesheet" href="${ctx}/css/jquery.bootgrid.min.css">
     <link rel="stylesheet" href="${ctx}/css/nprogress.css">
+    <link rel="stylesheet" href="${ctx}/css/bootstrap-datetimepicker.css">
     <link href="${ctx}/images/favicon.ico" rel="shortcut icon">
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/metisMenu.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/nprogress.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <style type="text/css">
         *{
             margin: 0;
@@ -144,42 +147,6 @@
                 <li><a href="#" onclick="showAtRight('${ctx}/userPage')" ><i class="fa fa-list"></i> 订单列表</a></li>
             </ul>
         </div>
-        <%--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Link</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>--%>
     </div>
 </nav>
 
@@ -302,57 +269,56 @@
             </div>
 
 
-            <table data-toggle="table">
-                <thead>
-                <tr>
-                    <th>Item ID</th>
-                    <th>Item Name</th>
-                    <th>Item Price</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Item 1</td>
-                    <td>$1</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Item 2</td>
-                    <td>$2</td>
-                </tr>
-                </tbody>
-            </table>
-
-
-            <h3>Auto Collapse<small>default</small></h3>
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    Code
-                    <span class="pull-right">
-                            <span class="fa fa-code"></span>
-                        </span>
-                </div>
+                <div class="panel-heading">查询条件</div>
                 <div class="panel-body">
-                        <pre class=" language-markup"><code class=" language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>metisMenu.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script language-javascript">
-                        <span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                        <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'#menu'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">metisMenu</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span></code></pre>
-
+                    <table data-toggle="table">
+                        <thead>
+                        <tr>
+                            <th>商品ID</th>
+                            <th>商品名称</th>
+                            <th>商品价格</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>iphone X</td>
+                            <td>￥8899</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>海尔洗衣机</td>
+                            <td>￥3580</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            <div id="toolbar" class="btn-group">
+                <button id="btn_add" type="button" class="btn btn-default">
+                    <span class="fa fa-plus fa-fw" aria-hidden="true"></span>新增
+                </button>
+                <button id="btn_edit" type="button" class="btn btn-default">
+                    <span class="fa fa-pencil fa-fw" aria-hidden="true"></span>修改
+                </button>
+                <button id="btn_delete" type="button" class="btn btn-default">
+                    <span class="fa fa-trash-o fa-fw" aria-hidden="true"></span>删除
+                </button>
+            </div>
+
+            <div id="datetime" class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                <input class="form-control" size="16" type="text" value="" readonly placeholder="时间选择器">
+                <span class="input-group-addon"><span class="fa fa-calendar fa-fw"></span></span>
+            </div>
 
 
+            <h3>Auto Collapse<small>default</small></h3>
 
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    Code
-                    <span class="pull-right">
-                            <span class="fa fa-code"></span>
-                        </span>
+                <div class="panel-heading">Code
+                    <span class="pull-right"><span class="fa fa-code"></span></span>
                 </div>
                 <div class="panel-body">
                         <pre class=" language-markup"><code class=" language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>metisMenu.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
@@ -377,6 +343,14 @@
             NProgress.done();
         });
     }
+    $("#datetime").datetimepicker({
+        format: "yyyy年mm月dd日 - hh:ii:ss",
+        autoclose: true,
+        todayHighlight: true,
+        language:"zh-CN",
+        todayBtn: true,
+        pickerPosition: "bottom-center"
+    });
 </script>
 
 </body>

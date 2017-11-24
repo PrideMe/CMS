@@ -38,7 +38,7 @@
         "operation" : function (column,row) {
             var info = "";
             info += "<button onclick='' class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
-            info += "<button onclick=\"deleteUser('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash-o fa-lg\"></i>删除</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"deleteUser('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash-o fa-fw\"></i>删除</button>&nbsp;&nbsp;";
             return info;
         }
     };

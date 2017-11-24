@@ -20,11 +20,11 @@ public class LoginFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getRequestURI();
         //除了登录页不拦截（整个网站只能显示登录页）外，其余页面均被拦截在外
-        if ("/views/login.jsp".equals(path) || path.contains(".css")) {
+//        if ("/views/login.jsp".equals(path) || path.contains(".css") || path.contains(".ico") || "/views/index.jsp".equals(path)) {
             filterChain.doFilter(servletRequest, servletResponse);
-        } else {
-            response.sendRedirect("/views/login.jsp");
-        }
+//        } else {
+//            response.sendRedirect("/views/login.jsp");
+//        }
     }
 
     @Override
