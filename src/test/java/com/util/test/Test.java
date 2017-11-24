@@ -53,7 +53,6 @@ public class Test extends JPanel {
         jsDimension.append("}").append(LS);
         jsDimension.append("return width + ':' + height;");
     }
-    //DJNativeSwing组件请于http://djproject.sourceforge<a href="http://lib.csdn.net/base/dotnet" class='replace_word' title=".NET知识库" target='_blank' style='color:#df3434; font-weight:bold;'>.NET</a>/main/index.html下载
     public Test(final String url, final int maxWidth, final int maxHeight) {
         super(new BorderLayout());
         JPanel webBrowserPanel = new JPanel(new BorderLayout());

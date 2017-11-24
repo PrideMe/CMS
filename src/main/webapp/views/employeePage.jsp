@@ -14,21 +14,21 @@
     <thead>
     <tr>
         <th data-column-id="id" data-identifier="true" data-type="numeric" data-visible="false" data-sortable="true">ID</th>
-        <th data-column-id="department" data-formatter="dep" data-visible="true">部门</th>
-        <th data-column-id="job" data-formatter="job" data-visible="true">职位</th>
-        <th data-column-id="name" data-visible="true">姓名</th>
+        <th data-column-id="department" data-formatter="dep" data-width="80px">部门</th>
+        <th data-column-id="job" data-formatter="job" data-width="80px">职位</th>
+        <th data-column-id="name" data-width="90px">姓名</th>
         <%--<th data-column-id="card_id" data-visible="true">ID卡</th>--%>
         <th data-column-id="address"  data-visible="true">地址</th>
         <%--<th data-column-id="post_code"  data-visible="true">邮编</th>--%>
         <th data-column-id="phone"  data-visible="true">手机</th>
         <%--<th data-column-id="qq"  data-visible="true">QQ</th>--%>
         <th data-column-id="email"  data-visible="true">邮箱</th>
-        <%--<th data-column-id="sex"  data-visible="true">性别</th>--%>
+        <th data-column-id="sex"  data-visible="true" data-formatter="sexx" data-width="70px" data-align="center" data-header-align="center">性别</th>
         <%--<th data-column-id="party"  data-visible="true">政党</th>--%>
-        <%--<th data-column-id="birthday" data-formatter="statuss" data-visible="true">生日</th>--%>
+        <th data-column-id="birthday" data-formatter="statuss" data-visible="true">生日</th>
         <%--<th data-column-id="race"  data-visible="true">民族</th>--%>
         <%--<th data-column-id="education"  data-visible="true">学历</th>--%>
-        <th data-column-id="speciality"  data-visible="true">专业</th>
+        <th data-column-id="speciality"  data-visible="true" data-width="80px">专业</th>
         <th data-column-id="remark"  data-visible="true">备注</th>
         <th data-column-id="" data-formatter="operation" data-visible="true">操作</th>
     </tr>
@@ -42,6 +42,15 @@
         },
         "job" :function (column,row) {
             var temp = row.job.name;
+            return temp;
+        },
+        "sexx" :function (column,row) {
+            var temp = "";
+            if ("1" == row.sex){
+                temp = "男";
+            }else {
+                temp = "女";
+            }
             return temp;
         },
         "operation" : function (column,row) {

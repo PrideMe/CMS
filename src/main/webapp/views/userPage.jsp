@@ -18,7 +18,7 @@
         <th data-column-id="username" data-visible="true">用户名</th>
         <th data-column-id="password" data-visible="true">密码</th>
         <th data-column-id="createdate" data-visible="true">创建时间</th>
-        <th data-column-id="status" data-formatter="statuss" data-visible="true">状态</th>
+        <th data-column-id="status" data-formatter="statuss" data-width="70px" data-header-align="center" data-align="center">状态</th>
         <th data-column-id="" data-formatter="operation" data-visible="true">操作</th>
     </tr>
     </thead>
