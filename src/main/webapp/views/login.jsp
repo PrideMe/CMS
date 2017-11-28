@@ -43,8 +43,7 @@
         });
     });
     $(document).ready(function() {
-        $('#loginForm')
-            .bootstrapValidator({
+        $('#loginForm').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
@@ -69,7 +68,7 @@
                              },*/
                             regexp: {
                                 regexp: /^[a-zA-Z0-9_\.]+$/,
-                                message: 'The username can only consist of alphabetical, number, dot and underscore'
+                                message: '用户名只能由字母，数字，点号和下划线组成'
                             }
                         }
                     },
@@ -77,25 +76,15 @@
                         validators: {
                             notEmpty: {
                                 message: '密码不能为空'
+                            },
+                            stringLength: {
+                                min: 6,
+                                max: 30,
+                                message: '密码必须是多于6个字符少于30个字符'
                             }
                         }
                     }
                 }
-            })
-            .on('success.form.bv', function(e) {
-                // Prevent form submission
-                e.preventDefault();
-
-                // Get the form instance
-                var $form = $(e.target);
-
-                // Get the BootstrapValidator instance
-                var bv = $form.data('bootstrapValidator');
-
-                // Use Ajax to submit form data
-                $.post($form.attr('action'), $form.serialize(), function(result) {
-                    console.log(result);
-                }, 'json');
             });
     });
 </script>
