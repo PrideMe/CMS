@@ -6,6 +6,9 @@ import com.wangjikai.domain.Job;
 import com.wangjikai.domain.User;
 import com.wangjikai.service.CmsService;
 import com.wangjikai.util.Page;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,11 +48,15 @@ public class UserController {
         for (String s : map.keySet()) {
             System.out.println(s+"="+request.getParameter(s));
         }
+        Subject currentUser = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+        currentUser.login(token);
 
         User user = cmsService.login(username,password);
         //request.setAttribute("",user);
         if (null != user){
-            return "redirect:/index";
+
+            return "redirect:/";
         } else {
             return "login";
         }

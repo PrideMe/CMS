@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+    <!--Shiro过滤器-->
+    <bean id="shiro" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--Shiro的核心安全接口,这个属性是必须的-->
+        <property name="securityManager" ref="securityManager"/>
+        <!--身份认证失败，则跳转到登录页面的配置-->
+        <property name="loginUrl" value="/login"/>
+        <!--权限认证失败，跳转到【无权限】页面-->
+        <property name="unauthorizedUrl" value="/views/unauthor.jsp"/>
+        <!--shiro过滤链-->
+        <property name="filterChainDefinitions">
+            <value>
+                /css/** = anon
+                /fonts/** = anon
+                /images/** = anon
+                /js/** = anon
+                /login = anon
+                /404/** = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="permissionsRealm"/>
+    </bean>
+
+    <bean id="permissionsRealm" class="com.wangjikai.shiro.PermissionsRealm"/>
+
+    <!--保证实现了Shiro内部lifecycle函数的bean执行-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+</beans>
