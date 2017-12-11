@@ -19,7 +19,8 @@
                 /images/** = anon
                 /js/** = anon
                 /login = anon
-                /404/** = anon
+                /check = anon
+                /WEB-INF/views/404.jsp = anon
                 /** = authc
             </value>
         </property>

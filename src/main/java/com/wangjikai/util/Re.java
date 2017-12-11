@@ -22,7 +22,7 @@ public class Re<T> {
 
 //        String classFile = "com7jd7". replaceAll("\\D", "/") + "MyClass.class";
 //        System.out.println(classFile);
-        boolean b=true?false:true==true?false:true;
+        boolean b = true ? false : true == true ? false : true;
         System.out.println(b);
     }
 }

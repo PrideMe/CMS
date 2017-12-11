@@ -53,13 +53,13 @@ public class Test extends JPanel {
         jsDimension.append("}").append(LS);
         jsDimension.append("return width + ':' + height;");
     }
+    //DJNativeSwing组件请于http://djproject.sourceforge<a href="http://lib.csdn.net/base/dotnet" class='replace_word' title=".NET知识库" target='_blank' style='color:#df3434; font-weight:bold;'>.NET</a>/main/index.html下载
     public Test(final String url, final int maxWidth, final int maxHeight) {
         super(new BorderLayout());
         JPanel webBrowserPanel = new JPanel(new BorderLayout());
         final String fileName = System.currentTimeMillis() + ".jpg";
         final JWebBrowser webBrowser = new JWebBrowser(null);
         webBrowser.setBarsVisible(false);
-        //webBrowser.setHTMLContent(");
         webBrowser.navigate(url);
         webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
         add(webBrowserPanel, BorderLayout.CENTER);
@@ -72,17 +72,16 @@ public class Test extends JPanel {
                                                      String result = (String) webBrowser
                                                              .executeJavascriptWithResult(jsDimension.toString());
                                                      int index = result == null ? -1 : result.indexOf(":");
-                                                     NativeComponent nativeComponent = webBrowser.getNativeComponent();
+                                                     NativeComponent nativeComponent = webBrowser
+                                                             .getNativeComponent();
                                                      Dimension originalSize = nativeComponent.getSize();
-                                                     System.out.println(originalSize.getWidth());
-                                                     System.out.println(originalSize.getHeight());
                                                      Dimension imageSize = new Dimension(Integer.parseInt(result
                                                              .substring(0, index)), Integer.parseInt(result
                                                              .substring(index + 1)));
-                                                     System.out.println(imageSize.getWidth());
-                                                     System.out.println(imageSize.getHeight());
-                                                     imageSize.width = 1200;
-                                                     imageSize.height = 1024;
+                                                     imageSize.width = Math.max(originalSize.width,
+                                                             imageSize.width + 50);
+                                                     imageSize.height = Math.max(originalSize.height,
+                                                             imageSize.height + 50);
                                                      nativeComponent.setSize(imageSize);
                                                      BufferedImage image = new BufferedImage(imageSize.width,
                                                              imageSize.height, BufferedImage.TYPE_INT_RGB);
@@ -125,10 +124,8 @@ public class Test extends JPanel {
                 // SWT组件转Swing组件，不初始化父窗体将无法启动webBrowser
                 JFrame frame = new JFrame("以DJ组件保存指定网页截图");
                 // 加载指定页面，最大保存为640x480的截图
-                frame.getContentPane().add(
-                        new Test("http://www.huanqiu.com", 1200, 1080),
-                        BorderLayout.CENTER);
-                frame.setSize(1000, 1080);
+                frame.getContentPane().add(new Test("http://echarts.baidu.com/tutorial.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9E%84%E5%BB%BA%20ECharts", 1024, 768), BorderLayout.CENTER);
+                frame.setSize(1024, 768);
                 // 仅初始化，但不显示
                 frame.invalidate();
                 frame.pack();

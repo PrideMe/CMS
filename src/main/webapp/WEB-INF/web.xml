@@ -57,10 +57,21 @@
         <servlet-name>springMVC</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <!--禁止通过URL访问views页面-->
+    <!--此方法通过tomcat默认标签的形式控制资源的访问，被访问的url会提示403错误。
+        或者可以通过将views全部移动到WEB-INF中来控制访问，同时在webapp下通过一个
+        默认的index页面跳转-->
+    <!--<security-constraint>-->
+        <!--<web-resource-collection>-->
+            <!--<web-resource-name>forbidden</web-resource-name>-->
+            <!--<url-pattern>/views/*</url-pattern>-->
+        <!--</web-resource-collection>-->
+        <!--<auth-constraint/>-->
+    <!--</security-constraint>-->
     <!--错误页面-->
     <error-page>
         <error-code>404</error-code>
-        <location>/views/404.jsp</location>
+        <location>/WEB-INF/views/404.jsp</location>
     </error-page>
     <session-config>
         <!--超时时间-->

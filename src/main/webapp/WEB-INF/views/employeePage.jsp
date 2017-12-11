@@ -14,13 +14,13 @@
     <thead>
     <tr>
         <th data-column-id="id" data-identifier="true" data-type="numeric" data-visible="false" data-sortable="true">ID</th>
-        <th data-column-id="department" data-formatter="dep" data-width="80px">部门</th>
-        <th data-column-id="job" data-formatter="job" data-width="80px">职位</th>
+        <th data-column-id="department" data-formatter="dep" data-width="65px">部门</th>
+        <th data-column-id="job" data-formatter="job" data-width="65px">职位</th>
         <th data-column-id="name" data-width="90px">姓名</th>
         <%--<th data-column-id="card_id" data-visible="true">ID卡</th>--%>
-        <th data-column-id="address"  data-visible="true">地址</th>
+        <th data-column-id="address"  data-visible="true" data-width="90px">地址</th>
         <%--<th data-column-id="post_code"  data-visible="true">邮编</th>--%>
-        <th data-column-id="phone"  data-visible="true">手机</th>
+        <th data-column-id="phone"  data-visible="true" data-width="110px">手机</th>
         <%--<th data-column-id="qq"  data-visible="true">QQ</th>--%>
         <th data-column-id="email"  data-visible="true">邮箱</th>
         <th data-column-id="sex"  data-visible="true" data-formatter="sexx" data-width="70px" data-align="center" data-header-align="center">性别</th>
@@ -55,8 +55,8 @@
         },
         "operation" : function (column,row) {
             var info = "";
-            info += "<button onclick='' class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
-            info += "<button onclick=\"deleteUser('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash-o fa-lg\"></i>删除</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"showEmployeeById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"deleteUser('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash fa-fw\"></i>删除</button>&nbsp;&nbsp;";
             return info;
         }
     };
@@ -67,7 +67,7 @@
             url: "${ctx}/employeeData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
             rowCount:[10,15,20],
-            rowSelect: true,   //点击项目选择
+            //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,
             keepSelection: true,
@@ -87,6 +87,28 @@
             $("#employeeList tr").removeClass("warning");
         });
     });
+    //显示单个部门
+    function showEmployeeById(id) {
+        alert(id)
+        <%--$.ajax({--%>
+        <%--dataType: "JSON",--%>
+        <%--url: "${ctx}/getUserById",--%>
+        <%--type: "POST",--%>
+        <%--data: {"id": id},--%>
+        <%--success: function (data) {--%>
+        <%--//alert(data.loginname);--%>
+        <%--$("#modalLabel").text(data.loginname);--%>
+        <%--$("#userId").val(data.id);--%>
+        <%--$("#loginname").val(data.loginname);--%>
+        <%--$("#username").val(data.username);--%>
+        <%--$("#password").val(data.password);--%>
+        <%--$("#status").val(data.status);--%>
+        <%--},--%>
+        <%--error: function () {--%>
+        <%--alert("请求失败");--%>
+        <%--}--%>
+        <%--});--%>
+    }
 </script>
 </body>
 </html>

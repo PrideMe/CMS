@@ -23,6 +23,44 @@
     </tr>
     </thead>
 </table>
+<div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="modalLabel">修改数据</h4>
+            </div>
+            <form id="editUser" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="input-group hidden">
+                        <div class="input-group-addon">id</div>
+                        <input class="form-control" id="userId" name="id">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">登录名</div>
+                        <input class="form-control" id="loginname" name="loginname" placeholder="请输入登录名">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">用户名</div>
+                        <input class="form-control" id="username" name="username" placeholder="请输入用户名">
+                    </div>
+                    <div class="input-group hidden">
+                        <div class="input-group-addon">密码</div>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">状&nbsp;&nbsp;&nbsp;态</div>
+                        <input class="form-control" id="status" name="status" placeholder="请输入状态">
+                    </div><br/>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="updateUser()" class="btn btn-success">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var formatters = {
         "statuss" :function (column,row) {
@@ -37,8 +75,8 @@
         },
         "operation" : function (column,row) {
             var info = "";
-            info += "<button onclick='' class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
-            info += "<button onclick=\"deleteUser('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash-o fa-fw\"></i>删除</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"showUserById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"deleteUser('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash fa-fw\"></i>删除</button>";
             return info;
         }
     };
@@ -49,7 +87,7 @@
             url: "${ctx}/getUser",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
             rowCount:[10,15,20],
-            rowSelect: true,   //点击项目选择
+            //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,
             keepSelection: true,
@@ -102,21 +140,45 @@
                 }
             }
         });
-    };
-    //修改用户操作
-    function updateUser(id) {
+    }
+    //显示单个用户
+    function showUserById(id) {
         $.ajax({
-            //contentType : 'application/json;charset=utf-8',
             dataType: "JSON",
-            url: "${ctx}/deleteUser",
+            url: "${ctx}/getUserById",
             type: "POST",
             data: {"id": id},
             success: function (data) {
-                bootbox.confirm("删除成功！", function (result) {});
+                //alert(data.loginname);
+                $("#modalLabel").text(data.loginname);
+                $("#userId").val(data.id);
+                $("#loginname").val(data.loginname);
+                $("#username").val(data.username);
+                $("#password").val(data.password);
+                $("#status").val(data.status);
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+        $('#updateUser').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
+            $(this).removeData("bs.modal");
+        });
+    }
+    //修改用户
+    function updateUser() {
+        var data = $("#editUser").serialize();
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/updateUserById",
+            type: "POST",
+            data: data,
+            success: function (data) {
+                bootbox.alert("修改成功！");
                 $("#grid-data").bootgrid("reload");
             },
             error: function () {
-                alert("失败");
+                alert("修改失败！");
             }
         });
     }

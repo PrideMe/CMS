@@ -20,10 +20,43 @@
     </tr>
     </thead>
 </table>
+<div class="modal fade" id="updateDepartment" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="departmentLabel">修改数据</h4>
+            </div>
+            <form id="editDepartment" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="input-group hidden">
+                        <div class="input-group-addon">id</div>
+                        <input class="form-control" id="departmentId" name="id">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">部门</div>
+                        <input class="form-control" id="departmentname" name="name" placeholder="请输入部门">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">备注</div>
+                        <input class="form-control" id="remark" name="remark" placeholder="请输入备注">
+                    </div><br/>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="updateDepartment()" class="btn btn-success">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var formatters = {
         "operation" :function (column,row) {
-            return "<button onclick=\"deleteDepartment('"+row.id+"')\" class=\"btn btn-danger btn-xs\">删除</button>";
+            var info = "";
+            info += "<button onclick=\"showDepartmentById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"deleteDepartment('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash fa-fw\"></i>删除</button>";
+            return info;
         }
     };
     //主动加载请求，填充表格数据
@@ -33,7 +66,7 @@
             url: "${ctx}/departmentData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
             rowCount:[10,15,20],
-            rowSelect: true,   //点击项目选择
+            //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,
             keepSelection: true,
@@ -85,7 +118,45 @@
                 }
             }
         });
-    };
+    }
+    //显示单个部门
+    function showDepartmentById(id) {
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/getDepartmentById",
+            type: "POST",
+            data: {"id": id},
+            success: function (data) {
+                $("#departmentLabel").text(data.name);
+                $("#departmentId").val(data.id);
+                $("#departmentname").val(data.name);
+                $("#remark").val(data.remark);
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+        $('#updateDepartment').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
+            $(this).removeData("bs.modal");
+        });
+    }
+    //修改部门
+    function updateDepartment() {
+        var data = $("#editDepartment").serialize();
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/updateDepartmentById",
+            type: "POST",
+            data: data,
+            success: function (data) {
+                bootbox.alert("修改成功！");
+                $("#departmentList").bootgrid("reload");
+            },
+            error: function () {
+                alert("修改失败！");
+            }
+        });
+    }
 </script>
 </body>
 </html>

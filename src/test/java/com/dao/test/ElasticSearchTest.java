@@ -51,4 +51,14 @@ public class ElasticSearchTest {
         //template.delete
         //template.putMapping("test","user",user);
     }
+
+    //添加、更新
+    @Test
+    public void testBulk(){
+        User user = new User("王吉凯","27","女","杭州","中电");
+        List<IndexQuery> queries = new ArrayList<>();
+        IndexQuery indexQuery = new IndexQueryBuilder().withIndexName("test").withType("user").withId("2").withObject(user).build();
+        queries.add(indexQuery);
+        template.bulkIndex(queries);
+    }
 }

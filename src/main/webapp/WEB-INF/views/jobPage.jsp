@@ -20,10 +20,43 @@
     </tr>
     </thead>
 </table>
+<div class="modal fade" id="updateJob" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="jobLabel">修改数据</h4>
+            </div>
+            <form id="editjob" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="input-group hidden">
+                        <div class="input-group-addon">id</div>
+                        <input class="form-control" id="jobId" name="id">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">职位</div>
+                        <input class="form-control" id="jobname" name="name" placeholder="请输入职位">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">备注</div>
+                        <input class="form-control" id="remark" name="remark" placeholder="请输入备注">
+                    </div><br/>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="updateJob()" class="btn btn-success">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var formatters = {
         "operation" :function (column,row) {
-            return "<button onclick=\"deleteDepartment('"+row.id+"')\" class=\"btn btn-danger btn-xs\">删除</button>";
+            var info = "";
+            info += "<button onclick=\"showJobById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"deleteDepartment('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash fa-fw\"></i>删除</button>";
+            return info;
         }
     };
     //主动加载请求，填充表格数据
@@ -33,7 +66,7 @@
             url: "${ctx}/jobData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
             rowCount:[10,15,20],
-            rowSelect: true,   //点击项目选择
+            //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,
             keepSelection: true,
@@ -85,7 +118,45 @@
                 }
             }
         });
-    };
+    }
+    //显示单个职位
+    function showJobById(id) {
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/getJobById",
+            type: "POST",
+            data: {"id": id},
+            success: function (data) {
+                $("#jobLabel").text(data.name);
+                $("#jobId").val(data.id);
+                $("#jobname").val(data.name);
+                $("#remark").val(data.remark);
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+        $('#updateJob').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
+            $(this).removeData("bs.modal");
+        });
+    }
+    //修改职位
+    function updateJob() {
+        var data = $("#editjob").serialize();
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/updateJobById",
+            type: "POST",
+            data: data,
+            success: function (data) {
+                bootbox.alert("修改成功！");
+                $("#jobList").bootgrid("reload");
+            },
+            error: function () {
+                alert("修改失败！");
+            }
+        });
+    }
 </script>
 </body>
 </html>

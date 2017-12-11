@@ -7,6 +7,9 @@ import com.wangjikai.domain.User;
 import com.wangjikai.service.CmsService;
 import com.wangjikai.util.Page;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -44,22 +47,40 @@ public class UserController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         //拿到所有参数
-        Map<String,String[]> map = request.getParameterMap();
-        for (String s : map.keySet()) {
-            System.out.println(s+"="+request.getParameter(s));
-        }
+//        Map<String,String[]> map = request.getParameterMap();
+//        for (String s : map.keySet()) {
+//            System.out.println(s+"="+request.getParameter(s));
+//        }
         Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
-        currentUser.login(token);
-
-        User user = cmsService.login(username,password);
-        //request.setAttribute("",user);
-        if (null != user){
-
-            return "redirect:/";
-        } else {
+        try {
+            currentUser.login(token);
+        }catch (UnknownAccountException e){
+            System.out.println("用户名/密码错误");
+            return "login";
+        }catch (ExcessiveAttemptsException e){
+            System.out.println("失败次数过多，锁定");
+            return "login";
+        }catch (AuthenticationException e){
+            System.out.println(e.getMessage());
             return "login";
         }
+        return "redirect:/";
+        //User user = cmsService.login(username,password);
+        //request.setAttribute("",user);
+    }
+
+    //检查用户名冲突
+    @RequestMapping(value = "/check",method = RequestMethod.POST)
+    @ResponseBody
+    public  Map<String,Object> checkUsername(String username){
+        //System.out.println(username);
+        Map<String,Object> map = new HashMap<>();
+        if ("wangjikai".equals(username))
+            map.put("valid",false);
+        else
+            map.put("valid",true);
+        return map;
     }
 
     //请求访问主页
@@ -101,6 +122,53 @@ public class UserController {
         return map;
     }
 
+    @RequestMapping(value = {"getUserById"},method = RequestMethod.POST)
+    @ResponseBody
+    public User getUserById(int id){
+        Map<String,Object> map = new HashMap<>();
+        User user = cmsService.findUserById(id);
+        return user;
+    }
+
+    @RequestMapping(value = {"updateUserById"},method = RequestMethod.POST)
+    @ResponseBody
+    public User updateUserById(User user){
+        //System.out.println(user);
+        cmsService.modifyUser(user);
+        return user;
+    }
+
+    @RequestMapping(value = {"getDepartmentById"},method = RequestMethod.POST)
+    @ResponseBody
+    public Department getDepartmentById(int id) {
+        Map<String, Object> map = new HashMap<>();
+        Department department = cmsService.findDepartmentById(id);
+        return department;
+    }
+
+    @RequestMapping(value = {"updateDepartmentById"},method = RequestMethod.POST)
+    @ResponseBody
+    public Department updateDepartmentById(Department department){
+        //System.out.println(department);
+        cmsService.modifyDepartment(department);
+        return department;
+    }
+
+    @RequestMapping(value = {"getJobById"},method = RequestMethod.POST)
+    @ResponseBody
+    public Job getJobById(int id){
+        Map<String,Object> map = new HashMap<>();
+        Job job = cmsService.findJobById(id);
+        return job;
+    }
+
+    @RequestMapping(value = {"updateJobById"},method = RequestMethod.POST)
+    @ResponseBody
+    public Job updateJobById(Job job){
+        cmsService.modifyJob(job);
+        return job;
+    }
+
     @RequestMapping(value = {"left"})
     public String madsn(){
         return "left";
@@ -119,7 +187,7 @@ public class UserController {
     @RequestMapping(value = {"addUserData"},method = RequestMethod.POST)
     public String addUserData(User user){
         cmsService.addUser(user);
-        return "index";
+        return "redirect:/index";
     }
 
     @RequestMapping(value = "deleteUser",method = RequestMethod.POST)
@@ -152,7 +220,7 @@ public class UserController {
     @RequestMapping(value = {"addDepartment"},method = RequestMethod.POST)
     public String addDepartment(Department department){
         cmsService.addDepartment(department);
-        return "index";
+        return "redirect:/index";
     }
 
     @RequestMapping(value = {"departmentPage"})
@@ -253,6 +321,6 @@ public class UserController {
     @RequestMapping(value = {"addJob"},method = RequestMethod.POST)
     public String addJob(Job job){
         cmsService.addJob(job);
-        return "index";
+        return "redirect:/index";
     }
 }

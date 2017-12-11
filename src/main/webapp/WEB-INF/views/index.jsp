@@ -109,6 +109,18 @@
         .table-hover>tbody>tr>th.active:hover{
             background-color: #dff0d8;
         }
+        .navbar .nav > li .dropdown-menu {
+            margin: 0;
+        }
+        .navbar .nav > li:hover .dropdown-menu {
+            display: block;
+        }
+        .carousel-control.left {
+            background-image: none;
+        }
+        .carousel-control.right {
+            background-image: none;
+        }
     </style>
     <script>
         $(function () {
@@ -142,10 +154,11 @@
             <a class="navbar-brand" href="${ctx}/index">CMS人事管理系统</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+            <button class="btn btn-primary navbar-right" style="margin-top: 7px;margin-left: 7px;margin-right: 1px;"><i class="fa fa-user fa-fw"></i>登陆</button>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-users"></i> 用户列表</a></li>
-                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list-alt"></i> 产品列表</a></li>
-                <li><a href="#" onclick="showAtRight('${ctx}/userPage')" ><i class="fa fa-list"></i> 订单列表</a></li>
+                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-users fa-fw"></i> 用户列表</a></li>
+                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list-alt fa-fw"></i> 产品列表</a></li>
+                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list fa-fw"></i> 订单列表</a></li>
             </ul>
         </div>
     </div>
@@ -249,15 +262,44 @@
     </aside>
     <section class="content">
         <div class="col-xs-12" id="rightContent">
+            <div id="myCarousel" class="carousel slide" style="width: 960px;height: 400px">
+                <!-- 轮播（Carousel）指标 -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <!-- 轮播（Carousel）项目 -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="${ctx}/images/bg1.jpg" alt="First slide">
+                    </div>
+                    <div class="item">
+                        <img src="${ctx}/images/bg2.png" alt="Second slide">
+                    </div>
+                    <div class="item">
+                        <img src="${ctx}/images/bg3.jpg" alt="Third slide">
+                    </div>
+                </div>
+                <!-- 轮播（Carousel）导航 -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
             <h2>创建模态框（Modal）</h2>
             <!-- 按钮触发模态框 -->
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">开始演示模态框</button>
             <!-- 模态框（Modal） -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
                         </div>
                         <div class="modal-body">在这里添加一些文本</div>
@@ -309,13 +351,15 @@
                 </button>
             </div>
 
-            <div id="datetime" class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+            <div id="datetime" class="input-group date form_datetime col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                 <input class="form-control" size="16" type="text" value="" readonly placeholder="时间选择器">
                 <span class="input-group-addon"><span class="fa fa-calendar fa-fw"></span></span>
             </div>
 
 
             <div id="echarts" style="width: 600px;height:400px;margin-top: 30px"></div>
+            <div id="echarts_zhuzhuang" style="width:600px;height:400px;margin-top: 30px"></div>
+            <div id="echarts_zhexian" style="width:600px;height:400px;margin-top: 30px"></div>
 
 
             <h3>Auto Collapse<small>default</small></h3>
@@ -340,24 +384,36 @@
 </div>
 
 <script type="text/javascript">
+    //自动轮播
+    $(function () {
+        $("#myCarousel").carousel('cycle');
+        $("#myCarousel a.left").click(function(){
+            $(".carousel").carousel("prev");
+        });
+        $("#myCarousel a.right").click(function(){
+            $(".carousel").carousel("next");
+        });
+    })
     //在右侧显示
     function showAtRight(url) {
         NProgress.start();
         $("#rightContent").load(url,function () {
             NProgress.done();
         });
-    }
+    };
     $("#datetime").datetimepicker({
         format: "yyyy年mm月dd日 - hh:ii:ss",
-        autoclose: true,
+        //autoclose: true,
         todayHighlight: true,
         language:"zh-CN",
         todayBtn: true,
-        pickerPosition: "bottom-center"
+        //pickerPosition: "bottom-center"
     });
 
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init($("#echarts")[0]);
+    var zhuzhuangtu = echarts.init($("#echarts_zhuzhuang")[0]);
+    var zhexiantu = echarts.init($("#echarts_zhexian")[0]);
 
     // 指定图表的配置项和数据
     var option = {
@@ -380,7 +436,181 @@
     };
 
     // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+//    myChart.setOption({
+//        backgroundColor: '#2c343c',
+//        roseType: 'angle',
+//        series : [
+//            {
+//                name:"访问来源",
+//                type:"pie",
+//                radius:"65%",
+//                data:[
+//                    {value:235,name:"视频广告"},
+//                    {value:274,name:'联盟广告'},
+//                    {value:310,name:'邮件营销'},
+//                    {value:335,name:'直接访问'},
+//                    {value:400,name:'搜索引擎'}
+//                ]
+//            }
+//        ]
+//    });
+    myChart.setOption({
+        xAxis: {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'value'
+        },
+        dataZoom: [
+            {   // 这个dataZoom组件，默认控制x轴。
+                type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                start: 10,      // 左边在 10% 的位置。
+                end: 60         // 右边在 60% 的位置。
+            },
+            {   // 这个dataZoom组件，也控制x轴。
+                type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+                start: 10,      // 左边在 10% 的位置。
+                end: 60         // 右边在 60% 的位置。
+            }
+        ],
+        series: [
+            {
+                type: 'scatter', // 这是个『散点图』
+                itemStyle: {
+                    normal: {
+                        opacity: 0.8
+                    }
+                },
+                symbolSize: function (val) {
+                    return val[2] * 40;
+                },
+                data: [["14.616","7.241","0.896"],["3.958","5.701","0.955"],["2.768","8.971","0.669"],["9.051","9.710","0.171"],["14.046","4.182","0.536"],["12.295","1.429","0.962"],["4.417","8.167","0.113"],["0.492","4.771","0.785"],["7.632","2.605","0.645"],["14.242","5.042","0.368"]]
+            }
+        ]
+    })
+    zhuzhuangtu.setOption({
+        color: ['#3398DB'],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'直接访问',
+                type:'bar',
+                barWidth: '60%',
+                data:[10, 52, 200, 334, 390, 330, 220]
+            }
+        ]
+    })
+    zhexiantu.setOption({
+        title: {
+            text: '未来一周气温变化',
+            subtext: '纯属虚构'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['最高气温','最低气温']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {
+                    type:"png",
+                    name:"123"
+                }
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一','周二','周三','周四','周五','周六','周日']
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} °C'
+            }
+        },
+        series: [
+            {
+                name:'最高气温',
+                type:'line',
+                data:[11, 11, 15, 13, 12, 13, 10],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'最低气温',
+                type:'line',
+                data:[1, -2, 2, 5, 3, 2, 0],
+                markPoint: {
+                    data: [
+                        {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'},
+                        [{
+                            symbol: 'none',
+                            x: '90%',
+                            yAxis: 'max'
+                        }, {
+                            symbol: 'circle',
+                            label: {
+                                normal: {
+                                    position: 'start',
+                                    formatter: '最大值'
+                                }
+                            },
+                            type: 'max',
+                            name: '最高点'
+                        }]
+                    ]
+                }
+            }
+        ]
+    })
 </script>
 
 </body>
