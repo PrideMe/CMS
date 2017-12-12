@@ -34,6 +34,36 @@
     </tr>
     </thead>
 </table>
+<div class="modal fade" id="updateEmployee" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="departmentLabel">修改数据</h4>
+            </div>
+            <form id="editEmployee" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="input-group hidden">
+                        <div class="input-group-addon">id</div>
+                        <input class="form-control" id="employeeId" name="id">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">部门</div>
+                        <input class="form-control" id="employeename" name="name" placeholder="请输入部门">
+                    </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">备注</div>
+                        <input class="form-control" id="remark" name="remark" placeholder="请输入备注">
+                    </div><br/>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="" class="btn btn-success">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var formatters = {
         "dep" :function (column,row) {
@@ -87,27 +117,26 @@
             $("#employeeList tr").removeClass("warning");
         });
     });
-    //显示单个部门
+    //显示单个雇员
     function showEmployeeById(id) {
-        alert(id)
-        <%--$.ajax({--%>
-        <%--dataType: "JSON",--%>
-        <%--url: "${ctx}/getUserById",--%>
-        <%--type: "POST",--%>
-        <%--data: {"id": id},--%>
-        <%--success: function (data) {--%>
-        <%--//alert(data.loginname);--%>
-        <%--$("#modalLabel").text(data.loginname);--%>
-        <%--$("#userId").val(data.id);--%>
-        <%--$("#loginname").val(data.loginname);--%>
-        <%--$("#username").val(data.username);--%>
-        <%--$("#password").val(data.password);--%>
-        <%--$("#status").val(data.status);--%>
-        <%--},--%>
-        <%--error: function () {--%>
-        <%--alert("请求失败");--%>
-        <%--}--%>
-        <%--});--%>
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/getEmployeeById",
+            type: "POST",
+            data: {"id": id},
+            success: function (data) {
+                $("#departmentLabel").text(data.name);
+                $("#employeeId").val(data.id);
+                $("#employeename").val(data.department.name);
+                $("#remark").val(data.remark);
+            },
+            error: function () {
+                alert("请求失败");
+            }
+        });
+        $('#updateEmployee').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
+            $(this).removeData("bs.modal");
+        });
     }
 </script>
 </body>

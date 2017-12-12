@@ -221,9 +221,10 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>Menu 1.3 <span class="fa plus-times"></span></a>
+                            <a href="#" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
+                                Menu 1.3 <span class="fa plus-times"></span></a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>item 1.3.1</a></li>
+                                <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
                                 <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>item 1.3.2</a></li>
                             </ul>
                         </li>
@@ -369,12 +370,30 @@
                     <span class="pull-right"><span class="fa fa-code"></span></span>
                 </div>
                 <div class="panel-body">
-                        <pre class=" language-markup"><code class=" language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>metisMenu.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script language-javascript">
-                        <span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                        <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'#menu'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">metisMenu</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span></code></pre>
+                        <pre class=" language-markup"><code class=" language-markup"><span class="token tag"><span
+                                class="token tag"><span class="token punctuation">&lt;</span>script</span> <span
+                                class="token attr-name">src</span><span class="token attr-value"><span
+                                class="token punctuation">=</span><span
+                                class="token punctuation">"</span>metisMenu.js<span
+                                class="token punctuation">"</span></span><span
+                                class="token punctuation">&gt;</span></span><span
+                                class="token script language-javascript"></span><span class="token tag"><span
+                                class="token tag"><span class="token punctuation">&lt;/</span>script</span><span
+                                class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span
+        class="token punctuation">&gt;</span></span><span class="token script language-javascript">
+                        <span class="token function">$</span><span class="token punctuation">(</span><span
+                                    class="token keyword">function</span> <span class="token punctuation">(</span><span
+                                    class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token function">$</span><span class="token punctuation">(</span><span
+                                    class="token string">'#menu'</span><span class="token punctuation">)</span><span
+                                    class="token punctuation">.</span><span class="token function">metisMenu</span><span
+                                    class="token punctuation">(</span><span class="token punctuation">)</span><span
+                                    class="token punctuation">;</span>
+                        <span class="token punctuation">}</span><span class="token punctuation">)</span><span
+                                    class="token punctuation">;</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span
+                                    class="token punctuation">&gt;</span></span></code></pre>
 
                 </div>
             </div>
@@ -484,7 +503,18 @@
                 symbolSize: function (val) {
                     return val[2] * 40;
                 },
-                data: [["14.616","7.241","0.896"],["3.958","5.701","0.955"],["2.768","8.971","0.669"],["9.051","9.710","0.171"],["14.046","4.182","0.536"],["12.295","1.429","0.962"],["4.417","8.167","0.113"],["0.492","4.771","0.785"],["7.632","2.605","0.645"],["14.242","5.042","0.368"]]
+                data: [
+                    ["14.616", "7.241", "0.896"],
+                    ["3.958", "5.701", "0.955"],
+                    ["2.768", "8.971", "0.669"],
+                    ["9.051", "9.710", "0.171"],
+                    ["14.046", "4.182", "0.536"],
+                    ["12.295", "1.429", "0.962"],
+                    ["4.417", "8.167", "0.113"],
+                    ["0.492", "4.771", "0.785"],
+                    ["7.632", "2.605", "0.645"],
+                    ["14.242", "5.042", "0.368"]
+                ]
             }
         ]
     })

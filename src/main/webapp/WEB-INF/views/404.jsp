@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=GBK">
@@ -15,7 +16,7 @@
 <body>
 <h1>not found</h1>
 
-<video id="my_video_1" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264"  data-setup="{}">
+<video id="my_video_1" style="margin: 0 auto" class="video-js  vjs-default-skin vjs-big-play-centered" controls preload="auto" width="740" height="420"  data-setup="{}">
     <source src="${ctx}/av/SHKD-736.mp4" type='video/mp4'>
 </video>
 

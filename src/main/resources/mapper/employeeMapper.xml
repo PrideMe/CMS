@@ -189,7 +189,7 @@
         DELETE FROM employee WHERE id = #{id};
     </delete>
 
-    <select id="findById" parameterType="Integer" resultType="com.wangjikai.domain.Employee">
+    <select id="findById" parameterType="Integer" resultMap="employeeResultMap">
         SELECT * FROM employee WHERE id = #{id};
     </select>
 

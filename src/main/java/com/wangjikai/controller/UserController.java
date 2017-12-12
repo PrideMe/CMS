@@ -12,6 +12,8 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +34,9 @@ public class UserController {
 
     @Resource
     private CmsService cmsService;
+
+    @Resource
+    private JavaMailSender mailSender;
 
     //请求登陆页面
     @RequestMapping(value = {"login"},method = RequestMethod.GET)
@@ -167,6 +172,14 @@ public class UserController {
     public Job updateJobById(Job job){
         cmsService.modifyJob(job);
         return job;
+    }
+
+    @RequestMapping(value = {"getEmployeeById"},method = RequestMethod.POST)
+    @ResponseBody
+    public Employee getEmployeeById(int id){
+        Map<String,Object> map = new HashMap<>();
+        Employee employee = cmsService.findEmployeeById(id);
+        return employee;
     }
 
     @RequestMapping(value = {"left"})
@@ -322,5 +335,22 @@ public class UserController {
     public String addJob(Job job){
         cmsService.addJob(job);
         return "redirect:/index";
+    }
+
+    @RequestMapping(value = "/sendMail")
+    public String sendMail(){
+        return "sendMail";
+    }
+
+    @RequestMapping(value = "/sendMailTo",method = RequestMethod.POST)
+    @ResponseBody
+    public String sendMailTo(String mailTo,String mailSubject,String mailText){
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setFrom("15314006321@163.com");
+        email.setTo(mailTo);
+        email.setSubject(mailSubject);
+        email.setText(mailText);
+        mailSender.send(email);
+        return "1";
     }
 }
