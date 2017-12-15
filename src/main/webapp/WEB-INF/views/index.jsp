@@ -157,8 +157,8 @@
             <button class="btn btn-primary navbar-right" style="margin-top: 7px;margin-left: 7px;margin-right: 1px;"><i class="fa fa-user fa-fw"></i>登陆</button>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-users fa-fw"></i> 用户列表</a></li>
-                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list-alt fa-fw"></i> 产品列表</a></li>
-                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list fa-fw"></i> 订单列表</a></li>
+                <%--<li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list-alt fa-fw"></i> 产品列表</a></li>--%>
+                <%--<li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list fa-fw"></i> 订单列表</a></li>--%>
             </ul>
         </div>
     </div>
@@ -166,8 +166,8 @@
 
 <div class="clearfix">
     <aside class="sidebar">
-        <nav class="sidebar-nav">
-            <ul class="metismenu" id="menu">
+        <nav class="sidebar-nav navbar">
+            <ul class="metismenu navbar-collapse collapse" id="menu">
                 <li class="active">
                     <a href="#" aria-expanded="true">
                         <span class="sidebar-nav-item-icon fa fa-id-card fa-lg"></span>
@@ -222,10 +222,10 @@
                         </li>
                         <li>
                             <a href="#" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
-                                Menu 1.3 <span class="fa plus-times"></span></a>
+                                小功能<span class="fa plus-times"></span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>item 1.3.2</a></li>
+                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
                             </ul>
                         </li>
                     </ul>

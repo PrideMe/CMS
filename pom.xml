@@ -112,11 +112,31 @@
             <artifactId>poi</artifactId>
             <version>3.16</version>
         </dependency>
-        <!--中文分词器-->
+        <!--中文分词器-IK-->
         <dependency>
-            <groupId>org.ansj</groupId>
-            <artifactId>ansj_seg</artifactId>
-            <version>5.1.1</version>
+            <groupId>com.janeluo</groupId>
+            <artifactId>ikanalyzer</artifactId>
+            <version>2012_u6</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>lucene-sandbox</artifactId>
+                    <groupId>org.apache.lucene</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>lucene-queries</artifactId>
+                    <groupId>org.apache.lucene</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>lucene-core</artifactId>
+                    <groupId>org.apache.lucene</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--图片验证码-->
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>0.0.9</version>
         </dependency>
         <!--发送邮件-->
         <dependency>
@@ -124,18 +144,17 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch -->
-        <!--<dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-elasticsearch</artifactId>
-            <version>3.0.0.RELEASE</version>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.eclipse/swt -->
+        <!--日志框架log4j2-->
         <dependency>
-            <groupId>org.eclipse</groupId>
-            <artifactId>swt</artifactId>
-            <version>3.2.1-v3235e</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.hynnet/DJNativeSwing-SWT -->
@@ -150,14 +169,6 @@
             <artifactId>DJNativeSwing</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-
-
-
-
-
-
-
     </dependencies>
     <dependencyManagement>
         <dependencies>

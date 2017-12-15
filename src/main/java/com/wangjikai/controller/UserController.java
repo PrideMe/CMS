@@ -6,6 +6,8 @@ import com.wangjikai.domain.Job;
 import com.wangjikai.domain.User;
 import com.wangjikai.service.CmsService;
 import com.wangjikai.util.Page;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -31,6 +33,8 @@ import java.util.Map;
  */
 @Controller
 public class UserController {
+
+    private Logger log = LogManager.getLogger(UserController.class);
 
     @Resource
     private CmsService cmsService;
@@ -97,6 +101,7 @@ public class UserController {
     @RequestMapping(value = {"getUser"})
     @ResponseBody
     public Map<String,Object> abcd(HttpServletRequest request){
+        log.info("获取全部用户");
         List<User> list = cmsService.findUser(null);   //获取所有用户
         String rowCount = request.getParameter("rowCount");
         String current = request.getParameter("current");

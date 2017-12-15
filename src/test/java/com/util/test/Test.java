@@ -5,12 +5,13 @@ import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
+import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class Test extends JPanel {
@@ -105,7 +106,9 @@ public class Test extends JPanel {
                                                      }
                                                      try {
                                                          // 输出图像
-                                                         ImageIO.write(image, "jpg", new File(fileName));
+                                                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                                         ImageIO.write(image, "jpg", byteArrayOutputStream);
+                                                         System.out.println("data:image/jpeg;base64,"+ImageToBase64(byteArrayOutputStream));
                                                      } catch (IOException ex) {
                                                          ex.printStackTrace();
                                                      }
@@ -133,5 +136,11 @@ public class Test extends JPanel {
             }
         });
         NativeInterface.runEventPump();
+    }
+    //图片转base64
+    public static String ImageToBase64(ByteArrayOutputStream byteArrayOutputStream) {
+        byte[] data = byteArrayOutputStream.toByteArray();
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
     }
 }
