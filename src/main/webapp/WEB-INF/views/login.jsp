@@ -10,6 +10,7 @@
     <title>CMS管理系统</title>
     <link type="text/css" rel="stylesheet" href="${ctx}/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="${ctx}/css/css.css"/>
+    <link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="${ctx}/css/bootstrapValidator.css"/>
     <link href="${ctx}/images/favicon.ico" rel="shortcut icon">
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
@@ -23,12 +24,32 @@
             <div class="form-top">
                 <form action="${ctx}/login" method="post" class="loginbody" id="loginForm">
                     <div class="form-group">
-                        <input type="text" name="username" placeholder="用户名" class="form-control" id="form-username">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-user fa-fw"></i>
+                            </div>
+                            <input type="text" name="username" placeholder="用户名" class="form-control" id="form-username">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" placeholder="密码" class="form-control" id="form-password">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-lock fa-fw"></i>
+                            </div>
+                            <input type="password" name="password" placeholder="密码" class="form-control" id="form-password">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="loginBtn">登陆</button>
+                    <div class="form-inline">
+                        <div class="form-group" style="width: 41%;float: left">
+                            <div class="input-group">
+                                <input type="text" name="verifyCode" class="form-control" placeholder="请输入验证码">
+                            </div>
+                        </div>
+                        <img id="kaptchaImage" class="verify-code" style="float: right" src="${ctx}/code">
+                    </div>
+                    <div class="clearfix"></div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">登陆</button>
                 </form>
             </div>
         </div>
@@ -40,6 +61,9 @@
             if (event.keyCode == 13) {
                 $("#loginBtn").click();
             }
+        });
+        $('#kaptchaImage').click(function() {
+            $(this).attr('src','${ctx}/code?'+Math.random());
         });
     });
     $(document).ready(function() {

@@ -15,9 +15,11 @@
         <property name="filterChainDefinitions">
             <value>
                 /css/** = anon
+                /favicon.ico = anon
                 /fonts/** = anon
                 /images/** = anon
                 /js/** = anon
+                /code = anon
                 /login = anon
                 /check = anon
                 /WEB-INF/views/404.jsp = anon

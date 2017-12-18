@@ -47,6 +47,60 @@
         </property>
     </bean>
 
+    <!-- google kaptcha的相关配置-->
+    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+            <bean class="com.google.code.kaptcha.util.Config">
+                <constructor-arg>
+                    <props>
+                        <!--是否有边框 可选yes 或者 no-->
+                        <prop key="kaptcha.border">no</prop>
+                        <!--边框颜色,r,g,b (and optional alpha) or white,black,blue. -->
+                        <prop key="kaptcha.border.color">red</prop>
+                        <!--边框厚度. 值大于0-->
+                        <prop key="kaptcha.border.thickness">5</prop>
+                        <!--验证码图片的宽度 默认200-->
+                        <prop key="kaptcha.image.width">150</prop>
+                        <!--验证码图片的宽度 默认50-->
+                        <prop key="kaptcha.image.height">34</prop>
+                        <!--图片实现类 默认com.google.code.kaptcha.impl.DefaultKaptcha-->
+                        <prop key="kaptcha.producer.impl">com.google.code.kaptcha.impl.DefaultKaptcha </prop>
+                        <!--文本实现类 默认com.google.code.kaptcha.text.impl.DefaultTextCreator-->
+                        <prop key="kaptcha.textproducer.impl">com.google.code.kaptcha.text.impl.DefaultTextCreator</prop>
+                        <!--文本集合，验证码值从此集合中获取-->
+                        <prop key="kaptcha.textproducer.char.string">abcde2345678gfynmnpwx</prop>
+                        <!--验证码文本字符长度  默认为5-->
+                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                        <!--验证码文本字体样式-->
+                        <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>
+                        <!--字体大小 默认40px-->
+                        <prop key="kaptcha.textproducer.font.size">25</prop>
+                        <!--文字间隔 默认2-->
+                        <prop key="kaptcha.textproducer.char.space">3</prop>
+                        <!--字体颜色，合法值： r,g,b  或者 white,black,blue.默认black-->
+                        <prop key="kaptcha.textproducer.font.color">blue</prop>
+                        <!--干扰实现类 默认com.google.code.kaptcha.impl.DefaultNoise-->
+                        <prop key="kaptcha.noise.impl">com.google.code.kaptcha.impl.DefaultNoise </prop>
+                        <!--干扰颜色，合法值： r,g,b 或者 white,black,blue.默认black-->
+                        <prop key="kaptcha.noise.color">black</prop>
+                        <!--图片样式 水纹：WaterRipple 鱼眼：FishEyeGimpy 阴影：ShadowGimpy-->
+                        <prop key="kaptcha.obscurificator.impl">com.google.code.kaptcha.impl.ShadowGimpy</prop>
+                        <!--背景实现类-->
+                        <prop key="kaptcha.background.impl">com.google.code.kaptcha.impl.DefaultBackground</prop>
+                        <!--背景颜色渐变，结束颜色-->
+                        <prop key="kaptcha.background.clear.to">white</prop>
+                        <!--文字渲染器-->
+                        <prop key="kaptcha.word.impl">com.google.code.kaptcha.text.impl.DefaultWordRenderer</prop>
+                        <!--&lt;!&ndash;The value for the kaptcha is generated and is put into the HttpSession. This is the key value for that item in the session. &ndash;&gt;-->
+                        <!--<prop key="kaptcha.session.key">KAPTCHA_SESSION_KEY</prop>-->
+                        <!--&lt;!&ndash;The date the kaptcha is generated is put into the HttpSession. This is the key value for that item in the session. &ndash;&gt;-->
+                        <!--<prop key="kaptcha.session.date">KAPTCHA</prop>-->
+                    </props>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
     <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300" cluster-name="elasticsearch" />
 
     <bean name="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">

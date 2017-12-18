@@ -1,5 +1,6 @@
 package com.wangjikai.controller;
 
+import com.google.code.kaptcha.Producer;
 import com.wangjikai.domain.Department;
 import com.wangjikai.domain.Employee;
 import com.wangjikai.domain.Job;
@@ -22,7 +23,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +47,9 @@ public class UserController {
 
     @Resource
     private JavaMailSender mailSender;
+
+    @Resource
+    private Producer captchaProducer;
 
     //请求登陆页面
     @RequestMapping(value = {"login"},method = RequestMethod.GET)
@@ -357,5 +366,26 @@ public class UserController {
         email.setText(mailText);
         mailSender.send(email);
         return "1";
+    }
+
+    @RequestMapping(value = "/code")
+    public void getCaptchaCode(HttpServletResponse response){
+        String capText = captchaProducer.createText();
+        System.out.println("验证码："+capText);
+        BufferedImage bi = captchaProducer.createImage(capText);
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            ImageIO.write(bi, "jpg", out);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
