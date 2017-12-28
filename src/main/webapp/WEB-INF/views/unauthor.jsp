@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>权限错误</title>
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
 </head>
 <body>
 <h3>无权限！</h3>

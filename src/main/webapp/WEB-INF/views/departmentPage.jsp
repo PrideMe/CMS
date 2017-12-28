@@ -8,6 +8,9 @@
     <script type="text/javascript" src="${ctx}/js/bootbox.min.js"/>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.fa.min.js"></script>
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
 </head>
 <body>
 <table id="departmentList" class="table table-striped table-bordered table-hover">

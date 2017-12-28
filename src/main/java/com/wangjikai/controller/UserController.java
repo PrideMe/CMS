@@ -21,12 +21,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -53,17 +55,29 @@ public class UserController {
 
     //请求登陆页面
     @RequestMapping(value = {"login"},method = RequestMethod.GET)
-    public String login(){
-        return "login";
+    public ModelAndView login(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        HttpSession session = request.getSession();
+        if (null != session.getAttribute("currentUser")){
+            modelAndView.setViewName("redirect:/index");
+            return modelAndView;
+        }
+        return modelAndView;
     }
 
     //请求登陆数据
     //1、通过request.getParameter()
     //2、通过反射
     @RequestMapping(value = {"login"},method = RequestMethod.POST)
-    public String loginData(HttpServletRequest request){
+    public ModelAndView loginData(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/index");
+        HttpSession session = request.getSession();
+        String session_code = (String) session.getAttribute("session_code");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String code = request.getParameter("verifyCode");
         //拿到所有参数
 //        Map<String,String[]> map = request.getParameterMap();
 //        for (String s : map.keySet()) {
@@ -72,18 +86,24 @@ public class UserController {
         Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
         try {
-            currentUser.login(token);
+            if (session_code.equals(code)) {
+                currentUser.login(token);
+                session.setAttribute("currentUser","海淀区");
+                modelAndView.setViewName("redirect:/");
+                return modelAndView;
+            } else {
+                return modelAndView;
+            }
         }catch (UnknownAccountException e){
             System.out.println("用户名/密码错误");
-            return "login";
+            return modelAndView;
         }catch (ExcessiveAttemptsException e){
             System.out.println("失败次数过多，锁定");
-            return "login";
+            return modelAndView;
         }catch (AuthenticationException e){
             System.out.println(e.getMessage());
-            return "login";
+            return modelAndView;
         }
-        return "redirect:/";
         //User user = cmsService.login(username,password);
         //request.setAttribute("",user);
     }
@@ -103,8 +123,36 @@ public class UserController {
 
     //请求访问主页
     @RequestMapping(value = {"/","index"},method = RequestMethod.GET)
-    public String index(){
-        return "index";
+    public ModelAndView index(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        String ip = request.getHeader("x-forwarded-for");
+        if(null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+        }
+        if(null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        modelAndView.setViewName("index");
+        modelAndView.addObject("ip",ip);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response){
+        request.getSession().removeAttribute("currentUser");
+        Subject subject= SecurityUtils.getSubject();
+        subject.logout();
+        //浏览器禁用缓存
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        return "redirect:/login";
     }
 
     @RequestMapping(value = {"getUser"})
@@ -359,19 +407,35 @@ public class UserController {
     @RequestMapping(value = "/sendMailTo",method = RequestMethod.POST)
     @ResponseBody
     public String sendMailTo(String mailTo,String mailSubject,String mailText){
+        //构建简单邮件对象
         SimpleMailMessage email = new SimpleMailMessage();
         email.setFrom("15314006321@163.com");
         email.setTo(mailTo);
         email.setSubject(mailSubject);
         email.setText(mailText);
         mailSender.send(email);
+        //支持更复杂的邮件格式和内容
+//        MimeMessage message = mailSender.createMimeMessage();
+//        try {
+//            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//            helper.setFrom("15314006321@163.com");
+//            helper.setTo(mailTo);
+//            helper.setSubject(mailSubject);
+//            helper.setText(mailText);
+//            //ClassPathResource file = new ClassPathResource("1.png");//附件
+//            //helper.addAttachment("1.png",file);
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//        }
+//        mailSender.send(message);
         return "1";
     }
 
     @RequestMapping(value = "/code")
-    public void getCaptchaCode(HttpServletResponse response){
+    public void getCaptchaCode(HttpServletRequest request,HttpServletResponse response){
+        HttpSession session = request.getSession();
         String capText = captchaProducer.createText();
-        System.out.println("验证码："+capText);
+        session.setAttribute("session_code",capText);
         BufferedImage bi = captchaProducer.createImage(capText);
         ServletOutputStream out = null;
         try {
@@ -387,5 +451,11 @@ public class UserController {
                 e.printStackTrace();
             }
         }
+    }
+
+    //搜索页
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    public String searchPage(){
+        return "searchPage";
     }
 }

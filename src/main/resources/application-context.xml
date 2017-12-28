@@ -32,6 +32,7 @@
         <property name="sqlSessionFactoryBeanName" value="SqlSessionFactory"/>
     </bean>
     <import resource="classpath:application-shiro.xml"/>
+    <import resource="classpath:application-scheduler.xml"/>
     <!--邮件发送器-->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.host}" />
@@ -42,7 +43,8 @@
             <props>
                 <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
                 <prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
-                <prop key="mail.smtp.port">${mail.smtp.port}</prop>
+                <prop key="mail.smtp.port">25</prop>
+                <!--<prop key="mail.debug">true</prop>-->
             </props>
         </property>
     </bean>
@@ -100,10 +102,13 @@
             </bean>
         </property>
     </bean>
-
-    <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300" cluster-name="elasticsearch" />
+    <!--配置节点-->
+    <elasticsearch:transport-client id="client" cluster-nodes="127.0.0.1:9300" cluster-name="elasticsearch" client-transport-sniff="false"/>
 
     <bean name="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
         <constructor-arg ref="client"/>
     </bean>
+    <!--包扫描路径-->
+    <elasticsearch:repositories base-package="com.wangjikai.repository" elasticsearch-template-ref="elasticsearchTemplate"/>
+
 </beans>

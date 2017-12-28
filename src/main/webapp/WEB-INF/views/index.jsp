@@ -6,7 +6,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
     <title>CMS管理系统</title>
     <link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
@@ -126,6 +126,9 @@
         $(function () {
             $('#menu').metisMenu();
         });
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
     </script>
 
 
@@ -154,11 +157,10 @@
             <a class="navbar-brand" href="${ctx}/index">CMS人事管理系统</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <button class="btn btn-primary navbar-right" style="margin-top: 7px;margin-left: 7px;margin-right: 1px;"><i class="fa fa-user fa-fw"></i>登陆</button>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-users fa-fw"></i> 用户列表</a></li>
-                <%--<li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list-alt fa-fw"></i> 产品列表</a></li>--%>
-                <%--<li><a href="#" onclick="showAtRight('${ctx}/userPage')"><i class="fa fa-list fa-fw"></i> 订单列表</a></li>--%>
+            <button class="btn btn-primary pull-right dropdown-toggle" style="margin-top: 7px;margin-left: 7px;margin-right: 1px;" data-toggle="dropdown"><i class="fa fa-user fa-fw"></i>${currentUser}<i class="caret"></i></button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#"><i class="fa fa-info fa-fw"></i>个人资料</a></li>
+                <li><a href="${ctx}/logout"><i class="fa fa-sign-out fa-fw"></i>退出</a></li>
             </ul>
         </div>
     </div>
@@ -225,6 +227,7 @@
                                 小功能<span class="fa plus-times"></span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
+                                <li><a href="#" onclick="showAtRight('${ctx}/search')"><span class="sidebar-nav-item-icon fa fa-search fa-fw"></span>搜索</a></li>
                                 <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
                             </ul>
                         </li>
@@ -273,13 +276,13 @@
                 <!-- 轮播（Carousel）项目 -->
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img src="${ctx}/images/bg1.jpg" alt="First slide">
+                        <img src="${ctx}/images/bg1.jpg" class="img-responsive" alt="First slide">
                     </div>
                     <div class="item">
-                        <img src="${ctx}/images/bg2.png" alt="Second slide">
+                        <img src="${ctx}/images/bg2.png" class="img-responsive" alt="Second slide">
                     </div>
                     <div class="item">
-                        <img src="${ctx}/images/bg3.jpg" alt="Third slide">
+                        <img src="${ctx}/images/bg3.jpg" class="img-responsive" alt="Third slide">
                     </div>
                 </div>
                 <!-- 轮播（Carousel）导航 -->
@@ -292,7 +295,7 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-            <h2>创建模态框（Modal）</h2>
+            <h2>${currentUser}创建模态框（Modal）</h2>
             <!-- 按钮触发模态框 -->
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">开始演示模态框</button>
             <!-- 模态框（Modal） -->
@@ -303,7 +306,7 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
                         </div>
-                        <div class="modal-body">在这里添加一些文本</div>
+                        <div class="modal-body"><p>IP地址${ip}</p></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                             <button type="button" class="btn btn-primary">提交更改</button>

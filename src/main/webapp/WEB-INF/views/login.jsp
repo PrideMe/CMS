@@ -16,6 +16,9 @@
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrapValidator.js"></script>
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
 </head>
 <body>
 <div class="container">
@@ -79,7 +82,7 @@
                     message: 'The username is not valid',
                     validators: {
                         notEmpty: {
-                            message: '用户名不能为空',
+                            message: '用户名不能为空'
                         },
                         threshold:6,//有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
                         stringLength: {
@@ -120,6 +123,22 @@
                         //    field:'password',  //需要进行比较的input name值
                         //    message:'用户名不能与密码相同'  //比较厚不相同时提示
                         //}
+                    }
+                },
+                verifyCode: {
+                    validators: {
+                        notEmpty: {
+                            message: '验证码不能为空'
+                        },
+                        stringLength: {
+                            min: 4,
+                            max: 4,
+                            message: '验证码为4个字符'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9]+$/,
+                            message: '验证码只能是字母，数字组成'
+                        }
                     }
                 }
             }

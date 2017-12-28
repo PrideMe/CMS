@@ -49,7 +49,7 @@
 
     <loggers>
         <!--过滤掉spring和mybatis的一些无用的debug信息-->
-        <!--<logger name="org.springframework" level="INFO"/>-->
+        <logger name="org.springframework" level="OFF"/>
         <logger name="org.elasticsearch" level="OFF"/>
         <root level="INFO">
             <appender-ref ref="Console"/>
