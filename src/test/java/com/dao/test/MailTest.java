@@ -2,6 +2,7 @@ package com.dao.test;
 
 import com.wangjikai.domain.Article;
 import com.wangjikai.repository.ArticleRepository;
+import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.junit.Test;
@@ -103,11 +104,16 @@ public class MailTest {
 
     @Test
     public void save(){
-        Article article = new Article();
-        article.setId(1L);
-        article.setTitle("陈冠希");
-        article.setContent("陈冠希在其个人社交平台分享了一张自己女儿Alaia的萌照并配文祝大家节日快乐。照片中小公主睁着大大的眼睛，露出小舌头，十分乖萌可爱。");
-        articleRepository.save(article);
+//        Article article = new Article();
+//        article.setId(4L);
+//        article.setTitle("LeetCode");
+//        article.setContent("为了题目查找方便起见，我把之前几篇陆陆续续贴出来的我对LeetCode上面算的解答汇总在下面，CTRL+F就可以比较方便地找到。");
+//        articleRepository.save(article);
+        MatchQueryBuilder queryBuilders = QueryBuilders.matchQuery("title","算法题");
+        Iterable<Article> articles = articleRepository.search(queryBuilders);
+        for (Article article : articles) {
+            System.out.println(article);
+        }
     }
 
     @Test

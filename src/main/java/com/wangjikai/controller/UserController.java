@@ -1,6 +1,8 @@
 package com.wangjikai.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.code.kaptcha.Producer;
+import com.wangjikai.domain.Article;
 import com.wangjikai.domain.Department;
 import com.wangjikai.domain.Employee;
 import com.wangjikai.domain.Job;
@@ -15,6 +17,10 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
@@ -30,10 +36,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.System.out;
 
 /**
  * Created by 22717 on 2017/11/4.
@@ -52,6 +67,9 @@ public class UserController {
 
     @Resource
     private Producer captchaProducer;
+
+    @Resource
+    private ElasticsearchTemplate template;
 
     //请求登陆页面
     @RequestMapping(value = {"login"},method = RequestMethod.GET)
@@ -90,18 +108,20 @@ public class UserController {
                 currentUser.login(token);
                 session.setAttribute("currentUser","海淀区");
                 modelAndView.setViewName("redirect:/");
+                log.info("登入成功");
                 return modelAndView;
             } else {
+                log.info("登入失败");
                 return modelAndView;
             }
         }catch (UnknownAccountException e){
-            System.out.println("用户名/密码错误");
+            out.println("用户名/密码错误");
             return modelAndView;
         }catch (ExcessiveAttemptsException e){
-            System.out.println("失败次数过多，锁定");
+            out.println("失败次数过多，锁定");
             return modelAndView;
         }catch (AuthenticationException e){
-            System.out.println(e.getMessage());
+            out.println(e.getMessage());
             return modelAndView;
         }
         //User user = cmsService.login(username,password);
@@ -139,6 +159,7 @@ public class UserController {
             ip = request.getRemoteAddr();
         }
         modelAndView.setViewName("index");
+        log.info("IP:"+ip+"登陆");
         modelAndView.addObject("ip",ip);
         return modelAndView;
     }
@@ -457,5 +478,51 @@ public class UserController {
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     public String searchPage(){
         return "searchPage";
+    }
+
+    //查询单个字
+    @RequestMapping(value = "/zi")
+    @ResponseBody
+    public List<Article> searchSingle(){
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(
+                QueryBuilders.matchQuery("title","算法题")).build();
+        List<Article> articles = template.queryForList(searchQuery,Article.class);
+        return articles;
+    }
+
+    //查询天气
+    @RequestMapping(value = "/weather")
+    @ResponseBody
+    public Map<String, String> getWeather(){
+        //https://free-api.heweather.com/s6/weather/now?location=%E5%B9%BF%E5%B7%9E&key=6e56fae9eb8e4e5f8fbbc13d1f15c292
+        String Url = "https://free-api.heweather.com/s6/weather/now?location=%E5%B9%BF%E5%B7%9E&key=6e56fae9eb8e4e5f8fbbc13d1f15c292";
+        StringBuffer strBuf;
+        try {
+            Url = "https://free-api.heweather.com/s6/weather/now?location="+URLEncoder.encode("济南", "utf-8")+"&key=6e56fae9eb8e4e5f8fbbc13d1f15c292";
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+        strBuf = new StringBuffer();
+        try{
+            URL url = new URL(Url);
+            URLConnection conn = url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));//转码。
+            String line = null;
+            while ((line = reader.readLine()) != null)
+                strBuf.append(line + " ");
+            reader.close();
+        }catch(MalformedURLException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        JSONObject jsonData = JSONObject.parseObject(strBuf.toString());
+        Map<String, String> weatherInfo = new HashMap<String, String>();
+        weatherInfo.put("温度",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("fl").toString()+"°C");
+        weatherInfo.put("天气",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("cond_txt").toString());
+        weatherInfo.put("风向",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("wind_dir").toString());
+        weatherInfo.put("风力",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("wind_sc").toString());
+        weatherInfo.put("风速",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("wind_spd").toString()+"公里/小时");
+        return weatherInfo;
     }
 }

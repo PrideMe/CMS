@@ -307,14 +307,18 @@
                             <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
                         </div>
                         <div class="modal-body"><p>IP地址${ip}</p></div>
+                        <div class="progress progress-striped active" style="margin: 0 10px 10px 10px;">
+                            <div id="btprogress" class="progress-bar progress-bar-success" style="width: 40%;">
+                                <span class="sr-only">40% 完成</span>
+                            </div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                            <button type="button" class="btn btn-primary">提交更改</button>
+                            <button type="button" id="progress_add" class="btn btn-primary">提交更改</button>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="panel panel-default">
                 <div class="panel-heading">查询条件</div>
@@ -415,20 +419,20 @@
         $("#myCarousel a.right").click(function(){
             $(".carousel").carousel("next");
         });
-    })
+    });
     //在右侧显示
     function showAtRight(url) {
         NProgress.start();
         $("#rightContent").load(url,function () {
             NProgress.done();
         });
-    };
+    }
     $("#datetime").datetimepicker({
         format: "yyyy年mm月dd日 - hh:ii:ss",
         //autoclose: true,
         todayHighlight: true,
         language:"zh-CN",
-        todayBtn: true,
+        todayBtn: true
         //pickerPosition: "bottom-center"
     });
 

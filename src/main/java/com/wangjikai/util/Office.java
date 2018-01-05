@@ -1,5 +1,9 @@
 package com.wangjikai.util;
 
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+
 import java.io.IOException;
 
 /**
@@ -13,25 +17,15 @@ import java.io.IOException;
  * docx=XWPFDocument
  */
 public class Office {
-
-    Office(String a){
-        System.out.println("dsddds");
-    }
-
-    public Office(){
-
-    }
-
     public static void main(String[] args) throws IOException {
-        new Office();
-//        XWPFDocument xwpfDocument = new XWPFDocument();
-//        XWPFParagraph paragraph = xwpfDocument.createParagraph();
-//        XWPFRun run = paragraph.createRun();
-//        run.setBold(true);
-//        run.setText("加粗的net");
-//        run = paragraph.createRun();
-//        run.setColor("FF0000");
-//        run.setText("FuckIdiot Microsoft");
+        XWPFDocument xwpfDocument = new XWPFDocument();
+        XWPFParagraph paragraph = xwpfDocument.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        run.setBold(true);
+        run.setText("加粗的net");
+        run = paragraph.createRun();
+        run.setColor("FF0000");
+        run.setText("FuckIdiot Microsoft");
         //====================================================
 //        Workbook workbook = new XSSFWorkbook();
 //        Sheet sheet1 = workbook.createSheet("济南市高新区");

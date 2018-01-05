@@ -1,48 +1,64 @@
 package com.util.test;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import redis.clients.jedis.Jedis;
 
 /**
  * Created by 22717 on 2017/11/22.
  * 线程测试
  */
-public class ThreadTest {
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-        String txt = "中国是世界四大文明古国之一，有着悠久的历史，距今约5000年前，以中原地区为中心开始出现聚落组织进而成国家和朝代，后历经多次演变和朝代更迭，持续时间较长的朝代有夏、商、周、汉、晋、唐、宋、元、明、清等。中原王朝历史上不断与北方游牧民族交往、征战，众多民族融合成为中华民族。20世纪初辛亥革命后，中国的君主政体退出历史舞台，取而代之的是共和政体。1949年中华人民共和国成立后，在中国大陆建立了人民代表大会制度的政体。中国有着多彩的民俗文化，传统艺术形式有诗词、戏曲、书法和国画等，春节、元宵、清明、端午、中秋、重阳等是中国重要的传统节日。";
-        try {
-            Process process = Runtime.getRuntime().exec("notepad");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Result result = ToAnalysis.parse(txt);
-//        List<Term> terms = result.getTerms();
-//        for (Term term : terms) {
-//            System.out.println(term.getRealName());
+public class ThreadTest extends Thread{
+    public static void main(String[] args) {
+//        ThreadTest test = new ThreadTest();
+//        test.setName("线程名字");
+//        test.start();
+        //读取JSON串最方便的形式
+//        JSONObject json = JSONObject
+//                .parseObject("{'username' : '11111','clientid' : 1,'password' : '222222'}");
+//        Map<String,Object> map = json;
+//        for (Map.Entry<String, Object> stringObjectEntry : map.entrySet()) {
+//            System.out.println(stringObjectEntry.getKey()+" = "+stringObjectEntry.getValue());
+//            if (stringObjectEntry.getValue() instanceof Integer){
+//                System.out.println(stringObjectEntry.getKey()+"类型是"+stringObjectEntry.getValue());
+//            }
 //        }
-//        File file = new File("");
-//        FileInputStream inputStream = new FileInputStream(file);
-//        InputStreamReader reader = new InputStreamReader(inputStream,"UTF-8");
-//        Map<String,String> map1 = new HashMap<>();
-//        Map<String,String> map2 = new HashMap<>();
-//        map1.put("username", "David");
-//        map2.put("username", "Nick");
-//        System.out.println(map1);
-//        System.out.println(map2);
-//        change(map1,map2);
-//        System.out.println(map1);
-//        System.out.println(map2);
-        //ThreadTest threadTest = new ThreadTest();
-        //new Thread(threadTest,"济南站").start();
-        //new Thread(threadTest,"杭州站").start();
-        //new Thread(threadTest,"c").start();
+        //mongo连接与获取
+//        MongoClient client = new MongoClient("127.0.0.1",27017);
+//        MongoDatabase database = client.getDatabase("scan");
+//        MongoCollection<Document> collection = database.getCollection("temp");
+//        FindIterable<Document> iterable = collection.find();
+//        for (Document document : iterable) {
+//            System.out.println(document);
+//        }
+        //DOM4J 生成XML
+//        Document document = DocumentHelper.createDocument();
+//        Element element = document.addElement("root");
+//        Element element1 = element.addElement("father");
+//        element1.addAttribute("language","zh_CN");
+//        Element son = element1.addElement("child");
+//        son.setText("男");
+//        FileOutputStream fileOutputStream = null;
+//        try {
+//            fileOutputStream = new FileOutputStream("E:\\王吉凯\\wjk.xml");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            XMLWriter xmlWriter = new XMLWriter(fileOutputStream);
+//            xmlWriter.write(document);
+//            xmlWriter.flush();
+//            xmlWriter.close();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        //
+        Jedis jedis = new Jedis("127.0.0.1",6379);
+        jedis.echo("1111");
+    }
+
+    @Override
+    public void run() {
+        System.out.println(getName()+"开始工作");
     }
 }
-
-
-
-
-
-
-
