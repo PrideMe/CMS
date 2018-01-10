@@ -21,6 +21,7 @@
                 /js/** = anon
                 /code = anon
                 /login = anon
+                /register = anon
                 /check = anon
                 /WEB-INF/views/404.jsp = anon
                 /** = authc

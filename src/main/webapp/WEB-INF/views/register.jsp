@@ -25,9 +25,9 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-4 col-sm-7 col-md-6 col-xs-12 col-center-block">
-            <form action="${ctx}/login" method="post" class="fh5co-form loginbody animate-box fadeInRight animated-fast"
+            <form action="${ctx}/register" method="post" class="fh5co-form loginbody animate-box fadeInRight animated-fast"
                   id="loginForm">
-                <h2 style="margin-bottom: 20px;">登陆</h2>
+                <h2 style="margin-bottom: 20px;">注册</h2>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">
@@ -54,70 +54,12 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group" style="margin-bottom: 10px">
-                    <p><a href="${ctx}/register">注册账号</a> | <a href="${ctx}/forgot3.html">忘记密码</a></p>
+                    <p><a href="${ctx}/login">去登陆</a></p>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">登陆</button>
+                <button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">注册</button>
             </form>
-            <%--<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInRight">--%>
-                <%--<h2>登陆</h2>--%>
-                <%--<div class="form-group">--%>
-                    <%--<label for="username" class="sr-only">用户名</label>--%>
-                    <%--<input type="text" class="form-control" id="username" placeholder="用户名" autocomplete="off">--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<label for="password" class="sr-only">密码</label>--%>
-                    <%--<input type="password" class="form-control" id="password" placeholder="密码" autocomplete="off">--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<label for="remember"><input type="checkbox" id="remember">记住我</label>--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<p><a href="sign-up3.html">登陆</a> | <a href="forgot3.html">忘记密码</a></p>--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<input type="submit" value="登陆" class="btn btn-primary">--%>
-                <%--</div>--%>
-            <%--</form>--%>
         </div>
-        <%--<div class="col-lg-4 col-sm-7 col-md-6 col-xs-10 col-center-block">--%>
-            <%--<div class="form-top">--%>
-                <%--<form action="${ctx}/login" method="post" class="loginbody animate-box fadeInRight animated-fast" id="loginForm" style="margin-top: 2em;--%>
-    <%---webkit-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%---moz-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%---o-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%--box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%--background: #e4e4e4;">--%>
-                    <%--<div class="form-group">--%>
-                        <%--<div class="input-group">--%>
-                            <%--<div class="input-group-addon">--%>
-                                <%--<i class="fa fa-user fa-fw"></i>--%>
-                            <%--</div>--%>
-                            <%--<input type="text" name="username" placeholder="用户名" class="form-control" id="form-username">--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-group">--%>
-                        <%--<div class="input-group">--%>
-                            <%--<div class="input-group-addon">--%>
-                                <%--<i class="fa fa-lock fa-fw"></i>--%>
-                            <%--</div>--%>
-                            <%--<input type="password" name="password" placeholder="密码" class="form-control" id="form-password">--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-inline">--%>
-                        <%--<div class="form-group" style="width: 41%;float: left">--%>
-                            <%--<div class="input-group">--%>
-                                <%--<input type="text" name="verifyCode" class="form-control" placeholder="请输入验证码">--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                        <%--<img id="kaptchaImage" class="verify-code" style="float: right" src="${ctx}/code">--%>
-                    <%--</div>--%>
-                    <%--<div class="clearfix"></div>--%>
-                    <%--<br>--%>
-                    <%--<button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">登陆</button>--%>
-                <%--</form>--%>
-            <%--</div>--%>
-        <%--</div>--%>
     </div>
 </div>
 <script type="text/javascript">
@@ -205,14 +147,6 @@
                 }
             }
         });
-        //.on('success.form.bv',function (e) { //点击提交之后
-        //    //防止表单提交
-        //    e.preventDefault();
-        //    //获取表单实例
-        //    var $form = $(e.target);
-        //    //获取BootstrapValidator实例
-        //    var bv = $form.data('bootstrapValidator');
-        //});
     });
 </script>
 </body>

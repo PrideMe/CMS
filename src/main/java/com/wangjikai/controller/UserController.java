@@ -83,6 +83,18 @@ public class UserController {
         }
         return modelAndView;
     }
+    @RequestMapping(value = {"register"},method = RequestMethod.GET)
+    public ModelAndView register(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("register");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = {"register"},method = RequestMethod.POST)
+    @ResponseBody
+    public String registerData(HttpServletRequest request){
+        return "";
+    }
 
     //请求登陆数据
     //1、通过request.getParameter()

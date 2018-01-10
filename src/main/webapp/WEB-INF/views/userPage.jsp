@@ -159,13 +159,13 @@
                 $("#username").val(data.username);
                 $("#password").val(data.password);
                 $("#status").val(data.status);
+                $('#updateUser').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
+                    $(this).removeData("bs.modal");
+                });
             },
             error: function () {
                 alert("请求失败");
             }
-        });
-        $('#updateUser').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
-            $(this).removeData("bs.modal");
         });
     }
     //修改用户

@@ -14,9 +14,9 @@ public class PhantomJS {
         try {
             process = Runtime.getRuntime().exec(currentPath + BLANK
                     + "E:/company/ab.js" + BLANK
-                    + "http://tn.cq.gov.cn" + BLANK
-                    + "存储" + BLANK
-                    + false + BLANK);
+                    + "http://www.bjhd.gov.cn/" + BLANK
+                    + "公开" + BLANK
+                    + true + BLANK);
         }catch (IOException e){
             e.printStackTrace();
         }

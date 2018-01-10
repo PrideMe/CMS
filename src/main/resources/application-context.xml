@@ -62,7 +62,7 @@
                         <!--边框厚度. 值大于0-->
                         <prop key="kaptcha.border.thickness">5</prop>
                         <!--验证码图片的宽度 默认200-->
-                        <prop key="kaptcha.image.width">150</prop>
+                        <prop key="kaptcha.image.width">125</prop>
                         <!--验证码图片的宽度 默认50-->
                         <prop key="kaptcha.image.height">34</prop>
                         <!--图片实现类 默认com.google.code.kaptcha.impl.DefaultKaptcha-->
