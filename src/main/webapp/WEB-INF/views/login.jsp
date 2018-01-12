@@ -17,9 +17,11 @@
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrapValidator.js"></script>
-    <script>if (window.top !== window.self) {
-        window.top.location = window.location;
-    }</script>
+    <script type="text/javascript">
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
 </head>
 <body style="background: #e4e4e4 url(${ctx}/images/login_bg.png) repeat;">
 <div class="container">
@@ -121,6 +123,18 @@
     </div>
 </div>
 <script type="text/javascript">
+    $(function(){
+        if (window.history && window.history.pushState) {
+            $(window).on('popstate', function () {
+                //当点击浏览器的 后退和前进按钮 时才会被触发，
+                window.history.pushState('forward', null, '');
+                window.history.forward(1);
+            });
+        }
+        window.history.pushState('forward', null, '');  //在IE中必须得有这两行
+        window.history.forward(1);
+
+    });
     $(function () {
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {

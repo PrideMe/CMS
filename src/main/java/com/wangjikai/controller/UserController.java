@@ -24,6 +24,7 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -93,21 +94,21 @@ public class UserController {
     @RequestMapping(value = {"register"},method = RequestMethod.POST)
     @ResponseBody
     public String registerData(HttpServletRequest request){
-        return "";
+        return "aaa汉字";
     }
 
     //请求登陆数据
     //1、通过request.getParameter()
     //2、通过反射
-    @RequestMapping(value = {"login"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/login"},method = RequestMethod.POST)
     public ModelAndView loginData(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/index");
         HttpSession session = request.getSession();
-        String session_code = (String) session.getAttribute("session_code");
+        String session_code = (String) session.getAttribute("session_code").toString().toLowerCase();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        String code = request.getParameter("verifyCode");
+        String code = request.getParameter("verifyCode").toLowerCase();
         //拿到所有参数
 //        Map<String,String[]> map = request.getParameterMap();
 //        for (String s : map.keySet()) {
@@ -188,37 +189,24 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @RequestMapping(value = {"getUser"})
+    @RequestMapping(value = {"getUser"},method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> abcd(HttpServletRequest request){
+    public Map<String,Object> abcd(HttpServletRequest request, int current, int rowCount){
         log.info("获取全部用户");
-        List<User> list = cmsService.findUser(null);   //获取所有用户
-        String rowCount = request.getParameter("rowCount");
-        String current = request.getParameter("current");
-        Integer i_rowCount = Integer.valueOf(rowCount);
-        Integer i_current = Integer.valueOf(current);
-
-        Page page = new Page();
-        page.setCurrent(i_current);
-        page.setRowCount(i_rowCount);
-
-        //System.out.println("请求当前页："+i_current);
-        //System.out.println("需要显示数："+i_rowCount);
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("current",i_current);
-        map.put("rowCount",i_rowCount);
-        int a;
-        int b = i_current*i_rowCount - list.size();
-        int c = list.size()>(i_current*i_rowCount)?i_rowCount:(i_rowCount-b);
-        //System.out.println("实际显示数："+c);
-        if (c%i_rowCount!=0){
-            a = list.size();
-        } else {
-            a = (i_current-1)*i_rowCount+i_rowCount;
+        Page<User> page = new Page<>();
+        if (StringUtils.isEmpty(current)){
+            current = 1;
+        } if (StringUtils.isEmpty(rowCount)){
+            rowCount = 1;
         }
-        map.put("rows",list.subList((i_current-1)*i_rowCount,a));
-        map.put("total",list.size());
+        page.setRowCount(rowCount);
+        page.setCurrent(current);
+        page = cmsService.findUser(null,page);   //获取所有用户
+        Map<String,Object> map = new HashMap<>();
+        map.put("current",current);
+        map.put("rowCount",rowCount);
+        map.put("rows",page.getRows());
+        map.put("total",page.getTotal());
         return map;
     }
 

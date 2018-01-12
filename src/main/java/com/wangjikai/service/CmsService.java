@@ -1,6 +1,12 @@
 package com.wangjikai.service;
 
-import com.wangjikai.domain.*;
+import com.wangjikai.domain.Department;
+import com.wangjikai.domain.Document;
+import com.wangjikai.domain.Employee;
+import com.wangjikai.domain.Job;
+import com.wangjikai.domain.Notice;
+import com.wangjikai.domain.User;
+import com.wangjikai.util.Page;
 
 import java.util.List;
 
@@ -29,7 +35,7 @@ public interface CmsService {
      * @param user
      * @return
      */
-    List<User> findUser(User user);
+    Page<User> findUser(User user, Page<User> page);
 
     /**
      * 根据id删除用户

@@ -37,7 +37,7 @@
             </where>
         </if>
         <if test="page != null">
-            LIMIT #{page.firstLimitParam},#{page.rowCount};
+            LIMIT #{page.current},#{page.rowCount};
         </if>
     </select>
     <select id="count" parameterType="map" resultType="Integer">

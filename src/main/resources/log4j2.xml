@@ -51,6 +51,8 @@
         <!--过滤掉spring和mybatis的一些无用的debug信息-->
         <logger name="org.springframework" level="OFF"/>
         <logger name="org.elasticsearch" level="OFF"/>
+        <logger name="org.quartz" level="OFF"/>
+        <logger name="com.alibaba" level="OFF"/>
         <root level="INFO">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>

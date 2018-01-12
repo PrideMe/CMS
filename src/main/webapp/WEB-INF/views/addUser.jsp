@@ -1,4 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+
 <html lang="zh-CN">
 <head>
     <title>Title</title>
@@ -11,7 +14,7 @@
 <body>
 
 <div style="margin-top: 30px;" class="col-xs-8 col-lg-4 col-md-6 col-sm-8">
-    <form role="form" action="/addUserData" method="post">
+    <form role="form" action="${ctx}/addUserData" method="post">
         <div class="form-group">
             <label>登录名</label>
             <input class="form-control" id="loginname" name="loginname" placeholder="请输入登录名">

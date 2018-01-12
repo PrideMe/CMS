@@ -1,7 +1,18 @@
 package com.wangjikai.service;
 
-import com.wangjikai.dao.*;
-import com.wangjikai.domain.*;
+import com.wangjikai.dao.DepartmentDao;
+import com.wangjikai.dao.DocumentDao;
+import com.wangjikai.dao.EmployeeDao;
+import com.wangjikai.dao.JobDao;
+import com.wangjikai.dao.NoticeDao;
+import com.wangjikai.dao.UserDao;
+import com.wangjikai.domain.Department;
+import com.wangjikai.domain.Document;
+import com.wangjikai.domain.Employee;
+import com.wangjikai.domain.Job;
+import com.wangjikai.domain.Notice;
+import com.wangjikai.domain.User;
+import com.wangjikai.util.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,16 +59,21 @@ public class CmsServiceImpl implements CmsService {
     }
 
     /**
-     * 获取所有用户.暂时不分页
+     * 获取所有用户
      */
     @Override
-    public List<User> findUser(User user) {
+    public Page<User> findUser(User user, Page<User> page) {
         Map<String,Object> map = new HashMap<>();
+        int current = page.getCurrent();
+        page.setCurrent((current-1)*page.getRowCount());
         map.put("user",user);
-        //map.put("page",user);
+        map.put("page",page);
         int allCount = userDao.count(map);
+        page.setTotal(allCount);
         List<User> users = userDao.selectByPage(map);
-        return users;
+        page.setCurrent(current);
+        page.setRows(users);
+        return page;
     }
 
     /**

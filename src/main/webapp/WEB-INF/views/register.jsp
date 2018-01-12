@@ -64,88 +64,8 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $(document).keydown(function (event) {
-            if (event.keyCode == 13) {
-                $("#loginBtn").click();
-            }
-        });
         $('#kaptchaImage').click(function() {
             $(this).attr('src','${ctx}/code?'+Math.random());
-        });
-    });
-    $(document).ready(function() {
-        $('#loginForm').bootstrapValidator({
-            message: 'This value is not valid',
-            feedbackIcons: { /*input状态样式图片*/
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                username: {
-                    message: 'The username is not valid',
-                    validators: {
-                        notEmpty: {
-                            message: '用户名不能为空'
-                        },
-                        threshold:6,//有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '用户名必须是多于6个字符少于30个字符'
-                        },
-                        //emailAddress: {  //校验email地址
-                        //    message: '请输入正确的邮件地址如：123@qq.com'
-                        //},
-                        remote: {
-                            url:'${ctx}/check',
-                            type: 'POST',
-                            delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-                            message:'用户名已存在'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_\.]+$/,
-                            message: '用户名只能由字母，数字，点号和下划线组成'
-                        }
-                    }
-                },
-                password: {
-                    validators: {
-                        notEmpty: {
-                            message: '密码不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 30,
-                            message: '密码必须是多于6个字符少于30个字符'
-                        },
-                        different:{   //要求必须不同
-                            field:'username',
-                            message:'密码不能与用户名相同'
-                        }
-                        //identical:{  //要求必须相同
-                        //    field:'password',  //需要进行比较的input name值
-                        //    message:'用户名不能与密码相同'  //比较厚不相同时提示
-                        //}
-                    }
-                },
-                verifyCode: {
-                    validators: {
-                        notEmpty: {
-                            message: '验证码不能为空'
-                        },
-                        stringLength: {
-                            min: 4,
-                            max: 4,
-                            message: '验证码为4个字符'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9]+$/,
-                            message: '验证码只能是字母，数字组成'
-                        }
-                    }
-                }
-            }
         });
     });
 </script>
