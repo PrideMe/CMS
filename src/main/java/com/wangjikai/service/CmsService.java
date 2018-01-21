@@ -14,7 +14,14 @@ import java.util.List;
  * Created by 22717 on 2017/10/30.
  * 业务逻辑组件。封装DAO对象
  */
-public interface CmsService {
+public interface CmsService<T> {
+
+    /**
+     * 用户注册
+     * @param user
+     */
+    void register(User user);
+
     /**
      * 用户登陆
      * @param loginname
@@ -31,11 +38,18 @@ public interface CmsService {
     User findUserById(Integer id);
 
     /**
+     * 根据用户名密码查找用户
+     * @param loginname
+     * @return
+     */
+    User findUserByLoginnameAndPassword(String loginname, String password);
+
+    /**
      * 获取所有用户
      * @param user
      * @return
      */
-    Page<User> findUser(User user, Page<User> page);
+    Page<T> findUser(User user, Page<T> page);
 
     /**
      * 根据id删除用户

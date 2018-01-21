@@ -22,10 +22,10 @@ import java.util.Map;
 
 /**
  * Created by 22717 on 2017/11/3.
- * 人事管理系统服务层接口实现类
+ * 管理系统服务层接口实现类
  */
 @Service(value = "cmsService")
-public class CmsServiceImpl implements CmsService {
+public class CmsServiceImpl<T> implements CmsService<T> {
 
     @Resource
     private UserDao userDao;
@@ -39,6 +39,15 @@ public class CmsServiceImpl implements CmsService {
     private NoticeDao noticeDao;
     @Resource
     private DocumentDao documentDao;
+
+    /**
+     * 用户注册
+     * @param user
+     */
+    @Override
+    public void register(User user) {
+        userDao.insertUser(user);
+    }
 
     /**
      * 用户登陆
@@ -59,10 +68,20 @@ public class CmsServiceImpl implements CmsService {
     }
 
     /**
-     * 获取所有用户
+     * 根据用户名查找
+     * @param loginname
+     * @return
      */
     @Override
-    public Page<User> findUser(User user, Page<User> page) {
+    public User findUserByLoginnameAndPassword(String loginname, String password) {
+        return userDao.selectByLoginnameAndPassword(loginname,password);
+    }
+
+    /**
+     * 获取所有用户,可以传递分页值
+     */
+    @Override
+    public Page<T> findUser(User user, Page<T> page) {
         Map<String,Object> map = new HashMap<>();
         int current = page.getCurrent();
         page.setCurrent((current-1)*page.getRowCount());

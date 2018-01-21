@@ -93,8 +93,22 @@ public class UserController {
 
     @RequestMapping(value = {"register"},method = RequestMethod.POST)
     @ResponseBody
-    public String registerData(HttpServletRequest request){
-        return "aaa汉字";
+    public ModelAndView registerData(HttpServletRequest request, String username, String password_again, String verifyCode){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/register");
+        HttpSession session = request.getSession();
+        String session_code = session.getAttribute("session_code").toString().toLowerCase();
+        if (session_code !=null && session_code.equals(verifyCode.toLowerCase())) {
+            User user = new User();
+            user.setLoginname(username);
+            user.setPassword(password_again);
+            user.setUsername(username); //用户可以更改
+            user.setStatus("1");
+            cmsService.register(user);
+            log.info("用户："+username+"，注册成功");
+            modelAndView.setViewName("redirect:/login");
+        }
+        return modelAndView;
     }
 
     //请求登陆数据
@@ -105,26 +119,23 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/index");
         HttpSession session = request.getSession();
-        String session_code = (String) session.getAttribute("session_code").toString().toLowerCase();
+        String session_code = session.getAttribute("session_code").toString().toLowerCase();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String code = request.getParameter("verifyCode").toLowerCase();
-        //拿到所有参数
-//        Map<String,String[]> map = request.getParameterMap();
-//        for (String s : map.keySet()) {
-//            System.out.println(s+"="+request.getParameter(s));
-//        }
+
         Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
         try {
             if (session_code.equals(code)) {
                 currentUser.login(token);
-                session.setAttribute("currentUser","海淀区");
+                //session.setAttribute("currentUser",user.getUsername());
                 modelAndView.setViewName("redirect:/");
-                log.info("登入成功");
+                session.removeAttribute("session_code");
+                log.info("用户："+username+"登入成功");
                 return modelAndView;
             } else {
-                log.info("登入失败");
+                log.info("用户："+username+"登入失败");
                 return modelAndView;
             }
         }catch (UnknownAccountException e){
@@ -174,6 +185,9 @@ public class UserController {
         modelAndView.setViewName("index");
         log.info("IP:"+ip+"登陆");
         modelAndView.addObject("ip",ip);
+        Subject currentUser = SecurityUtils.getSubject();
+        User user = (User) currentUser.getSession().getAttribute("currentUser");
+        modelAndView.addObject("currentUser",user.getUsername());
         return modelAndView;
     }
 
@@ -221,7 +235,9 @@ public class UserController {
     @RequestMapping(value = {"updateUserById"},method = RequestMethod.POST)
     @ResponseBody
     public User updateUserById(User user){
-        //System.out.println(user);
+        Subject currentUser = SecurityUtils.getSubject();
+        User session_user = (User) currentUser.getSession().getAttribute("currentUser");
+        session_user.setUsername(user.getUsername());
         cmsService.modifyUser(user);
         return user;
     }
