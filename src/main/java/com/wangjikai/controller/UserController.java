@@ -206,7 +206,12 @@ public class UserController {
     @RequestMapping(value = {"getUser"},method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> abcd(HttpServletRequest request, int current, int rowCount){
-        log.info("获取全部用户");
+        String searchPhrase = request.getParameter("searchPhrase"); //登录名也行，用户名也可
+        User user = new User();
+        if (!StringUtils.isEmpty(searchPhrase)){
+            user.setLoginname(searchPhrase);
+            log.info("获取符合参数["+searchPhrase+"]的用户");
+        }
         Page<User> page = new Page<>();
         if (StringUtils.isEmpty(current)){
             current = 1;
@@ -215,7 +220,7 @@ public class UserController {
         }
         page.setRowCount(rowCount);
         page.setCurrent(current);
-        page = cmsService.findUser(null,page);   //获取所有用户
+        page = cmsService.findUser(user,page);   //获取指定用户
         Map<String,Object> map = new HashMap<>();
         map.put("current",current);
         map.put("rowCount",rowCount);
