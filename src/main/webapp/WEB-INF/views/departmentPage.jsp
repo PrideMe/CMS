@@ -80,7 +80,7 @@
                 loading: "加载中...",
                 noResults: "没有相关数据",
                 refresh: "刷新",
-                search: "查询"
+                search: "查询部门"
             }
         });
         $("#departmentList").on("loaded.rs.jquery.bootgrid", function (e){

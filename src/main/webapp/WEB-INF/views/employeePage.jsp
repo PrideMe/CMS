@@ -17,11 +17,11 @@
     <thead>
     <tr>
         <th data-column-id="id" data-identifier="true" data-type="numeric" data-visible="false" data-sortable="true">ID</th>
-        <th data-column-id="department" data-formatter="dep" data-width="65px">部门</th>
-        <th data-column-id="job" data-formatter="job" data-width="65px">职位</th>
-        <th data-column-id="name" data-width="90px">姓名</th>
+        <th data-column-id="department" data-formatter="dep" data-width="160px">部门</th>
+        <th data-column-id="job" data-formatter="job" data-width="160px">职位</th>
+        <th data-column-id="name" data-width="80px">姓名</th>
         <%--<th data-column-id="card_id" data-visible="true">ID卡</th>--%>
-        <th data-column-id="address"  data-visible="true" data-width="90px">地址</th>
+        <th data-column-id="address"  data-visible="true" data-width="180px">地址</th>
         <%--<th data-column-id="post_code"  data-visible="true">邮编</th>--%>
         <th data-column-id="phone"  data-visible="true" data-width="110px">手机</th>
         <%--<th data-column-id="qq"  data-visible="true">QQ</th>--%>
@@ -70,12 +70,16 @@
 <script type="text/javascript">
     var formatters = {
         "dep" :function (column,row) {
-            var temp = row.department.name;
-            return temp;
+            if (row.department != null){
+                var temp = row.department.name;
+                return temp;
+            }
         },
         "job" :function (column,row) {
-            var temp = row.job.name;
-            return temp;
+            if (row.job != null) {
+                var temp = row.job.name;
+                return temp;
+            }
         },
         "sexx" :function (column,row) {
             var temp = "";
@@ -99,7 +103,7 @@
             ajax: true,
             url: "${ctx}/employeeData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
-            rowCount:[10,15,20],
+            rowCount:[15,20,25],
             //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,
@@ -111,7 +115,7 @@
                 loading: "加载中...",
                 noResults: "没有相关数据",
                 refresh: "刷新",
-                search: "查询"
+                search: "查询姓名"
             }
         });
         $("#employeeList").on("loaded.rs.jquery.bootgrid", function (e){

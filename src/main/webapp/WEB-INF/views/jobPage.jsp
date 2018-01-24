@@ -80,7 +80,7 @@
                 loading: "加载中...",
                 noResults: "没有相关数据",
                 refresh: "刷新",
-                search: "查询"
+                search: "查询职位"
             }
         });
         $("#jobList").on("loaded.rs.jquery.bootgrid", function (e){

@@ -9,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
 
 /**
  * Created by 22717 on 2017/11/27.
- *
+ * shiro 权限控制
  */
 public class PermissionsRealm extends AuthorizingRealm {
 
@@ -26,6 +27,8 @@ public class PermissionsRealm extends AuthorizingRealm {
     //权限相关
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        String userName = (String) principalCollection.getPrimaryPrincipal();
         return null;
     }
 

@@ -74,7 +74,7 @@ public interface CmsService<T> {
      * @param employee
      * @return
      */
-    List<Employee> findEmployee(Employee employee);
+    Page<T> findEmployee(Employee employee, Page<T> page);
 
     /**
      * 根据id删除员工

@@ -193,9 +193,13 @@ public class UserController {
 
     @RequestMapping(value = "/logout")
     public String logout(HttpServletRequest request,HttpServletResponse response){
-        request.getSession().removeAttribute("currentUser");
         Subject subject= SecurityUtils.getSubject();
-        subject.logout();
+        if (subject != null){
+            subject.logout();
+            HttpSession session = request.getSession();
+            //设置用户最后登陆时间
+            session.removeAttribute("currentUser");
+        }
         //浏览器禁用缓存
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -407,26 +411,27 @@ public class UserController {
 
     @RequestMapping(value = {"employeeData"})
     @ResponseBody
-    public Map<String,Object> employeeData(HttpServletRequest request){
-        List<Employee> employees = cmsService.findEmployee(null);  //获取所有员工
-        String rowCount = request.getParameter("rowCount");
-        String current = request.getParameter("current");
-        Integer i_rowCount = Integer.valueOf(rowCount);
-        Integer i_current = Integer.valueOf(current);
-        Map<String,Object> map = new HashMap<>();
-        map.put("current",i_current);
-        map.put("rowCount",i_rowCount);
-        int a = 0;
-        int b = i_current*i_rowCount - employees.size();
-        int c = employees.size()>(i_current*i_rowCount)?i_rowCount:(i_rowCount-b);
-        //System.out.println("实际显示数："+c);
-        if (c%i_rowCount!=0){
-            a = employees.size();
-        } else {
-            a = (i_current-1)*i_rowCount+i_rowCount;
+    public Map<String,Object> employeeData(HttpServletRequest request, int current, int rowCount){
+        String searchPhrase = request.getParameter("searchPhrase"); //查询短语
+        Employee employee = new Employee();
+        if (!StringUtils.isEmpty(searchPhrase)){
+            employee.setName(searchPhrase);
+            log.info("获取符合参数["+searchPhrase+"]的员工");
         }
-        map.put("rows",employees.subList((i_current-1)*i_rowCount,a));
-        map.put("total",employees.size());
+        Page<Employee> page = new Page<>();
+        if (StringUtils.isEmpty(current)){
+            current = 1;
+        } if (StringUtils.isEmpty(rowCount)){
+            rowCount = 1;
+        }
+        page.setRowCount(rowCount);
+        page.setCurrent(current);
+        page = cmsService.findEmployee(employee,page);  //获取符合条件的员工
+        Map<String,Object> map = new HashMap<>();
+        map.put("current",current);
+        map.put("rowCount",rowCount);
+        map.put("rows",page.getRows());
+        map.put("total",page.getTotal());
         return map;
     }
 

@@ -15,7 +15,7 @@
             </where>
         </if>
         <if test="page != null">
-            LIMIT #{page.firstLimitParam},#{page.pageSize};
+            LIMIT #{page.current},#{page.rowCount};
         </if>
     </select>
 

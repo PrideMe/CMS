@@ -123,12 +123,19 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 获取所有员工.暂时不分页
      */
     @Override
-    public List<Employee> findEmployee(Employee employee) {
+    public Page<T> findEmployee(Employee employee, Page<T> page) {
         Map<String,Object> map = new HashMap<>();
+        int current = page.getCurrent(); //获取到前台请求的当前页数
+        page.setCurrent((current-1)*page.getRowCount());
         map.put("employee",employee);
+        map.put("page",page);
         int allCount = employeeDao.count(map);
         List<Employee> employees = employeeDao.findByPage(map);
-        return employees;
+        page.setTotal(allCount);
+        page.setCurrent(current);
+        page.setRows(employees);
+        //page.setRowCount(page.getRowCount());
+        return page;
     }
 
     /**
@@ -190,6 +197,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      */
     @Override
     public void removeDepartmentById(Integer id) {
+        //存在表关联时，首先判断是否使用外键
         departmentDao.deleteById(id);
     }
 

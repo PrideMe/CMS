@@ -10,7 +10,7 @@
             </if>
         </if>
         <if test="page != null">
-            LIMIT #{page.firstLimitParam},#{page.pageSize};
+            LIMIT #{page.current},#{page.rowCount};
         </if>
     </select>
     <select id="count" parameterType="map" resultType="Integer">
