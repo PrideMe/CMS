@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
@@ -296,6 +297,12 @@
                 </a>
             </div>
             <h2>${currentUser}创建模态框（Modal）</h2>
+            <shiro:hasPermission name="aaa">
+                <h3>有权限</h3>
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="aaa">
+                <h3>无权限aaa</h3>
+            </shiro:lacksPermission>
             <!-- 按钮触发模态框 -->
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">开始演示模态框</button>
             <!-- 模态框（Modal） -->

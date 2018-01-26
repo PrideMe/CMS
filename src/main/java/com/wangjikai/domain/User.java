@@ -2,6 +2,7 @@ package com.wangjikai.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * Created by 22717 on 2017/10/5.
@@ -14,6 +15,7 @@ public class User implements Serializable {
     private String password;
     private String status;
     private Timestamp createdate;
+    private Set<Role> roles; //用户持有角色信息
 
     public Integer getId() {
         return id;
@@ -63,6 +65,14 @@ public class User implements Serializable {
         this.createdate = createdate;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -72,6 +82,7 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", status='" + status + '\'' +
                 ", createdate=" + createdate +
+                ", roles=" + roles +
                 '}';
     }
 }

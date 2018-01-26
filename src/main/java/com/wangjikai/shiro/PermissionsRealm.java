@@ -28,7 +28,12 @@ public class PermissionsRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        String userName = (String) principalCollection.getPrimaryPrincipal();
+        User user = (User) principalCollection.getPrimaryPrincipal();
+        if (user != null) {
+            //authorizationInfo.addRoles();
+            authorizationInfo.addStringPermission("aaa");
+            return authorizationInfo;
+        }
         return null;
     }
 
@@ -41,7 +46,7 @@ public class PermissionsRealm extends AuthorizingRealm {
         User user = cmsService.findUserByLoginnameAndPassword(username,String.valueOf(password));
         if (null != user){
             SecurityUtils.getSubject().getSession().setAttribute("currentUser", user);
-            return new SimpleAuthenticationInfo(user.getUsername(),user.getPassword(),this.getName());
+            return new SimpleAuthenticationInfo(user,user.getPassword(),this.getName());
         }else {
             throw new AuthenticationException();
         }

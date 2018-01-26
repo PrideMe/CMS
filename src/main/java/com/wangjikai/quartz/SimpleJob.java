@@ -2,6 +2,7 @@ package com.wangjikai.quartz;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,9 @@ import java.util.Map;
 public class SimpleJob {
     @Resource
     private JavaMailSender mailSender;
+
+    @Value("${mail.username}")
+    private String mailFrom; //不适用于在controller中使用，因为spring与springMVC不属于同一个容器
 
     public void out(){
         Date date = new Date();
@@ -90,7 +94,7 @@ public class SimpleJob {
 //        weatherInfo.put("风速",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("wind_spd")+"公里/小时");
         //return weatherInfo;
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom("15314006321@163.com");
+        email.setFrom(mailFrom);
         email.setTo("549469611@qq.com");
         email.setSubject(simpleDateFormat.format(date));
         email.setText(weatherInfo.toString());

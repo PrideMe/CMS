@@ -89,7 +89,7 @@
             ajax: true,
             url: "${ctx}/getUser",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
-            rowCount:[10,15,20],
+            rowCount:[15,20,25],
             //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,

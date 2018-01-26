@@ -2,9 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.wangjikai.dao.UserDao">
-    <select id="selectByLoginnameAndPassword" resultType="com.wangjikai.domain.User">
-    SELECT * FROM user WHERE loginname = #{loginname} AND password = #{password};
-</select>
+    <select id="selectByLoginnameAndPassword" resultMap="getUserRole">
+        SELECT
+        u.id,u.loginname,u.username,u.`password`,u.`status`,u.createdate,
+        r.id AS rId,r.roleName,r.roleCode,r.description AS rDescription,
+        p.id AS pId,p.`name` AS pName,p.description AS pDescription,p.url
+        FROM
+        `user` AS u,
+        role AS r,
+        permission AS p,
+        role_permission AS rp,
+        user_role AS ur
+        WHERE
+        u.id = ur.userId
+        AND
+        r.id = ur.roleId
+        AND
+        p.id = rp.permissionId
+        AND
+        r.id = rp.roleId
+        AND
+        u.loginname = #{loginname} AND u.password = #{password};
+    </select>
+    <resultMap id="getUserRole" type="com.wangjikai.domain.User">
+        <id property="id" column="id"/>
+        <result property="loginname" column="loginname"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="createdate" column="createdate"/>
+        <collection property="roles" ofType="com.wangjikai.domain.Role">
+            <id property="id" column="rId"/>
+            <result property="name" column="roleName"/>
+            <result property="roleCode" column="roleCode"/>
+            <result property="description" column="rDescription"/>
+            <collection property="permissions" ofType="com.wangjikai.domain.Permission">
+                <id property="id" column="pId"/>
+                <result property="name" column="pName"/>
+                <result property="description" column="pDescription"/>
+                <result property="url" column="url"/>
+            </collection>
+        </collection>
+    </resultMap>
     <select id="selectById" resultType="com.wangjikai.domain.User" parameterType="Integer">
         SELECT * FROM user WHERE id = #{id};
     </select>
