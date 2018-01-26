@@ -297,12 +297,51 @@
                 </a>
             </div>
             <h2>${currentUser}创建模态框（Modal）</h2>
-            <shiro:hasPermission name="aaa">
-                <h3>有权限</h3>
-            </shiro:hasPermission>
-            <shiro:lacksPermission name="aaa">
-                <h3>无权限aaa</h3>
-            </shiro:lacksPermission>
+            <shiro:hasRole name="employee">
+                <h3>你是员工</h3>
+                <shiro:hasPermission name="delegate">
+                    <h3>代表公司</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="manager">
+                    <h3>人事安排</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="interview">
+                    <h3>面试新员工</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="work">
+                    <h3>只有工作</h3>
+                </shiro:hasPermission>
+            </shiro:hasRole>
+            <shiro:hasRole name="boss">
+                <h3>你是老板</h3>
+                <shiro:hasPermission name="delegate">
+                    <h3>代表公司</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="manager">
+                    <h3>人事安排</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="interview">
+                    <h3>面试新员工</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="work">
+                    <h3>只有工作</h3>
+                </shiro:hasPermission>
+            </shiro:hasRole>
+            <shiro:hasRole name="manager">
+                <h3>你是经理</h3>
+                <shiro:hasPermission name="delegate">
+                    <h3>代表公司</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="manager">
+                    <h3>人事安排</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="interview">
+                    <h3>面试新员工</h3>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="work">
+                    <h3>只有工作</h3>
+                </shiro:hasPermission>
+            </shiro:hasRole>
             <!-- 按钮触发模态框 -->
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">开始演示模态框</button>
             <!-- 模态框（Modal） -->

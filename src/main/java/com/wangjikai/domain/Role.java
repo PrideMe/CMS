@@ -1,12 +1,13 @@
 package com.wangjikai.domain;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  * Created by jikai_wang on 2018/1/22.
  * 角色类
  */
-public class Role {
+public class Role implements Serializable{
     private Integer id;
     private String name;
     private String roleCode;

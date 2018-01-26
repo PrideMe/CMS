@@ -18,6 +18,7 @@
         <setting name="useColumnLabel" value="true"/>
         <!-- 开启驼峰命名转换:Table{create_time} -> Domain{createTime} -->
         <!--<setting name="mapUnderscoreToCamelCase" value="true"/>-->
+        <setting name="logImpl" value="LOG4J2" />
     </settings>
 
     <!--<environments default="mysql">

@@ -1,12 +1,13 @@
 package com.wangjikai.domain;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  * Created by jikai_wang on 2018/1/24.
  * 权限实体类
  */
-public class Permission {
+public class Permission implements Serializable{
     private Integer id;
     private String name;
     private String description;
