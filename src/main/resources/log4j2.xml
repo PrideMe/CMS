@@ -53,6 +53,10 @@
         <logger name="org.elasticsearch" level="OFF"/>
         <logger name="org.quartz" level="OFF"/>
         <logger name="com.alibaba" level="OFF"/>
+        <!--mybatis 打印SQL 正常生产环境去除-->
+        <logger name="com.wangjikai.dao" level="DEBUG" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
         <root level="INFO">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>

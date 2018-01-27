@@ -35,13 +35,11 @@ public class PermissionsRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //等到登陆时查询到的用户，此时用户不带角色权限信息
         User user = (User) principalCollection.getPrimaryPrincipal();
-        //查询用户权限信息
-        User userWithRoleAndPermission = cmsService.selectUserRolePermission(user);
-        if (userWithRoleAndPermission != null) {
-            Set<Role> roles = userWithRoleAndPermission.getRoles();
+        if (user != null) {
+            Set<Role> roles = user.getRoles();
             List<String> roleList = new ArrayList<>();
             List<String> permissionList = new ArrayList<>();
-            if (user != null) {
+            if (roles != null) {
                 for (Role role : roles) {
                     roleList.add(role.getRoleCode());
                     for (Permission permission : role.getPermissions()) {
@@ -62,9 +60,14 @@ public class PermissionsRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
         char[] password = token.getPassword();
-        //只查找用户信息，不包含角色权限信息
+        //只查找用户信息
         User user = cmsService.findUserByLoginnameAndPassword(username,String.valueOf(password));
         if (null != user){
+            //查询用户权限信息
+            User userRolePermission = cmsService.selectUserRolePermission(user);
+            if (userRolePermission != null){
+                user.setRoles(userRolePermission.getRoles());
+            }
             SecurityUtils.getSubject().getSession().setAttribute("currentUser", user);
             return new SimpleAuthenticationInfo(user,user.getPassword(),this.getName());
         }else {

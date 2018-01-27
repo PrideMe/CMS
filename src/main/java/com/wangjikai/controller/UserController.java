@@ -119,7 +119,10 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/index");
         HttpSession session = request.getSession();
-        String session_code = session.getAttribute("session_code").toString().toLowerCase();
+        String session_code = "";
+        if (session.getAttribute("session_code") != null) {
+            session_code = session.getAttribute("session_code").toString().toLowerCase();
+        }
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String code = request.getParameter("verifyCode").toLowerCase();

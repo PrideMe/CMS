@@ -68,7 +68,7 @@ public interface CmsService<T> {
      * 修改用户
      * @param user
      */
-    void modifyUser(User user);
+    User modifyUser(User user);
 
     /**
      * 添加用户

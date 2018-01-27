@@ -304,51 +304,18 @@
                 </a>
             </div>
             <h2>${currentUser}创建模态框（Modal）</h2>
-            <shiro:hasRole name="employee">
-                <h3>你是员工</h3>
-                <shiro:hasPermission name="delegate">
-                    <h3>代表公司</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="manager">
-                    <h3>人事安排</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="interview">
-                    <h3>面试新员工</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="work">
-                    <h3>只有工作</h3>
-                </shiro:hasPermission>
-            </shiro:hasRole>
-            <shiro:hasRole name="boss">
-                <h3>你是老板</h3>
-                <shiro:hasPermission name="delegate">
-                    <h3>代表公司</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="manager">
-                    <h3>人事安排</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="interview">
-                    <h3>面试新员工</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="work">
-                    <h3>只有工作</h3>
-                </shiro:hasPermission>
-            </shiro:hasRole>
-            <shiro:hasRole name="manager">
-                <h3>你是经理</h3>
-                <shiro:hasPermission name="delegate">
-                    <h3>代表公司</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="manager">
-                    <h3>人事安排</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="interview">
-                    <h3>面试新员工</h3>
-                </shiro:hasPermission>
-                <shiro:hasPermission name="work">
-                    <h3>只有工作</h3>
-                </shiro:hasPermission>
-            </shiro:hasRole>
+            <shiro:hasPermission name="delegate">
+                <h3>具有代表公司权限</h3>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="manager">
+                <h3>具有人事安排权限</h3>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="interview">
+                <h3>具有面试新员工权限</h3>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="work">
+                <h3>具有只有工作权限</h3>
+            </shiro:hasPermission>
             <!-- 按钮触发模态框 -->
             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">开始演示模态框</button>
             <!-- 模态框（Modal） -->
@@ -410,10 +377,12 @@
 
                 <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal">居中弹出</button>
             </div>
+            <br/>
 
             <div>
                 <ul id="treeDemo" class="ztree"></ul>
             </div>
+            <br/>
 
             <div id="toolbar" class="btn-group">
                 <button id="btn_add" type="button" class="btn btn-default">
@@ -426,6 +395,7 @@
                     <span class="fa fa-trash-o fa-fw" aria-hidden="true"></span>删除
                 </button>
             </div>
+            <br/><br/>
 
             <div id="datetime" class="input-group date form_datetime col-md-5" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                 <input class="form-control" size="16" type="text" value="" readonly placeholder="时间选择器">
@@ -480,13 +450,38 @@
 <script type="text/javascript">
     var zTreeObj;
     // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
-    var setting = {};
+    var setting = {
+        check : {
+            chkStyle:"checkbox",
+            enable : true //是否复选框
+        }
+    };
     // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
     var zNodes = [
-        {name:"山东省", open:true, children:[
-            {name:"济南市"}, {name:"日照市"}]},
-        {name:"浙江省", open:true, children:[
-            {name:"杭州市"}, {name:"温州市"}]}
+        {
+            name: "山东省",
+            open: true,
+            children: [
+                {
+                    name: "济南市"
+                },
+                {
+                    name: "日照市"
+                }
+            ]
+        },
+        {
+            name: "浙江省",
+            open: true,
+            children: [
+                {
+                    name: "杭州市"
+                },
+                {
+                    name: "温州市"
+                }
+            ]
+        }
     ];
     $(document).ready(function(){
         zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);

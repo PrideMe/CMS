@@ -13,6 +13,9 @@ import com.wangjikai.domain.Job;
 import com.wangjikai.domain.Notice;
 import com.wangjikai.domain.User;
 import com.wangjikai.util.Page;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -62,6 +65,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id查询用户
      */
     @Override
+    @Cacheable(value = "userCache", key = "'user:' + #id")
     public User findUserById(Integer id) {
         User user = userDao.selectById(id);
         return user;
@@ -109,6 +113,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id删除用户
      */
     @Override
+    @CacheEvict(value = "userCache", key = "'user:' + #id")
     public void removeUserById(Integer id) {
         userDao.deleteById(id);
     }
@@ -117,8 +122,10 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 修改用户
      */
     @Override
-    public void modifyUser(User user) {
+    @CachePut(value = "userCache", key = "'user:' + #user.id")
+    public User modifyUser(User user) {
         userDao.update(user);
+        return user;
     }
 
     /**
