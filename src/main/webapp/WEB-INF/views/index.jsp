@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="${ctx}/css/metisMenu.css">
     <link rel="stylesheet" href="${ctx}/css/jquery.bootgrid.min.css">
     <link rel="stylesheet" href="${ctx}/css/nprogress.css">
+    <link rel="stylesheet" href="${ctx}/ztree/zTreeStyle.css">
     <link rel="stylesheet" href="${ctx}/css/bootstrap-datetimepicker.css">
     <link href="${ctx}/images/favicon.ico" rel="shortcut icon">
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
@@ -23,6 +24,8 @@
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <script type="text/javascript" src="${ctx}/js/echarts.js"></script>
+    <script type="text/javascript" src="${ctx}/layer/layer.js"></script>
+    <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.core.min.js"></script>
     <style type="text/css">
         *{
             margin: 0;
@@ -183,11 +186,13 @@
                                 <span class="sidebar-nav-item-icon fa fa-code-fork fa-fw"></span>用户查询
                             </a>
                         </li>
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/addUser')">
-                                <span class="sidebar-nav-item-icon fa fa-star fa-fw"></span>添加用户
-                            </a>
-                        </li>
+                        <shiro:hasRole name="boss">
+                            <li>
+                                <a href="#" onclick="showAtRight('${ctx}/addUser')">
+                                    <span class="sidebar-nav-item-icon fa fa-star fa-fw"></span>添加用户
+                                </a>
+                            </li>
+                        </shiro:hasRole>
                     </ul>
                 </li>
                 <li>
@@ -201,11 +206,13 @@
                                 <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>部门查询
                             </a>
                         </li>
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/addDepartment')">
-                                <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加部门
-                            </a>
-                        </li>
+                        <shiro:hasRole name="boss">
+                            <li>
+                                <a href="#" onclick="showAtRight('${ctx}/addDepartment')">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加部门
+                                </a>
+                            </li>
+                        </shiro:hasRole>
                     </ul>
                 </li>
                 <li>
@@ -393,6 +400,21 @@
                 </div>
             </div>
 
+            <div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    Tips：为了更清晰演示，每触发下述一个例子之前，都会关闭所有已经演示的层
+                </blockquote>
+                <button data-method="setTop" class="layui-btn">多窗口模式，层叠置顶</button>
+                <button data-method="confirmTrans" class="layui-btn">配置一个透明的询问框</button>
+                <button data-method="notice" class="layui-btn">示范一个公告层</button>
+
+                <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal">居中弹出</button>
+            </div>
+
+            <div>
+                <ul id="treeDemo" class="ztree"></ul>
+            </div>
+
             <div id="toolbar" class="btn-group">
                 <button id="btn_add" type="button" class="btn btn-default">
                     <span class="fa fa-plus fa-fw" aria-hidden="true"></span>新增
@@ -456,6 +478,104 @@
 </div>
 
 <script type="text/javascript">
+    var zTreeObj;
+    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+    var setting = {};
+    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+    var zNodes = [
+        {name:"山东省", open:true, children:[
+            {name:"济南市"}, {name:"日照市"}]},
+        {name:"浙江省", open:true, children:[
+            {name:"杭州市"}, {name:"温州市"}]}
+    ];
+    $(document).ready(function(){
+        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+        //触发事件
+        var active = {
+            setTop: function(){
+                var that = this;
+                //多窗口模式，层叠置顶
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '当你选择该窗体时，即会在最顶端'
+                    ,area: ['390px', '260px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,offset: [ //为了演示，随机坐标
+                        Math.random()*($(window).height()-300)
+                        ,Math.random()*($(window).width()-390)
+                    ]
+                    ,content: 'http://layer.layui.com/test/settop.html'
+                    ,btn: ['继续弹出', '全部关闭'] //只是为了演示
+                    ,yes: function(){
+                        $(that).click();
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                    }
+
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                    }
+                });
+            }
+            ,confirmTrans: function(){
+                //配置一个透明的询问框
+                layer.msg('大部分参数都是可以公用的<br>合理搭配，展示不一样的风格', {
+                    time: 20000, //20s后自动关闭
+                    btn: ['明白了', '知道了', '哦']
+                });
+            }
+            ,notice: function(){
+                //示范一个公告层
+                layer.open({
+                    type: 1
+                    ,title: false //不显示标题栏
+                    ,closeBtn: false
+                    ,area: '300px;'
+                    ,shade: 0.8
+                    ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    ,btn: ['火速围观', '残忍拒绝']
+                    ,btnAlign: 'c'
+                    ,moveType: 1 //拖拽模式，0或者1
+                    ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">你知道吗？亲！<br>layer ≠ layui<br><br>layer只是作为Layui的一个弹层模块，由于其用户基数较大，所以常常会有人以为layui是layerui<br><br>layer虽然已被 Layui 收编为内置的弹层模块，但仍然会作为一个独立组件全力维护、升级。<br><br>我们此后的征途是星辰大海 ^_^</div>'
+                    ,success: function(layero){
+                        var btn = layero.find('.layui-layer-btn');
+                        btn.find('.layui-layer-btn0').attr({
+                            href: '${ctx}/index'
+                            ,target: '_blank'
+                        });
+                    }
+                });
+            }
+            ,offset: function(othis){
+                var type = othis.data('type')
+                    ,text = othis.text();
+
+                layer.open({
+                    type: 1
+                    ,offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                    ,id: 'layerDemo'+type //防止重复弹出
+                    ,content: '<div style="padding: 20px 100px;">'+ text +'</div>'
+                    ,btn: '关闭全部'
+                    ,btnAlign: 'c' //按钮居中
+                    ,shade: 0 //不显示遮罩
+                    ,yes: function(){
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
+
+        $('#layerDemo .layui-btn').on('click', function(){
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+
+
     //自动轮播
     $(function () {
         $("#myCarousel").carousel('cycle');

@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.wangjikai.dao.UserDao">
-    <select id="selectByLoginnameAndPassword" resultMap="getUserRole">
+    <select id="selectByLoginnameAndPassword" resultType="com.wangjikai.domain.User">
+        SELECT * FROM `user` WHERE loginname = #{loginname} AND password = #{password};
+    </select>
+    <select id="selectUserRolePermission" resultMap="getUserRole">
         SELECT
         u.id,u.loginname,u.username,u.`password`,u.`status`,u.createdate,
         r.id AS rId,r.roleName,r.roleCode,r.description AS rDescription,

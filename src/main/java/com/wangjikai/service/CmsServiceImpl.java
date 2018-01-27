@@ -78,6 +78,16 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     }
 
     /**
+     * 根据用户查询角色权限信息
+     * @param user
+     * @return
+     */
+    @Override
+    public User selectUserRolePermission(User user) {
+        return userDao.selectUserRolePermission(user);
+    }
+
+    /**
      * 获取所有用户,可以传递分页值
      */
     @Override

@@ -45,6 +45,13 @@ public interface CmsService<T> {
     User findUserByLoginnameAndPassword(String loginname, String password);
 
     /**
+     * 根据用户查找角色与权限
+     * @param user
+     * @return
+     */
+    User selectUserRolePermission(User user);
+
+    /**
      * 获取所有用户
      * @param user
      * @return

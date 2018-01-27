@@ -27,6 +27,6 @@ public interface UserDao {
     Integer count(Map<String,Object> params);
     //动态插入
     void insertUser(User user);
-
-
+    //查询用户的角色权限信息
+    User selectUserRolePermission(User user);
 }

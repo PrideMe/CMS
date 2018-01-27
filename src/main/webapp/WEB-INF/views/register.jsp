@@ -125,10 +125,10 @@
                             max: 30,
                             message: '密码必须是多于6个字符少于30个字符'
                         },
-//                        different:{   //要求必须不同
-//                            field:'username',
-//                            message:'密码不能与用户名相同'
-//                        }
+                        different:{   //要求必须不同
+                            field:'username',
+                            message:'密码不能与用户名相同'
+                        }
 //                        identical:{  //要求必须相同
 //                            field:'password',  //需要进行比较的input name值
 //                            message:'用户名不能与密码相同'  //比较厚不相同时提示
@@ -145,10 +145,10 @@
 //                            max: 30,
 //                            message: '密码必须是多于6个字符少于30个字符'
 //                        },
-//                        different:{   //要求必须不同
-//                            field:'username',
-//                            message:'密码不能与用户名相同'
-//                        }
+                        different:{   //要求必须不同
+                            field:'username',
+                            message:'密码不能与用户名相同'
+                        },
                         identical:{  //要求必须相同
                             field:'password',  //需要进行比较的input name值
                             message:'两次密码不一致'  //比较厚不相同时提示
