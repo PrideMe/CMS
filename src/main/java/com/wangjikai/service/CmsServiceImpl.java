@@ -146,9 +146,9 @@ public class CmsServiceImpl<T> implements CmsService<T> {
 
     /**
      * 获取所有员工
+     * 使用缓存、将参数写入key。注意变动
      */
     @Override
-    //@Cacheable(value = "userCache", key = "'user:' + #page.rows")
     public Page<T> findEmployee(Employee employee, Page<T> page) {
         Map<String,Object> map = new HashMap<>();
         int current = page.getCurrent(); //获取到前台请求的当前页数
@@ -168,6 +168,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id删除员工
      */
     @Override
+    @CacheEvict(value = "employeeCache", key = "'employee:' + #id")
     public void removeEmployeeById(Integer id) {
         employeeDao.deleteById(id);
     }
@@ -176,6 +177,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id查询员工
      */
     @Override
+    @Cacheable(value = "employeeCache", key = "'employee:' + #id")
     public Employee findEmployeeById(Integer id) {
         Employee employee = employeeDao.findById(id);
         return employee;
@@ -193,6 +195,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 修改员工
      */
     @Override
+    @CachePut(value = "employeeCache", key = "'employee:' + #employee.id")
     public void modifyEmployee(Employee employee) {
         employeeDao.update(employee);
     }
@@ -222,6 +225,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id删除部门
      */
     @Override
+    @CacheEvict(value = "departmentCache", key = "'department:' + #id")
     public void removeDepartmentById(Integer id) {
         //存在表关联时，首先判断是否使用外键
         departmentDao.deleteById(id);
@@ -239,6 +243,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id查找部门
      */
     @Override
+    @Cacheable(value = "departmentCache", key = "'department:' + #id")
     public Department findDepartmentById(Integer id) {
         Department department = departmentDao.findById(id);
         return department;
@@ -248,6 +253,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 修改部门
      */
     @Override
+    @CachePut(value = "departmentCache", key = "'department:' + #department.id")
     public void modifyDepartment(Department department) {
         departmentDao.update(department);
     }

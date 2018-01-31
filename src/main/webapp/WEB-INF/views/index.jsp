@@ -126,7 +126,7 @@
         .carousel-control.right {
             background-image: none;
         }
-        @media (min-width: 768px) and (max-width:959px) {
+        @media (max-width:768px) {
             .navbar-toggle[class*=pull-left] { margin-left: 15px; margin-right: 0; }
             /*#goTop { padding: 0 8px; }*/
         }
@@ -184,7 +184,7 @@
             <ul class="metismenu" id="menu">
                 <shiro:hasAnyRoles name="boss,manager">
                     <li class="active">
-                        <a href="#" aria-expanded="true">
+                        <a href="javascript:void(0);" aria-expanded="true">
                             <span class="sidebar-nav-item-icon fa fa-id-card fa-lg"></span>
                             <span class="sidebar-nav-item">用户管理</span>
                             <span class="fa arrow"></span>
@@ -205,7 +205,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" aria-expanded="false">
+                        <a href="javascript:void(0);" aria-expanded="false">
                             <span class="sidebar-nav-item-icon fa fa-th fa-lg"></span>
                             部门管理<span class="fa arrow"></span>
                         </a>
@@ -225,7 +225,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" aria-expanded="false">
+                        <a href="javascript:void(0);" aria-expanded="false">
                             <span class="sidebar-nav-item-icon fa fa-keyboard-o fa-lg"></span>
                             职位管理<span class="fa arrow"></span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -240,7 +240,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
+                                <a href="javascript:void(0);" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
                                     小功能<span class="fa plus-times"></span></a>
                                 <ul aria-expanded="false" class="collapse">
                                     <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
@@ -251,7 +251,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" aria-expanded="false">
+                        <a href="javascript:void(0);" aria-expanded="false">
                             <span class="sidebar-nav-item-icon fa fa-user-o fa-lg"></span>员工管理<span class="fa arrow"></span>
                         </a>
                         <ul aria-expanded="false" class="collapse">
@@ -268,7 +268,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" aria-expanded="false">
+                        <a href="javascript:void(0);" aria-expanded="false">
                             <span class="sidebar-nav-item-icon fa fa-map-o fa-lg"></span>
                             公告管理<span class="fa arrow"></span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -279,11 +279,15 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" aria-expanded="false">
+                        <a href="javascript:void(0);" aria-expanded="false">
                             <span class="sidebar-nav-item-icon fa fa-cog fa-lg"></span>
                             系统设置<span class="fa arrow"></span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>角色管理</a></li>
+                            <li>
+                                <a href="#" onclick="showAtRight('${ctx}/rolePage')">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>角色管理
+                                </a>
+                            </li>
                             <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>菜单管理</a></li>
                             <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>系统字典</a></li>
                         </ul>

@@ -9,6 +9,7 @@
     <defaultCache maxElementsInMemory="10000" memoryStoreEvictionPolicy="LRU" eternal="false"
                   timeToIdleSeconds="300" timeToLiveSeconds="300" overflowToDisk="false" diskPersistent="false" />
 
+    <!-- 用户缓存 -->
     <cache name="userCache"
            maxElementsInMemory="1000"
            eternal="false"
@@ -17,4 +18,21 @@
            overflowToDisk="false"
            memoryStoreEvictionPolicy="LRU"/>
 
+    <!-- 员工缓存 -->
+    <cache name="employeeCache"
+           maxElementsInMemory="1000"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU"/>
+
+    <!-- 部门缓存 -->
+    <cache name="departmentCache"
+           maxElementsInMemory="1000"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU"/>
 </ehcache>
