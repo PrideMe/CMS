@@ -5,6 +5,8 @@ import com.wangjikai.domain.Document;
 import com.wangjikai.domain.Employee;
 import com.wangjikai.domain.Job;
 import com.wangjikai.domain.Notice;
+import com.wangjikai.domain.Permission;
+import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
 import com.wangjikai.util.Page;
 
@@ -54,7 +56,6 @@ public interface CmsService<T> {
     /**
      * 获取所有用户
      * @param user
-     * @return
      */
     Page<T> findUser(User user, Page<T> page);
 
@@ -247,4 +248,69 @@ public interface CmsService<T> {
      * @param document
      */
     void modifyDocument(Document document);
+
+    /**
+     * 根据id查找角色
+     * @param id
+     * @return
+     */
+    Role findRoleById(Integer id);
+
+    /**
+     * 根据id删除角色
+     * @param id
+     */
+    void deleteRoleById(Integer id);
+
+    /**
+     * 修改角色
+     * @param role
+     */
+    void modifyRole(Role role);
+
+    /**
+     * 添加角色
+     * @param role
+     */
+    void addRole(Role role);
+
+    /**
+     * 获取所有符合条件的角色
+     * @param role
+     * @return
+     */
+    Page<T> findRole(Role role, Page<T> page);
+
+    /**
+     * 根据id查找权限
+     * @param id
+     * @return
+     */
+    Permission findPermissionById(Integer id);
+
+    /**
+     * 根据id删除权限
+     * @param id
+     */
+    void deletePermissionById(Integer id);
+
+    /**
+     * 修改权限
+     * @param permission
+     */
+    void modifyPermission(Permission permission);
+
+    /**
+     * 添加权限
+     * @param permission
+     */
+    void addPermission(Permission permission);
+
+    /**
+     * 获取所有符合条件的角色
+     * @param permission
+     * @param page
+     * @return
+     */
+    Page<T> findPermission(Permission permission, Page<T> page);
 }

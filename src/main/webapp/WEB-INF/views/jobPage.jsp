@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <link rel="stylesheet" href="${ctx}/css/bootstrap.min.css">
+    <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootbox.min.js"/>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.fa.min.js"></script>

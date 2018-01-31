@@ -99,6 +99,10 @@
     };
     //主动加载请求，填充表格数据
     $(function () {
+        $.getScript("${ctx}/js/jquery.bootgrid.min.js");
+        $.getScript("${ctx}/js/jquery.bootgrid.fa.min.js");
+        $.getScript("${ctx}/js/jquery-3.2.1.min.js");
+        $.getScript("${ctx}/js/bootstrap.min.js");
         $("#employeeList").bootgrid({
             ajax: true,
             url: "${ctx}/employeeData",

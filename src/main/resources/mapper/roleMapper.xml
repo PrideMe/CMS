@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wangjikai.dao.RoleDao">
+    <select id="findById" resultType="com.wangjikai.domain.Role" parameterType="Integer">
+        SELECT id,roleName AS `name`,roleCode,description FROM role WHERE id  = #{id};
+    </select>
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM role WHERE id = #{id};
+    </delete>
+    <update id="update" parameterType="com.wangjikai.domain.Role">
+        UPDATE role
+        -- 需要查找角色关联的权限
+        <set>
+            <if test="name != null">roleName=#{name},</if>
+            <if test="roleCode != null">roleCode=#{roleCode},</if>
+            <if test="description != null">description=#{description},</if>
+        </set>
+        WHERE id = #{id};
+    </update>
+    <insert id="addRole" parameterType="com.wangjikai.domain.Role" flushCache="true">
+        INSERT INTO role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                roleName,
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                roleCode,
+            </if>
+            <if test="description != null and description != ''">
+                description,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                #{roleCode},
+            </if>
+            <if test="description != null and description != ''">
+                #{description},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByPage" parameterType="map" resultType="com.wangjikai.domain.Role">
+        SELECT id,roleName AS `name`,roleCode,description FROM role
+        <if test="role != null">
+            <where>
+                <if test="role.name != null and role.name != ''">
+                    roleName LIKE CONCAT('%',#{role.name},'%')
+                </if>
+                <if test="role.roleCode != null and role.roleCode != ''">
+                    AND roleCode LIKE CONCAT('%',#{role.roleCode},'%')
+                </if>
+                <if test="role.description != null and role.description != ''">
+                    AND description LIKE CONCAT('%',#{role.description},'%')
+                </if>
+            </where>
+        </if>
+        <if test="page != null">
+            LIMIT #{page.current},#{page.rowCount};
+        </if>
+    </select>
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT COUNT(*) FROM role
+        <if test="role != null">
+            <where>
+                <if test="role.name != null and role.name != ''">
+                    roleName LIKE CONCAT('%',#{role.name},'%')
+                </if>
+                <if test="role.roleCode != null and role.roleCode != ''">
+                    AND roleCode LIKE CONCAT('%',#{role.roleCode},'%')
+                </if>
+                <if test="role.description != null and role.description != ''">
+                    AND description LIKE CONCAT('%',#{role.description},'%')
+                </if>
+            </where>
+        </if>
+    </select>
+</mapper>

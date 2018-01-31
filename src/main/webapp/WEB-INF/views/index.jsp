@@ -25,6 +25,7 @@
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <script type="text/javascript" src="${ctx}/js/echarts.js"></script>
     <script type="text/javascript" src="${ctx}/layer/layer.js"></script>
+    <script type="text/javascript" src="${ctx}/js/default.js"></script>
     <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.core.min.js"></script>
     <style type="text/css">
         *{
@@ -41,7 +42,7 @@
             background: #333;
         }
         .content {
-            margin-left: 210px;
+            /*margin-left: 210px;*/
             margin-top: 50px;
             top: 50px;
         }
@@ -125,6 +126,10 @@
         .carousel-control.right {
             background-image: none;
         }
+        @media (min-width: 768px) and (max-width:959px) {
+            .navbar-toggle[class*=pull-left] { margin-left: 15px; margin-right: 0; }
+            /*#goTop { padding: 0 8px; }*/
+        }
     </style>
     <script>
         $(function () {
@@ -152,6 +157,9 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle show pull-left" data-target="sidebar">
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -170,105 +178,117 @@
     </div>
 </nav>
 
-<div class="clearfix">
+<div class="clearfix all">
     <aside class="sidebar">
         <nav class="sidebar-nav navbar">
-            <ul class="metismenu navbar-collapse collapse" id="menu">
-                <li class="active">
-                    <a href="#" aria-expanded="true">
-                        <span class="sidebar-nav-item-icon fa fa-id-card fa-lg"></span>
-                        <span class="sidebar-nav-item">用户管理</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul aria-expanded="true" class="collapse in">
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/userPage')">
-                                <span class="sidebar-nav-item-icon fa fa-code-fork fa-fw"></span>用户查询
-                            </a>
-                        </li>
-                        <shiro:hasRole name="boss">
+            <ul class="metismenu" id="menu">
+                <shiro:hasAnyRoles name="boss,manager">
+                    <li class="active">
+                        <a href="#" aria-expanded="true">
+                            <span class="sidebar-nav-item-icon fa fa-id-card fa-lg"></span>
+                            <span class="sidebar-nav-item">用户管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul aria-expanded="true" class="collapse in">
                             <li>
-                                <a href="#" onclick="showAtRight('${ctx}/addUser')">
-                                    <span class="sidebar-nav-item-icon fa fa-star fa-fw"></span>添加用户
+                                <a href="#" onclick="showAtRight('${ctx}/userPage')">
+                                    <span class="sidebar-nav-item-icon fa fa-code-fork fa-fw"></span>用户查询
                                 </a>
                             </li>
-                        </shiro:hasRole>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" aria-expanded="false">
-                        <span class="sidebar-nav-item-icon fa fa-th fa-lg"></span>
-                        部门管理<span class="fa arrow"></span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/departmentPage')">
-                                <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>部门查询
-                            </a>
-                        </li>
-                        <shiro:hasRole name="boss">
+                            <shiro:hasRole name="boss">
+                                <li>
+                                    <a href="#" onclick="showAtRight('${ctx}/addUser')">
+                                        <span class="sidebar-nav-item-icon fa fa-star fa-fw"></span>添加用户
+                                    </a>
+                                </li>
+                            </shiro:hasRole>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" aria-expanded="false">
+                            <span class="sidebar-nav-item-icon fa fa-th fa-lg"></span>
+                            部门管理<span class="fa arrow"></span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
                             <li>
-                                <a href="#" onclick="showAtRight('${ctx}/addDepartment')">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加部门
+                                <a href="#" onclick="showAtRight('${ctx}/departmentPage')">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>部门查询
                                 </a>
                             </li>
-                        </shiro:hasRole>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" aria-expanded="false">
-                        <span class="sidebar-nav-item-icon fa fa-keyboard-o fa-lg"></span>
-                        职位管理<span class="fa arrow"></span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/jobPage')">
-                                <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>职位查询
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/addJob')">
-                                <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加职位
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
-                                小功能<span class="fa plus-times"></span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
-                                <li><a href="#" onclick="showAtRight('${ctx}/search')"><span class="sidebar-nav-item-icon fa fa-search fa-fw"></span>搜索</a></li>
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" aria-expanded="false">
-                        <span class="sidebar-nav-item-icon fa fa-user-o fa-lg"></span>员工管理<span class="fa arrow"></span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li>
-                            <a href="#" onclick="showAtRight('${ctx}/employeePage')">
-                                <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>员工查询
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加员工
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" aria-expanded="false">
-                        <span class="sidebar-nav-item-icon fa fa-map-o fa-lg"></span>
-                        公告管理<span class="fa arrow"></span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>查询公告</a></li>
-                        <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加公告</a></li>
-                        <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>删除公告</a></li>
-                        <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>修改公告</a></li>
-                    </ul>
-                </li>
+                            <shiro:hasRole name="boss">
+                                <li>
+                                    <a href="#" onclick="showAtRight('${ctx}/addDepartment')">
+                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加部门
+                                    </a>
+                                </li>
+                            </shiro:hasRole>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" aria-expanded="false">
+                            <span class="sidebar-nav-item-icon fa fa-keyboard-o fa-lg"></span>
+                            职位管理<span class="fa arrow"></span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="#" onclick="showAtRight('${ctx}/jobPage')">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>职位查询
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="showAtRight('${ctx}/addJob')">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加职位
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
+                                    小功能<span class="fa plus-times"></span></a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
+                                    <li><a href="#" onclick="showAtRight('${ctx}/search')"><span class="sidebar-nav-item-icon fa fa-search fa-fw"></span>搜索</a></li>
+                                    <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" aria-expanded="false">
+                            <span class="sidebar-nav-item-icon fa fa-user-o fa-lg"></span>员工管理<span class="fa arrow"></span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="#" onclick="showAtRight('${ctx}/employeePage')">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>员工查询
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加员工
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" aria-expanded="false">
+                            <span class="sidebar-nav-item-icon fa fa-map-o fa-lg"></span>
+                            公告管理<span class="fa arrow"></span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>查询公告</a></li>
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加公告</a></li>
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>删除公告</a></li>
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>修改公告</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" aria-expanded="false">
+                            <span class="sidebar-nav-item-icon fa fa-cog fa-lg"></span>
+                            系统设置<span class="fa arrow"></span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>角色管理</a></li>
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>菜单管理</a></li>
+                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>系统字典</a></li>
+                        </ul>
+                    </li>
+                </shiro:hasAnyRoles>
             </ul>
         </nav>
     </aside>
@@ -454,37 +474,23 @@
         check : {
             chkStyle:"checkbox",
             enable : true //是否复选框
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
         }
     };
-    // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
-    var zNodes = [
-        {
-            name: "山东省",
-            open: true,
-            children: [
-                {
-                    name: "济南市"
-                },
-                {
-                    name: "日照市"
-                }
-            ]
-        },
-        {
-            name: "浙江省",
-            open: true,
-            children: [
-                {
-                    name: "杭州市"
-                },
-                {
-                    name: "温州市"
-                }
-            ]
-        }
-    ];
     $(document).ready(function(){
-        zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        $.ajax({
+            type:'POST',
+            url:'${ctx}/tests',
+            dataType:'JSON',
+            success:function(data){
+                /*成功后的处理*/
+                zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);
+            }
+        });
     });
 
         //触发事件

@@ -6,6 +6,8 @@ import com.wangjikai.domain.Article;
 import com.wangjikai.domain.Department;
 import com.wangjikai.domain.Employee;
 import com.wangjikai.domain.Job;
+import com.wangjikai.domain.Permission;
+import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
 import com.wangjikai.service.CmsService;
 import com.wangjikai.util.Page;
@@ -18,6 +20,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
@@ -71,6 +74,9 @@ public class UserController {
 
     @Resource
     private ElasticsearchTemplate template;
+
+    @Value("${mail.username}")
+    private String mailFrom;
 
     //请求登陆页面
     @RequestMapping(value = {"login"},method = RequestMethod.GET)
@@ -459,7 +465,7 @@ public class UserController {
     public String sendMailTo(String mailTo,String mailSubject,String mailText){
         //构建简单邮件对象
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom("15314006321@163.com");
+        email.setFrom(mailFrom);
         email.setTo(mailTo);
         email.setSubject(mailSubject);
         email.setText(mailText);
@@ -553,5 +559,96 @@ public class UserController {
         weatherInfo.put("风力",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("wind_sc").toString());
         weatherInfo.put("风速",jsonData.getJSONArray("HeWeather6").getJSONObject(0).getJSONObject("now").getString("wind_spd").toString()+"公里/小时");
         return weatherInfo;
+    }
+
+    //请求角色页面
+    @RequestMapping(value = {"rolePage"})
+    public String rolePage(){
+        return "rolePage";
+    }
+
+    //请求角色数据
+    @RequestMapping(value = {"roleData"},method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> roleData(HttpServletRequest request, int current, int rowCount){
+        String searchPhrase = request.getParameter("searchPhrase"); //获取查询参数
+        Role role = new Role();
+        if (!StringUtils.isEmpty(searchPhrase)){
+            role.setName(searchPhrase);
+            log.info("查询符合参数["+searchPhrase+"]的角色");
+        }
+        Page<Role> page = new Page<>();
+        if (StringUtils.isEmpty(current)){
+            current = 1;
+        } if (StringUtils.isEmpty(rowCount)){
+            rowCount = 1;
+        }
+        page.setRowCount(rowCount);
+        page.setCurrent(current);
+        page = cmsService.findRole(role,page);   //获取指定用户
+        Map<String,Object> map = new HashMap<>();
+        map.put("current",current);
+        map.put("rowCount",rowCount);
+        map.put("rows",page.getRows());
+        map.put("total",page.getTotal());
+        return map;
+    }
+
+    //请求权限页面
+    @RequestMapping(value = {"permissionPage"})
+    public String permissionPage(){
+        return "permissionPage";
+    }
+
+    //请求权限数据，注意树形菜单的显示ztree
+    @RequestMapping(value = {"permissionData"},method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> permissionData(HttpServletRequest request, int current, int rowCount){
+        String searchPhrase = request.getParameter("searchPhrase"); //获取查询参数
+        Permission permission = new Permission();
+        if (!StringUtils.isEmpty(searchPhrase)){
+            permission.setName(searchPhrase);
+            log.info("查询符合参数["+searchPhrase+"]的权限");
+        }
+        Page<Permission> page = new Page<>();
+        if (StringUtils.isEmpty(current)){
+            current = 1;
+        } if (StringUtils.isEmpty(rowCount)){
+            rowCount = 1;
+        }
+        page.setRowCount(rowCount);
+        page.setCurrent(current);
+        page = cmsService.findPermission(permission,page);   //获取指定权限
+        Map<String,Object> map = new HashMap<>();
+        map.put("current",current);
+        map.put("rowCount",rowCount);
+        map.put("rows",page.getRows());
+        map.put("total",page.getTotal());
+        return map;
+    }
+
+    @RequestMapping("/tests")
+    @ResponseBody
+    public List<Permission> tests(){
+        Page<Permission> page = new Page<>();
+        page.setCurrent(1);
+        page.setRowCount(100);
+        page = cmsService.findPermission(null,page);
+        List<Permission> permissions = page.getRows();
+
+//        List<Map<String,Object>> list = new ArrayList<>();
+//
+//        Map<String,Object> map = new HashMap<String,Object>();
+//        map.put("name", "子节点 1");
+//
+//        List<Object> objectList = new ArrayList<>();
+//        objectList.add(map);
+//
+//        Map<String,Object> map1 = new HashMap<String,Object>();
+//        map1.put("name", "父节点 2");
+//        map1.put("open", false);
+//        map1.put("children", objectList);
+//        list.add(map1);
+        return permissions;
     }
 }

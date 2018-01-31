@@ -39,5 +39,7 @@
         <mapper resource="mapper/employeeMapper.xml"/>
         <mapper resource="mapper/noticeMapper.xml"/>
         <mapper resource="mapper/documentMapper.xml"/>
+        <mapper resource="mapper/roleMapper.xml"/>
+        <mapper resource="mapper/permissionMapper.xml"/>
     </mappers>-->
 </configuration>

@@ -1,6 +1,13 @@
 package com.dao.test;
 
-import com.wangjikai.dao.*;
+import com.wangjikai.dao.DepartmentDao;
+import com.wangjikai.dao.DocumentDao;
+import com.wangjikai.dao.EmployeeDao;
+import com.wangjikai.dao.JobDao;
+import com.wangjikai.dao.NoticeDao;
+import com.wangjikai.dao.PermissionDao;
+import com.wangjikai.dao.RoleDao;
+import com.wangjikai.dao.UserDao;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -35,6 +42,14 @@ public class DBTest {
     @Test
     public void test() throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
         UserDao userDao = sqlSession.getMapper(UserDao.class);
+//        Role role = new Role();
+//        role.setName("店员");
+//        role.setRoleCode("dianyuan");
+//        role.setDescription("卖产品");
+        RoleDao roleDao = sqlSession.getMapper(RoleDao.class);
+        //roleDao.addRole(role);
+        PermissionDao permissionDao = sqlSession.getMapper(PermissionDao.class);
+
         DepartmentDao departmentDao = sqlSession.getMapper(DepartmentDao.class);
         JobDao jobDao = sqlSession.getMapper(JobDao.class);
         EmployeeDao employeeDao = sqlSession.getMapper(EmployeeDao.class);

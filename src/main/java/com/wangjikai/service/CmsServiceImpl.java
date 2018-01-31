@@ -5,12 +5,16 @@ import com.wangjikai.dao.DocumentDao;
 import com.wangjikai.dao.EmployeeDao;
 import com.wangjikai.dao.JobDao;
 import com.wangjikai.dao.NoticeDao;
+import com.wangjikai.dao.PermissionDao;
+import com.wangjikai.dao.RoleDao;
 import com.wangjikai.dao.UserDao;
 import com.wangjikai.domain.Department;
 import com.wangjikai.domain.Document;
 import com.wangjikai.domain.Employee;
 import com.wangjikai.domain.Job;
 import com.wangjikai.domain.Notice;
+import com.wangjikai.domain.Permission;
+import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
 import com.wangjikai.util.Page;
 import org.springframework.cache.annotation.CacheEvict;
@@ -42,6 +46,10 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     private NoticeDao noticeDao;
     @Resource
     private DocumentDao documentDao;
+    @Resource
+    private RoleDao roleDao;
+    @Resource
+    private PermissionDao permissionDao;
 
     /**
      * 用户注册
@@ -137,9 +145,10 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     }
 
     /**
-     * 获取所有员工.暂时不分页
+     * 获取所有员工
      */
     @Override
+    //@Cacheable(value = "userCache", key = "'user:' + #page.rows")
     public Page<T> findEmployee(Employee employee, Page<T> page) {
         Map<String,Object> map = new HashMap<>();
         int current = page.getCurrent(); //获取到前台请求的当前页数
@@ -385,5 +394,121 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     @Override
     public void modifyDocument(Document document) {
         documentDao.update(document);
+    }
+
+    /**
+     * 根据id查找角色
+     * @param id
+     * @return
+     */
+    @Override
+    public Role findRoleById(Integer id) {
+        return roleDao.findById(id);
+    }
+
+    /**
+     * 根据id删除角色
+     * @param id
+     */
+    @Override
+    public void deleteRoleById(Integer id) {
+        roleDao.deleteById(id);
+    }
+
+    /**
+     * 修改角色
+     * @param role
+     */
+    @Override
+    public void modifyRole(Role role) {
+        roleDao.update(role);
+    }
+
+    /**
+     * 添加角色
+     * @param role
+     */
+    @Override
+    public void addRole(Role role) {
+        roleDao.addRole(role);
+    }
+
+    /**
+     * 获取所有符合条件的角色
+     * @param role
+     * @param page
+     * @return
+     */
+    @Override
+    public Page<T> findRole(Role role, Page<T> page) {
+        Map<String,Object> map = new HashMap<>();
+        int current = page.getCurrent(); //获取到前台请求的当前页数
+        page.setCurrent((current-1)*page.getRowCount());
+        map.put("role",role);
+        map.put("page",page);
+        int allCount = roleDao.count(map);
+        List<Role> roles = roleDao.selectByPage(map);
+        page.setTotal(allCount);
+        page.setCurrent(current);
+        page.setRows(roles);
+        return page;
+    }
+
+    /**
+     * 根据id查找权限
+     * @param id
+     * @return
+     */
+    @Override
+    public Permission findPermissionById(Integer id) {
+        return permissionDao.findById(id);
+    }
+
+    /**
+     * 根据id删除权限
+     * @param id
+     */
+    @Override
+    public void deletePermissionById(Integer id) {
+        permissionDao.deleteById(id);
+    }
+
+    /**
+     * 修改权限
+     * @param permission
+     */
+    @Override
+    public void modifyPermission(Permission permission) {
+        permissionDao.update(permission);
+    }
+
+    /**
+     * 添加权限
+     * @param permission
+     */
+    @Override
+    public void addPermission(Permission permission) {
+        permissionDao.addPermission(permission);
+    }
+
+    /**
+     * 获取所有符合条件的角色
+     * @param permission
+     * @param page
+     * @return
+     */
+    @Override
+    public Page<T> findPermission(Permission permission, Page<T> page) {
+        Map<String,Object> map = new HashMap<>();
+        int current = page.getCurrent(); //获取到前台请求的当前页数
+        page.setCurrent((current-1)*page.getRowCount());
+        map.put("permission",permission);
+        map.put("page",page);
+        int allCount = permissionDao.count(map);
+        List<Permission> permissions = permissionDao.selectByPage(map);
+        page.setTotal(allCount);
+        page.setCurrent(current);
+        page.setRows(permissions);
+        return page;
     }
 }

@@ -9,6 +9,8 @@ import java.util.Set;
  */
 public class Permission implements Serializable{
     private Integer id;
+    private Integer pId; //父标号
+    private String pCode; //权限代号
     private String name;
     private String description;
     private String url;
@@ -20,6 +22,22 @@ public class Permission implements Serializable{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getpId() {
+        return pId;
+    }
+
+    public void setpId(Integer pId) {
+        this.pId = pId;
+    }
+
+    public String getpCode() {
+        return pCode;
+    }
+
+    public void setpCode(String pCode) {
+        this.pCode = pCode;
     }
 
     public String getName() {
@@ -58,6 +76,7 @@ public class Permission implements Serializable{
     public String toString() {
         return "Permission{" +
                 "id=" + id +
+                ", pId=" + pId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
