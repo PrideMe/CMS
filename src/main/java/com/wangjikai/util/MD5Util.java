@@ -2,9 +2,7 @@ package com.wangjikai.util;
 
 import org.apache.commons.codec.binary.Hex;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
@@ -12,65 +10,34 @@ import java.util.Random;
  * MD5加密：信息摘要算法5，一致散列函数
  */
 public class MD5Util {
-    /**
-     * 字符串加盐加密功能
-     * @param string 需要加密的字符串
-     * @param salt 加盐盐值
-     * @return
-     */
-    public static String md5(String string,String salt) {
-        if (string.isEmpty()) {
-            return "";
-        }
-        MessageDigest md5 = null;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-            md5.reset();
-            md5.update(salt.substring(0,17).getBytes("UTF-8"));
-            md5.update(salt.substring(14,23).getBytes("UTF-8"));
-            byte[] bytes = md5.digest(string.getBytes("UTF-8"));
-            String result = "";
-            for (byte b : bytes) {
-                String temp = Integer.toHexString(b & 0xff);
-                if (temp.length() == 1) {
-                    temp = "0" + temp;
-                }
-                result += temp;
-            }
-            return result;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        String s = "cmd";
+    public static void main(String[] args) {
         //System.out.println(6>>2);
         //加盐MD5，每个用户的盐值都不一样，保存盐值到数据库用户表
         //盐值不一定在最后或最前，插中间、分开插、倒叙插等方法
-        //System.out.println(md5(s,"c5371998452177f738d3cc01912f9803"));
-        String password = generate("admin");
-        System.out.println(verify("admin", password));
+//        String password = generateMD5("123456");
+//        System.out.println(password);
+//        System.out.println(verify("123456", password));
     }
 
     /**
-     * 生成含有随机盐的密码
+     * 生成含有随机盐的密码串
      */
-    public static String generate(String password) {
-        Random r = new Random();
-        StringBuilder sb = new StringBuilder(16);
-        sb.append(r.nextInt(99999999)).append(r.nextInt(99999999));
-        int len = sb.length();
+    public static String generateMD5(String password) {
+        //生成16位随机数盐值，不够的后面补零
+        Random random = new Random();
+        StringBuilder stringBuilder = new StringBuilder(16);
+        stringBuilder.append(random.nextInt(99999999)).append(random.nextInt(99999999));
+        int len = stringBuilder.length();
         if (len < 16) {
             for (int i = 0; i < 16 - len; i++) {
-                sb.append("0");
+                stringBuilder.append("0");
             }
         }
-        String salt = sb.toString();
+        //盐值
+        String salt = stringBuilder.toString();
+        //盐与密码一起进行MD摘要得到32位的十六进制字符串
         password = md5Hex(password + salt);
+        //将盐值写入48位字符串中
         char[] cs = new char[48];
         for (int i = 0; i < 48; i += 3) {
             cs[i] = password.charAt(i / 3 * 2);
@@ -82,7 +49,7 @@ public class MD5Util {
     }
 
     /**
-     * 获取十六进制字符串形式的MD5摘要+
+     * 获取十六进制字符串形式的MD5摘要
      */
     public static String md5Hex(String src) {
         try {
@@ -105,6 +72,7 @@ public class MD5Util {
             cs1[i / 3 * 2 + 1] = md5.charAt(i + 2);
             cs2[i / 3] = md5.charAt(i + 1);
         }
+        //取出盐值
         String salt = new String(cs2);
         return md5Hex(password + salt).equals(new String(cs1));
     }

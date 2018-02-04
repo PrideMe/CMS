@@ -21,7 +21,7 @@
         window.top.location = window.location;
     }</script>
 </head>
-<body style="background: #e4e4e4 url(${ctx}/images/login_bg.png) repeat;">
+<body style="background: #e4e4e4 url(${ctx}/images/login_bg.jpg) repeat;">
 <div class="container">
     <div class="row">
         <div class="col-lg-4 col-sm-7 col-md-6 col-xs-12 col-center-block">
@@ -69,6 +69,9 @@
                     <img id="kaptchaImage" class="verify-code" style="float: right" src="${ctx}/code">
                 </div>
                 <div class="clearfix"></div>
+                <div class="form-group" style="margin-bottom: 10px;font-size: 15px;">
+                    <p><a href="${ctx}/login">去登陆</a></p>
+                </div>
                 <br>
                 <button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">注册</button>
             </form>

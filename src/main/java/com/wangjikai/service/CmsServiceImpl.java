@@ -64,8 +64,8 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 用户登陆
      */
     @Override
-    public User login(String loginname, String password) {
-        User user = userDao.selectByLoginnameAndPassword(loginname,password);
+    public User login(String loginname) {
+        User user = userDao.selectByLoginname(loginname);
         return user;
     }
 
@@ -85,8 +85,8 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * @return
      */
     @Override
-    public User findUserByLoginnameAndPassword(String loginname, String password) {
-        return userDao.selectByLoginnameAndPassword(loginname,password);
+    public User findUserByLoginname(String loginname) {
+        return userDao.selectByLoginname(loginname);
     }
 
     /**

@@ -11,12 +11,42 @@ body {
     text-align:center;
 }
 
-.col-center-block {
-    float: none;
-    display: block;
-    margin:0 auto;
-    padding-top: 5em;
+@media (min-device-height: 668px) {
+    .col-center-block {
+        float: none;
+        display: block;
+        margin:0 auto;
+        padding-top: 5em;
+    }
 }
+
+@media (max-device-height: 667px) {
+    .col-center-block {
+        float: none;
+        display: block;
+        margin:0 auto;
+        padding-top: 2em;
+    }
+}
+
+@media (min-device-height: 668px) {
+    .vertical-center {
+        float: none;
+        display: block;
+        margin:0 auto;
+        padding-top: 9em;
+    }
+}
+
+@media (max-device-height: 667px) {
+    .vertical-center {
+        float: none;
+        display: block;
+        margin:0 auto;
+        padding-top: 6em;
+    }
+}
+
 
 .has-feedback .form-control {
     padding-right: 0px;

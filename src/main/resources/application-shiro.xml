@@ -32,8 +32,39 @@
         <property name="realm" ref="permissionsRealm"/>
     </bean>
 
-    <bean id="permissionsRealm" class="com.wangjikai.shiro.PermissionsRealm"/>
+    <bean id="permissionsRealm" class="com.wangjikai.shiro.PermissionsRealm">
+        <property name="credentialsMatcher">
+            <bean class="com.wangjikai.shiro.CustomCredentialsMatcher"/>
+        </property>
+    </bean>
 
     <!--保证实现了Shiro内部lifecycle函数的bean执行-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 </beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

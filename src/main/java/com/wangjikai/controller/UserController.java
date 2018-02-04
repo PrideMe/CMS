@@ -10,6 +10,7 @@ import com.wangjikai.domain.Permission;
 import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
 import com.wangjikai.service.CmsService;
+import com.wangjikai.util.MD5Util;
 import com.wangjikai.util.Page;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,18 +102,18 @@ public class UserController {
     @ResponseBody
     public ModelAndView registerData(HttpServletRequest request, String username, String password_again, String verifyCode){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/register");
+        modelAndView.setViewName("register");
         HttpSession session = request.getSession();
         String session_code = session.getAttribute("session_code").toString().toLowerCase();
         if (session_code !=null && session_code.equals(verifyCode.toLowerCase())) {
             User user = new User();
             user.setLoginname(username);
-            user.setPassword(password_again);
+            user.setPassword(MD5Util.generateMD5(password_again));
             user.setUsername(username); //用户可以更改
             user.setStatus("1");
             cmsService.register(user);
             log.info("用户："+username+"，注册成功");
-            modelAndView.setViewName("redirect:/login");
+            modelAndView.setViewName("login");
         }
         return modelAndView;
     }
@@ -123,7 +124,7 @@ public class UserController {
     @RequestMapping(value = {"/login"},method = RequestMethod.POST)
     public ModelAndView loginData(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/index");
+        modelAndView.setViewName("/login");
         HttpSession session = request.getSession();
         String session_code = "";
         if (session.getAttribute("session_code") != null) {
@@ -595,7 +596,7 @@ public class UserController {
     }
 
     //请求权限页面
-    @RequestMapping(value = {"permissionPage"})
+    @RequestMapping(value = {"permissionPage"},method = RequestMethod.GET)
     public String permissionPage(){
         return "permissionPage";
     }
@@ -622,33 +623,19 @@ public class UserController {
         Map<String,Object> map = new HashMap<>();
         map.put("current",current);
         map.put("rowCount",rowCount);
-        map.put("rows",page.getRows());
+        map.put("rows",page.getRows());  //尝试获取json节点
         map.put("total",page.getTotal());
         return map;
     }
 
     @RequestMapping("/tests")
     @ResponseBody
-    public List<Permission> tests(){
+    public List<Permission> ztree(){
         Page<Permission> page = new Page<>();
         page.setCurrent(1);
         page.setRowCount(100);
         page = cmsService.findPermission(null,page);
         List<Permission> permissions = page.getRows();
-
-//        List<Map<String,Object>> list = new ArrayList<>();
-//
-//        Map<String,Object> map = new HashMap<String,Object>();
-//        map.put("name", "子节点 1");
-//
-//        List<Object> objectList = new ArrayList<>();
-//        objectList.add(map);
-//
-//        Map<String,Object> map1 = new HashMap<String,Object>();
-//        map1.put("name", "父节点 2");
-//        map1.put("open", false);
-//        map1.put("children", objectList);
-//        list.add(map1);
         return permissions;
     }
 }

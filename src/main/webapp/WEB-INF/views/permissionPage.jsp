@@ -16,7 +16,7 @@
     }</script>
 </head>
 <body>
-<table id="roleList" class="table table-striped table-bordered table-hover">
+<table id="permissionList" class="table table-striped table-bordered table-hover">
     <thead>
     <tr>
         <th data-column-id="id" data-identifier="true" data-type="numeric" data-visible="false" data-sortable="true">ID</th>
@@ -62,9 +62,9 @@
     };
     //主动加载请求，填充表格数据
     $(function () {
-        $("#roleList").bootgrid({
+        $("#permissionList").bootgrid({
             ajax: true,
-            url: "${ctx}/roleData",
+            url: "${ctx}/permissionData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
             rowCount:[10,15,20],
             //rowSelect: true,   //点击项目选择
@@ -78,13 +78,13 @@
                 loading: "加载中...",
                 noResults: "没有相关数据",
                 refresh: "刷新",
-                search: "查询角色"
+                search: "查询权限"
             }
         });
-        $("#roleList").on("loaded.rs.jquery.bootgrid", function (e){
-            $("#roleList tr").removeClass("success");
-            $("#roleList tr").removeClass("info");
-            $("#roleList tr").removeClass("warning");
+        $("#permissionList").on("loaded.rs.jquery.bootgrid", function (e){
+            $("#permissionList tr").removeClass("success");
+            $("#permissionList tr").removeClass("info");
+            $("#permissionList tr").removeClass("warning");
         });
     });
 </script>

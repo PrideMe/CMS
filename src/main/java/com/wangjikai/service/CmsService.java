@@ -27,10 +27,9 @@ public interface CmsService<T> {
     /**
      * 用户登陆
      * @param loginname
-     * @param password
      * @return User
      */
-    User login(String loginname,String password);
+    User login(String loginname);
 
     /**
      * 根据id查询用户
@@ -44,7 +43,7 @@ public interface CmsService<T> {
      * @param loginname
      * @return
      */
-    User findUserByLoginnameAndPassword(String loginname, String password);
+    User findUserByLoginname(String loginname);
 
     /**
      * 根据用户查找角色与权限

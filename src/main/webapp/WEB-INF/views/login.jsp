@@ -23,10 +23,11 @@
         }
     </script>
 </head>
-<body style="background: #e4e4e4 url(${ctx}/images/login_bg.png) repeat;">
+<%--<body style="background: #e4e4e4 url(${ctx}/images/login_bg.png) repeat;">--%>
+<body style="background: #e4e4e4 url(${ctx}/images/login_bg.jpg) repeat;">
 <div class="container">
     <div class="row">
-        <div class="col-lg-4 col-sm-7 col-md-6 col-xs-12 col-center-block">
+        <div class="col-lg-4 col-sm-7 col-md-6 col-xs-12 vertical-center">
             <form action="${ctx}/login" method="post" class="fh5co-form loginbody animate-box fadeInRight animated-fast"
                   id="loginForm">
                 <h2 style="margin-bottom: 20px;">登陆</h2>
@@ -55,7 +56,7 @@
                     <img id="kaptchaImage" class="verify-code" style="float: right" src="${ctx}/code">
                 </div>
                 <div class="clearfix"></div>
-                <div class="form-group" style="margin-bottom: 10px">
+                <div class="form-group" style="margin-bottom: 10px;font-size: 15px;">
                     <p><a href="${ctx}/register">注册账号</a> | <a href="${ctx}/forgot3.html">忘记密码</a></p>
                 </div>
                 <br>

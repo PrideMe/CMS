@@ -27,6 +27,7 @@
     <script type="text/javascript" src="${ctx}/layer/layer.js"></script>
     <script type="text/javascript" src="${ctx}/js/default.js"></script>
     <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.core.min.js"></script>
+    <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.excheck.min.js"></script>
     <style type="text/css">
         *{
             margin: 0;
@@ -234,20 +235,22 @@
                                     <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>职位查询
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" onclick="showAtRight('${ctx}/addJob')">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加职位
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
-                                    小功能<span class="fa plus-times"></span></a>
-                                <ul aria-expanded="false" class="collapse">
-                                    <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
-                                    <li><a href="#" onclick="showAtRight('${ctx}/search')"><span class="sidebar-nav-item-icon fa fa-search fa-fw"></span>搜索</a></li>
-                                    <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
-                                </ul>
-                            </li>
+                            <shiro:hasRole name="boss">
+                                <li>
+                                    <a href="#" onclick="showAtRight('${ctx}/addJob')">
+                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加职位
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
+                                        小功能<span class="fa plus-times"></span></a>
+                                    <ul aria-expanded="false" class="collapse">
+                                        <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
+                                        <li><a href="#" onclick="showAtRight('${ctx}/search')"><span class="sidebar-nav-item-icon fa fa-search fa-fw"></span>搜索</a></li>
+                                        <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
+                                    </ul>
+                                </li>
+                            </shiro:hasRole>
                         </ul>
                     </li>
                     <li>
@@ -272,10 +275,12 @@
                             <span class="sidebar-nav-item-icon fa fa-map-o fa-lg"></span>
                             公告管理<span class="fa arrow"></span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>查询公告</a></li>
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加公告</a></li>
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>删除公告</a></li>
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>修改公告</a></li>
+                            <shiro:hasRole name="boss">
+                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>查询公告</a></li>
+                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加公告</a></li>
+                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>删除公告</a></li>
+                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>修改公告</a></li>
+                            </shiro:hasRole>
                         </ul>
                     </li>
                     <li>
@@ -283,13 +288,19 @@
                             <span class="sidebar-nav-item-icon fa fa-cog fa-lg"></span>
                             系统设置<span class="fa arrow"></span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li>
-                                <a href="#" onclick="showAtRight('${ctx}/rolePage')">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>角色管理
-                                </a>
-                            </li>
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>菜单管理</a></li>
-                            <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>系统字典</a></li>
+                            <shiro:hasRole name="boss">
+                                <li>
+                                    <a href="#" onclick="showAtRight('${ctx}/rolePage')">
+                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>角色管理
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="showAtRight('${ctx}/permissionPage')">
+                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>菜单管理
+                                    </a>
+                                </li>
+                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>系统字典</a></li>
+                            </shiro:hasRole>
                         </ul>
                     </li>
                 </shiro:hasAnyRoles>
@@ -327,7 +338,7 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-            <h2>${currentUser}创建模态框（Modal）</h2>
+            <h2>创建模态框（Modal）</h2>
             <shiro:hasPermission name="delegate">
                 <h3>具有代表公司权限</h3>
             </shiro:hasPermission>
@@ -341,7 +352,7 @@
                 <h3>具有只有工作权限</h3>
             </shiro:hasPermission>
             <!-- 按钮触发模态框 -->
-            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">开始演示模态框</button>
+            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px">查看本机IP</button>
             <!-- 模态框（Modal） -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog">
@@ -393,7 +404,7 @@
 
             <div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
                 <blockquote class="layui-elem-quote layui-quote-nm">
-                    Tips：为了更清晰演示，每触发下述一个例子之前，都会关闭所有已经演示的层
+                    Tips：演示弹窗
                 </blockquote>
                 <button data-method="setTop" class="layui-btn">多窗口模式，层叠置顶</button>
                 <button data-method="confirmTrans" class="layui-btn">配置一个透明的询问框</button>
@@ -493,6 +504,8 @@
             success:function(data){
                 /*成功后的处理*/
                 zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);
+                //默认展开全部节点
+                zTreeObj.expandAll(true);
             }
         });
     });

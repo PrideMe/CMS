@@ -59,16 +59,17 @@ public class PermissionsRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
-        char[] password = token.getPassword();
+        //char[] password = token.getPassword();
         //只查找用户信息
-        User user = cmsService.findUserByLoginnameAndPassword(username,String.valueOf(password));
-        if (null != user){
+        User user = cmsService.findUserByLoginname(username);
+        if (user != null) {
             //查询用户权限信息
             User userRolePermission = cmsService.selectUserRolePermission(user);
             if (userRolePermission != null){
                 user.setRoles(userRolePermission.getRoles());
             }
             SecurityUtils.getSubject().getSession().setAttribute("currentUser", user);
+            //进入自定义比较器进行比较
             return new SimpleAuthenticationInfo(user,user.getPassword(),this.getName());
         }else {
             throw new AuthenticationException();

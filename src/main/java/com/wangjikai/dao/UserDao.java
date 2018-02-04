@@ -14,7 +14,8 @@ import java.util.Map;
 @Repository
 public interface UserDao {
     //根据登陆名、密码查询用户
-    User selectByLoginnameAndPassword(@Param("loginname") String loginname,@Param("password") String password);
+    User selectByLoginname(@Param("loginname") String loginname);
+    //User selectByLoginname(String loginname);
     //根据id查询用户
     User selectById(Integer id);
     //根据id删除用户
