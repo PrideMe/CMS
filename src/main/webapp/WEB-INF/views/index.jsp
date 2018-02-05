@@ -23,6 +23,9 @@
     <script type="text/javascript" src="${ctx}/js/nprogress.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.fa.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootbox.min.js"/>
     <script type="text/javascript" src="${ctx}/js/echarts.js"></script>
     <script type="text/javascript" src="${ctx}/layer/layer.js"></script>
     <script type="text/javascript" src="${ctx}/js/default.js"></script>
@@ -142,14 +145,14 @@
     </script>
 
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <%--<!-- Latest compiled and minified CSS -->--%>
+    <%--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">--%>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <%--<!-- Latest compiled and minified JavaScript -->--%>
+    <%--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>--%>
 
-    <!-- Latest compiled and minified Locales -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <%--<!-- Latest compiled and minified Locales -->--%>
+    <%--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>--%>
 
 
 </head>
@@ -161,7 +164,7 @@
             <button type="button" class="navbar-toggle show pull-left" data-target="sidebar">
                 <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
             </button>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -172,7 +175,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <button class="btn btn-primary pull-right dropdown-toggle" style="margin-top: 7px;margin-left: 7px;margin-right: 1px;" data-toggle="dropdown"><i class="fa fa-user fa-fw"></i>${currentUser}<i class="caret"></i></button>
             <ul class="dropdown-menu dropdown-menu-right">
-                <li><a href="#"><i class="fa fa-info fa-fw"></i>个人资料</a></li>
+                <li><a href="javascript:void(0);" onclick="showAtRight('${ctx}/aboutme')"><i class="fa fa-info fa-fw"></i>个人资料</a></li>
                 <li><a href="${ctx}/logout"><i class="fa fa-sign-out fa-fw"></i>退出</a></li>
             </ul>
         </div>
@@ -616,8 +619,8 @@
         //autoclose: true,
         todayHighlight: true,
         language:"zh-CN",
-        todayBtn: true
-        //pickerPosition: "bottom-center"
+        todayBtn: true,
+        pickerPosition: "bottom-left"
     });
 
     // 基于准备好的dom，初始化echarts实例

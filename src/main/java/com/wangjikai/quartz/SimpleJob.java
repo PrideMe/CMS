@@ -2,6 +2,8 @@ package com.wangjikai.quartz;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,6 +29,7 @@ import java.util.Map;
  */
 @Component
 public class SimpleJob {
+    private Logger log = LogManager.getLogger(SimpleJob.class);
     @Resource
     private JavaMailSender mailSender;
 
@@ -44,21 +47,24 @@ public class SimpleJob {
             //Url = "https://free-api.heweather.com/s6/weather/now?location="+ URLEncoder.encode("济南", "utf-8")+"&key=6e56fae9eb8e4e5f8fbbc13d1f15c292";
             Url = "http://www.sojson.com/open/api/weather/json.shtml?city="+ URLEncoder.encode("济南", "utf-8");
         } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
+            log.info(simpleDateFormat.format(date)+"定时任务发送失败，原因：URL错误");
+            return;
         }
         strBuf = new StringBuffer();
         try{
             URL url = new URL(Url);
-            URLConnection conn = url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));//转码。
+            URLConnection connection = url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));//转码。
             String line = null;
             while ((line = reader.readLine()) != null)
                 strBuf.append(line + " ");
             reader.close();
         }catch(MalformedURLException e) {
-            e.printStackTrace();
+            log.info(simpleDateFormat.format(date)+"定时任务发送失败，原因：URL错误");
+            return;
         }catch(IOException e){
-            e.printStackTrace();
+            log.info(simpleDateFormat.format(date)+"定时任务发送失败，原因：IO流错误");
+            return;
         }
         JSONObject jsonData = JSONObject.parseObject(strBuf.toString());
         Map<String, Object> weatherInfo = new HashMap<>();

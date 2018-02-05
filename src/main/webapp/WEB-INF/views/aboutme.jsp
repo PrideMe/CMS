@@ -4,6 +4,8 @@
 
 <html lang="zh-CN">
 <head>
+    <%--<script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>--%>
     <script>if (window.top !== window.self) {
         window.top.location = window.location;
     }</script>
@@ -11,14 +13,14 @@
 <body>
 
 <div style="margin-top: 30px;" class="col-xs-8 col-lg-4 col-md-6 col-sm-8">
-    <form role="form" action="${ctx}/addDepartment" method="post">
+    <form role="form" action="${ctx}/addJob" method="post">
         <div class="form-group">
-            <label>部门名</label>
-            <input class="form-control" name="name" placeholder="请输入部门名">
+            <label>登陆名</label>
+            <input class="form-control" name="name" placeholder="请输入登陆名" value="${currentUser.loginname}">
         </div>
         <div class="form-group">
-            <label>备注</label>
-            <input class="form-control" name="remark" placeholder="请输入备注">
+            <label>用户名</label>
+            <input class="form-control" name="remark" placeholder="请输入用户名" value="${currentUser.username}">
         </div>
 
         <button type="submit" class="btn btn-success">添加</button>

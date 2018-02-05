@@ -175,6 +175,16 @@ public class UserController {
         return map;
     }
 
+    @RequestMapping(value = {"/aboutme"},method = RequestMethod.GET)
+    public ModelAndView aboutme(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("aboutme");
+        Subject subject = SecurityUtils.getSubject();
+        User session_user = (User) subject.getSession().getAttribute("currentUser");
+        modelAndView.addObject("currentUser",session_user);
+        return modelAndView;
+    }
+
     //请求访问主页
     @RequestMapping(value = {"/","index"},method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request){
