@@ -130,7 +130,7 @@
         .carousel-control.right {
             background-image: none;
         }
-        @media (max-width:768px) {
+        @media (max-width:767px) {
             .navbar-toggle[class*=pull-left] { margin-left: 15px; margin-right: 0; }
             /*#goTop { padding: 0 8px; }*/
         }
