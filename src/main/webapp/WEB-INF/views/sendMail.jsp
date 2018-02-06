@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>mail</title>
-    <script type="text/javascript" src="${ctx}/js/bootbox.min.js"/>
+
     <script>if (window.top !== window.self) {
         window.top.location = window.location;
     }</script>

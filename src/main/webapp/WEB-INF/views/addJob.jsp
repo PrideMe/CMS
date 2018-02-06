@@ -5,8 +5,6 @@
 <html lang="zh-CN">
 <head>
     <title>Title</title>
-    <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
     <script>if (window.top !== window.self) {
         window.top.location = window.location;
     }</script>

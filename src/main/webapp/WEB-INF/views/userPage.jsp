@@ -5,9 +5,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script type="text/javascript" src="${ctx}/js/bootbox.min.js"/>
-    <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.min.js"></script>
-    <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.fa.min.js"></script>
     <script>if (window.top !== window.self) {
         window.top.location = window.location;
     }</script>

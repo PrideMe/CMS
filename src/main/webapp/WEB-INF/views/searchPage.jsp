@@ -6,7 +6,6 @@
 <html lang="zh-CN">
 <head>
     <title>search</title>
-    <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <style type="text/css">
         dl, dt, dd, ol, ul, li{ list-style:none;}
         #main{width:730px;margin:75px auto 0;}

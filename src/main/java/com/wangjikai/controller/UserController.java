@@ -110,7 +110,7 @@ public class UserController {
             user.setLoginname(username);
             user.setPassword(MD5Util.generateMD5(password_again));
             user.setUsername(username); //用户可以更改
-            user.setStatus("1");
+            user.setStatus("1");  //此时可以发送邮件，请求已有用户进行同意，方可登陆系统
             cmsService.register(user);
             log.info("用户："+username+"，注册成功");
             modelAndView.setViewName("login");
@@ -310,11 +310,6 @@ public class UserController {
         return employee;
     }
 
-    @RequestMapping(value = {"left"})
-    public String madsn(){
-        return "left";
-    }
-
     @RequestMapping(value = {"userPage"})
     public String rightPage(){
         return "userPage";
@@ -327,6 +322,8 @@ public class UserController {
 
     @RequestMapping(value = {"addUserData"},method = RequestMethod.POST)
     public String addUserData(User user){
+        //密码加密
+        user.setPassword(MD5Util.generateMD5(user.getPassword()));
         cmsService.addUser(user);
         return "redirect:/index";
     }

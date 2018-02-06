@@ -10,6 +10,10 @@
                 <ref bean="cronTriggerBean"/>
             </list>
         </property>
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--使用applicationContextKey这个key在quartz中获取spring的上下文-->
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
+        <!--<property name="configLocation" value=""/>-->
     </bean>
     <!--调度触发器，一个触发器只能与一个任务绑定-->
     <bean id="cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

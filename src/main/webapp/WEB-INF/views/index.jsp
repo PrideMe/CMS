@@ -13,21 +13,24 @@
     <link rel="stylesheet" href="${ctx}/css/font-awesome.min.css">
     <link rel="stylesheet" href="${ctx}/css/metisMenu.css">
     <link rel="stylesheet" href="${ctx}/css/jquery.bootgrid.min.css">
+    <link rel="stylesheet" href="${ctx}/css/bootstrap-select.css">
     <link rel="stylesheet" href="${ctx}/css/nprogress.css">
     <link rel="stylesheet" href="${ctx}/ztree/zTreeStyle.css">
     <link rel="stylesheet" href="${ctx}/css/bootstrap-datetimepicker.css">
     <link href="${ctx}/images/favicon.ico" rel="shortcut icon">
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${ctx}/layer/layer.js"></script>
     <script type="text/javascript" src="${ctx}/js/metisMenu.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/nprogress.js"></script>
-    <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/defaults-zh_CN.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-select.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/js/echarts.js"></script>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.fa.min.js"></script>
-    <script type="text/javascript" src="${ctx}/js/bootbox.min.js"/>
-    <script type="text/javascript" src="${ctx}/js/echarts.js"></script>
-    <script type="text/javascript" src="${ctx}/layer/layer.js"></script>
     <script type="text/javascript" src="${ctx}/js/default.js"></script>
     <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.core.min.js"></script>
     <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.excheck.min.js"></script>
@@ -182,7 +185,7 @@
     </div>
 </nav>
 
-<div class="clearfix all">
+<div class="clearfix all" style="height: 100%">
     <aside class="sidebar">
         <nav class="sidebar-nav navbar">
             <ul class="metismenu" id="menu">
@@ -310,7 +313,7 @@
             </ul>
         </nav>
     </aside>
-    <section class="content">
+    <section class="content" style="margin-top: 51px;height: 95%;">
         <div class="col-xs-12" id="rightContent">
             <div id="myCarousel" class="carousel slide" style="width: 960px;height: 400px">
                 <!-- 轮播（Carousel）指标 -->
