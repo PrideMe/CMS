@@ -18,7 +18,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by 22717 on 2017/11/27.
@@ -36,14 +35,14 @@ public class PermissionsRealm extends AuthorizingRealm {
         //等到登陆时查询到的用户，此时用户不带角色权限信息
         User user = (User) principalCollection.getPrimaryPrincipal();
         if (user != null) {
-            Set<Role> roles = user.getRoles();
+            List<Role> roles = user.getRoles();
             List<String> roleList = new ArrayList<>();
             List<String> permissionList = new ArrayList<>();
             if (roles != null) {
                 for (Role role : roles) {
                     roleList.add(role.getRoleCode());
                     for (Permission permission : role.getPermissions()) {
-                        permissionList.add(permission.getName());
+                        permissionList.add(permission.getpCode());
                     }
                 }
                 authorizationInfo.addRoles(roleList);

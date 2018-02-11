@@ -16,7 +16,8 @@
         <th data-column-id="id" data-identifier="true" data-type="numeric" data-visible="false" data-sortable="true">ID</th>
         <th data-column-id="loginname" data-visible="true">登录名</th>
         <th data-column-id="username" data-visible="true">用户名</th>
-        <th data-column-id="password" data-visible="true">密码</th>
+        <th data-column-id="password" data-visible="true" data-visible="false">密码</th>
+        <th data-column-id="userRole" data-formatter="roles" data-align="center">角色</th>
         <th data-column-id="createdate" data-visible="true">创建时间</th>
         <th data-column-id="status" data-formatter="statuss" data-width="70px" data-header-align="center" data-align="center">状态</th>
         <th data-column-id="" data-formatter="operation" data-visible="true">操作</th>
@@ -52,6 +53,14 @@
                         <div class="input-group-addon">状&nbsp;&nbsp;&nbsp;态</div>
                         <input class="form-control" id="status" name="status" placeholder="请输入状态">
                     </div><br/>
+                    <div class="input-group">
+                        <div class="input-group-addon">角&nbsp;&nbsp;&nbsp;色</div>
+                        <select id="lunch" name="role" class="selectpicker form-control" multiple title="选择角色添加">
+                            <c:forEach var="role" items="${roles}">
+                                <option value="${role.id}">${role.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div><br/>
                 </div>
             </form>
             <div class="modal-footer">
@@ -62,6 +71,11 @@
     </div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker({
+            size: 7
+        });
+    });
     var formatters = {
         "statuss" :function (column,row) {
             var info = "";
@@ -73,6 +87,21 @@
             }
             return info;
         },
+        "roles" :function (column,row) {
+            var result = "";
+            var arr = row.roles;
+            for(j = 0,len=arr.length; j < len; j++) {
+                result += "<button class='btn btn-success btn-xs'>"+arr[j].name+"</button>";
+                //判断最后一个，尾部不添加空格
+                if(len != j+1){
+                    result +="&nbsp;&nbsp;";
+                }
+            }
+            if (result == ""){
+                result = "<button class='btn btn-warning btn-xs'>未分配</button>";
+            }
+            return result;
+        },
         "operation" : function (column,row) {
             var info = "";
             info += "<button onclick=\"showUserById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
@@ -83,6 +112,9 @@
     //主动加载请求，填充表格数据
     $(function () {
         $("#grid-data").bootgrid({
+            searchSettings: {
+                delay: 1000 //每一秒执行一次搜索
+            },
             ajax: true,
             url: "${ctx}/getUser",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
@@ -143,6 +175,7 @@
     }
     //显示单个用户
     function showUserById(id) {
+        $('.selectpicker').selectpicker('deselectAll');
         $.ajax({
             dataType: "JSON",
             url: "${ctx}/getUserById",
@@ -156,6 +189,13 @@
                 $("#username").val(data.username);
                 $("#password").val(data.password);
                 $("#status").val(data.status);
+                var arr = data.roles;
+                var rolesSelect = new Array();
+                for(j = 0,len=arr.length; j < len; j++) {
+                    rolesSelect.push(arr[j].id);
+                }
+                $('.selectpicker').selectpicker('val', rolesSelect);
+                $(".selectpicker").selectpicker('refresh');
                 $('#updateUser').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
                     $(this).removeData("bs.modal");
                 });

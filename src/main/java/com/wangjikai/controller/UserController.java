@@ -49,6 +49,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -208,6 +209,8 @@ public class UserController {
         Subject currentUser = SecurityUtils.getSubject();
         User user = (User) currentUser.getSession().getAttribute("currentUser");
         modelAndView.addObject("currentUser",user.getUsername());
+        List<Permission> permissions = cmsService.getAllPermission();
+        modelAndView.addObject("permissions",permissions);
         return modelAndView;
     }
 
@@ -263,10 +266,96 @@ public class UserController {
 
     @RequestMapping(value = {"updateUserById"},method = RequestMethod.POST)
     @ResponseBody
-    public User updateUserById(User user){
+    public User updateUserById(HttpServletRequest request, User user){
         Subject currentUser = SecurityUtils.getSubject();
         User session_user = (User) currentUser.getSession().getAttribute("currentUser");
         session_user.setUsername(user.getUsername());
+        //获取前台选择框多选数组.为空或相等则不对角色做任何改变
+        String[] roles = request.getParameterValues("role");
+        if (!StringUtils.isEmpty(roles)) {
+            //前台传回来的角色列表 转化为list
+            List<Integer> integers = new ArrayList<>();
+            for (String role : roles) {
+                integers.add(Integer.valueOf(role));
+            }
+            List<Role> roleArrayList = new ArrayList<>(roles.length);
+            List<Integer> userRoles = cmsService.selectUserRoleRelationByUserId(user.getId());
+            //userRoles.getRoleRelation()
+            Role role = null;
+            for (Integer integer : integers) {
+                if (!userRoles.contains(integer)) {
+                    role = new Role();
+                    role.setId(integer);
+                    roleArrayList.add(role);
+                }
+            }
+            //设置角色信息
+            user.setRoles(roleArrayList);
+        }
+//        if (roles.length != 0){
+//            //前台传回来的角色列表 转化为list
+//            List<Integer> integers1 = new ArrayList<>();
+//            for (String role : roles) {
+//                integers1.add(Integer.valueOf(role));
+//            }
+//            //后台DB中的角色列表
+//            List<Integer> integers2 = new ArrayList<>();
+//            List<Role> roleList = cmsService.findUserById(user.getId()).getRoles();
+//            //如果DB中此用户存在角色，则比较，如果不存在角色，则直接添加角色
+//            if (roleList.size() != 0){
+//                for (Role role : roleList) {
+//                    integers2.add(role.getId());
+//                }
+//                //存在用户则开始判断前台传递的角色为1、增加 2、减少 3、乱序 4、相等
+//                if (!Arrays.equals(roles,integers2.toArray())) {
+//                    if (integers1.size()>integers2.size()){
+//                        //数据库中的角色列表全部包含，说明是增加角色的动作
+//                        if (integers1.containsAll(integers2)){
+//                            integers1.removeAll(integers2);
+//                            List<Role> roleArrayList = new ArrayList<>(roles.length);
+//                            Role role = null;
+//                            for (Integer integer : integers1) {
+//                                role = new Role();
+//                                role.setId(integer);
+//                                roleArrayList.add(role);
+//                            }
+//                            //设置角色信息
+//                            user.setRoles(roleList);
+//                        }else {
+//                            List<Integer> temp = new ArrayList<>();
+//                            for (Integer integer : integers1) {
+//                                temp.add(integer);
+//                            }
+//                            integers1.retainAll(integers2);
+//                            integers2.retainAll(temp);
+//                            List<Role> roleArrayList = new ArrayList<>(roles.length);
+//                            Role role = null;
+//                            for (Integer integer : integers1) {
+//                                role = new Role();
+//                                role.setId(integer);
+//                                roleArrayList.add(role);
+//                            }
+//                            //设置角色信息
+//                            user.setRoles(roleList);
+//                        }
+//                    } else {
+//                        //数据库中的角色列表包含前台传入的，说明是减少角色的操作
+//                        if (integers2.containsAll(integers1)){
+//                        }
+//                    }
+//                }
+//            } else {
+//                List<Role> roleArrayList = new ArrayList<>(roles.length);
+//                Role role = null;
+//                for (String role1 : roles) {
+//                    role = new Role();
+//                    role.setId(Integer.valueOf(role1));
+//                    roleList.add(role);
+//                }
+//                //设置角色信息
+//                user.setRoles(roleList);
+//            }
+//        }
         cmsService.modifyUser(user);
         return user;
     }
@@ -311,19 +400,37 @@ public class UserController {
     }
 
     @RequestMapping(value = {"userPage"})
-    public String rightPage(){
-        return "userPage";
+    public ModelAndView rightPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        List<Role> roles = cmsService.findAllRoles();
+        modelAndView.addObject("roles",roles);
+        modelAndView.setViewName("userPage");
+        return modelAndView;
     }
 
     @RequestMapping(value = {"addUser"})
-    public String addUser(){
-        return "addUser";
+    public ModelAndView addUser(){
+        ModelAndView modelAndView = new ModelAndView();
+        List<Role> roles = cmsService.findAllRoles();
+        modelAndView.addObject("roles",roles);
+        modelAndView.setViewName("addUser");
+        return modelAndView;
     }
 
     @RequestMapping(value = {"addUserData"},method = RequestMethod.POST)
     public String addUserData(User user){
         //密码加密
         user.setPassword(MD5Util.generateMD5(user.getPassword()));
+//        String[] roles = request.getParameterValues("role");
+//        List<Role> roleList = new ArrayList<>(roles.length);
+//        Role role = null;
+//        for (int i = 0; i < roles.length; i++) {
+//            role = new Role();
+//            role.setId(Integer.valueOf(roles[i]));
+//            roleList.add(role);
+//        }
+//        //获取角色信息
+//        user.setRoles(roleList);
         cmsService.addUser(user);
         return "redirect:/index";
     }
@@ -600,6 +707,26 @@ public class UserController {
         map.put("rows",page.getRows());
         map.put("total",page.getTotal());
         return map;
+    }
+
+    @RequestMapping(value = "deleteRole",method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteRole(Integer id){
+        cmsService.deleteRoleById(id);
+        return "1";
+    }
+
+    @RequestMapping(value = "getRoleById",method = RequestMethod.POST)
+    @ResponseBody
+    public Role getRoleById(Integer id){
+        return cmsService.findRoleById(id);
+    }
+
+    @RequestMapping(value = "updateRoleById",method = RequestMethod.POST)
+    @ResponseBody
+    public Role updateRoleById(Role role){
+        cmsService.modifyRole(role);
+        return role;
     }
 
     //请求权限页面

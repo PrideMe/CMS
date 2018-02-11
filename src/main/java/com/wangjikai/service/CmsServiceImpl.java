@@ -16,16 +16,21 @@ import com.wangjikai.domain.Notice;
 import com.wangjikai.domain.Permission;
 import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
+import com.wangjikai.domain.po.UserRole;
 import com.wangjikai.util.Page;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by 22717 on 2017/11/3.
@@ -73,9 +78,10 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id查询用户
      */
     @Override
-    @Cacheable(value = "userCache", key = "'user:' + #id")
+    //@Cacheable(value = "userCache", key = "'user:' + #id")
     public User findUserById(Integer id) {
         User user = userDao.selectById(id);
+        user.setRoles(roleDao.selectRolesByUserId(id));
         return user;
     }
 
@@ -121,7 +127,7 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 根据id删除用户
      */
     @Override
-    @CacheEvict(value = "userCache", key = "'user:' + #id")
+    //@CacheEvict(value = "userCache", key = "'user:' + #id")
     public void removeUserById(Integer id) {
         userDao.deleteById(id);
     }
@@ -130,9 +136,18 @@ public class CmsServiceImpl<T> implements CmsService<T> {
      * 修改用户
      */
     @Override
-    @CachePut(value = "userCache", key = "'user:' + #user.id")
+    //@CachePut(value = "userCache", key = "'user:' + #user.id")
     public User modifyUser(User user) {
         userDao.update(user);
+        if (!StringUtils.isEmpty(user.getRoles())){
+            List<Role> roles = user.getRoles();
+            UserRole userRole = new UserRole();
+            userRole.setUserId(user.getId());
+            for (Role role : roles) {
+                userRole.setRoleId(role.getId());
+                userDao.insertUserRole(userRole);
+            }
+        }
         return user;
     }
 
@@ -461,6 +476,15 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     }
 
     /**
+     * 获取所有角色
+     * @return
+     */
+    @Override
+    public List<Role> findAllRoles() {
+        return roleDao.selectByPage(null);
+    }
+
+    /**
      * 根据id查找权限
      * @param id
      * @return
@@ -516,5 +540,70 @@ public class CmsServiceImpl<T> implements CmsService<T> {
         page.setCurrent(current);
         page.setRows(permissions);
         return page;
+    }
+
+    @Override
+    public List<Permission> getAllPermission() {
+        List<Permission> permissions = permissionDao.selectByPage(null);
+        //需要返回的权限列表，包含子菜单
+        List<Permission> result = new ArrayList<>();
+        //循环出id字段
+        Set<Integer> ids = new HashSet<>();
+        for (Permission permission1 : permissions) {
+            ids.add(permission1.getId());
+        }
+        //找到没有父节点的节点，即根节点
+        for (Permission permission1 : permissions) {
+            if (!ids.contains(permission1.getpId())){
+                result.add(permission1);
+            }
+        }
+        //【三级菜单的时候无法查出】
+        Set<Permission> set = null;
+        //给根节点绑定子节点，即在主菜单上添加子菜单
+        for (Permission perm : result) {
+//            set = new HashSet<>();
+//            for (Permission per : permissions) {
+//                if (perm.getId().equals(per.getpId())){
+//                    set.add(per);
+//                }
+//            }
+            perm.setChild(getChild(perm.getId(),permissions));
+        }
+        return result;
+    }
+
+    //递归菜单
+    public List<Permission> getChild(Integer id,List<Permission> permissions){
+        //子菜单
+        List<Permission> childSet = new ArrayList<>();
+        for (Permission permission : permissions) {
+            //遍历所有节点，将父菜单id与传过来的id比较
+            if (!StringUtils.isEmpty(permission.getpId())){
+                if (permission.getpId().equals(id)){
+                    childSet.add(permission);
+                }
+            }
+        }
+        //把子菜单的子菜单再循环一遍
+        for (Permission permission : childSet) {
+            if (!StringUtils.isEmpty(permission.getpId())){
+                permission.setChild(getChild(permission.getId(),permissions));
+            }
+        }
+        //递归退出条件
+        if (childSet.size() ==0 ){
+            return null;
+        }
+        return childSet;
+    }
+
+    /**
+     * 根据用户id查找关联表中的角色集合数据
+     * @param id
+     * @return
+     */
+    public List<Integer> selectUserRoleRelationByUserId(Integer id) {
+        return userDao.selectUserRoleRelationByUserId(id);
     }
 }

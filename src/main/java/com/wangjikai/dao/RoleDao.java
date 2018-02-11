@@ -24,4 +24,6 @@ public interface RoleDao {
     List<Role> selectByPage(Map<String,Object> params);
     //根据参数查询角色总数
     Integer count(Map<String,Object> params);
+    //根据用户的id拿到当前用户的角色信息
+    List<Role> selectRolesByUserId(Integer id);
 }

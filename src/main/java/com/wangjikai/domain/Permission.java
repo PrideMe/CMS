@@ -1,6 +1,7 @@
 package com.wangjikai.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,8 +14,10 @@ public class Permission implements Serializable{
     private String pCode; //权限代号
     private String name;
     private String description;
-    private String url;
+    private String picon; //图标
+    private String purl;
     private Set<Role> roles; //权限持有角色信息
+    private List<Permission> child; //父级菜单拥有的子级菜单集合
 
     public Integer getId() {
         return id;
@@ -56,12 +59,20 @@ public class Permission implements Serializable{
         this.description = description;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPicon() {
+        return picon;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPicon(String picon) {
+        this.picon = picon;
+    }
+
+    public String getPurl() {
+        return purl;
+    }
+
+    public void setPurl(String purl) {
+        this.purl = purl;
     }
 
     public Set<Role> getRoles() {
@@ -72,15 +83,26 @@ public class Permission implements Serializable{
         this.roles = roles;
     }
 
+    public List<Permission> getChild() {
+        return child;
+    }
+
+    public void setChild(List<Permission> child) {
+        this.child = child;
+    }
+
     @Override
     public String toString() {
         return "Permission{" +
                 "id=" + id +
                 ", pId=" + pId +
+                ", pCode='" + pCode + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", url='" + url + '\'' +
+                ", picon='" + picon + '\'' +
+                ", purl='" + purl + '\'' +
                 ", roles=" + roles +
+                ", child=" + child +
                 '}';
     }
 }

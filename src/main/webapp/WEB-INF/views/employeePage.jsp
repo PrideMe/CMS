@@ -100,6 +100,9 @@
     //主动加载请求，填充表格数据
     $(function () {
         $("#employeeList").bootgrid({
+            searchSettings: {
+                delay: 1000 //每一秒执行一次搜索
+            },
             ajax: true,
             url: "${ctx}/employeeData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部

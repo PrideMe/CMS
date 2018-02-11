@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="${ctx}/css/nprogress.css">
     <link rel="stylesheet" href="${ctx}/ztree/zTreeStyle.css">
     <link rel="stylesheet" href="${ctx}/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${ctx}/css/bootstrap-table.min.css">
     <link href="${ctx}/images/favicon.ico" rel="shortcut icon">
     <script type="text/javascript" src="${ctx}/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap.min.js"></script>
@@ -24,16 +25,18 @@
     <script type="text/javascript" src="${ctx}/js/metisMenu.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/nprogress.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootbox.min.js"></script>
-    <script type="text/javascript" src="${ctx}/js/defaults-zh_CN.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap-select.js"></script>
-    <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="${ctx}/js/defaults-zh_CN.js"></script>
     <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <script type="text/javascript" src="${ctx}/js/echarts.js"></script>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/jquery.bootgrid.fa.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/default.js"></script>
     <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.core.min.js"></script>
     <script type="text/javascript" src="${ctx}/ztree/jquery.ztree.excheck.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/bootstrap-table-zh-CN.min.js"></script>
     <style type="text/css">
         *{
             margin: 0;
@@ -146,18 +149,6 @@
             window.top.location = window.location;
         }
     </script>
-
-
-    <%--<!-- Latest compiled and minified CSS -->--%>
-    <%--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">--%>
-
-    <%--<!-- Latest compiled and minified JavaScript -->--%>
-    <%--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>--%>
-
-    <%--<!-- Latest compiled and minified Locales -->--%>
-    <%--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>--%>
-
-
 </head>
 
 <body>
@@ -189,127 +180,36 @@
     <aside class="sidebar">
         <nav class="sidebar-nav navbar">
             <ul class="metismenu" id="menu">
-                <shiro:hasAnyRoles name="boss,manager">
-                    <li class="active">
-                        <a href="javascript:void(0);" aria-expanded="true">
-                            <span class="sidebar-nav-item-icon fa fa-id-card fa-lg"></span>
-                            <span class="sidebar-nav-item">用户管理</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul aria-expanded="true" class="collapse in">
-                            <li>
-                                <a href="#" onclick="showAtRight('${ctx}/userPage')">
-                                    <span class="sidebar-nav-item-icon fa fa-code-fork fa-fw"></span>用户查询
-                                </a>
-                            </li>
-                            <shiro:hasRole name="boss">
-                                <li>
-                                    <a href="#" onclick="showAtRight('${ctx}/addUser')">
-                                        <span class="sidebar-nav-item-icon fa fa-star fa-fw"></span>添加用户
-                                    </a>
-                                </li>
-                            </shiro:hasRole>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" aria-expanded="false">
-                            <span class="sidebar-nav-item-icon fa fa-th fa-lg"></span>
-                            部门管理<span class="fa arrow"></span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li>
-                                <a href="#" onclick="showAtRight('${ctx}/departmentPage')">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>部门查询
-                                </a>
-                            </li>
-                            <shiro:hasRole name="boss">
-                                <li>
-                                    <a href="#" onclick="showAtRight('${ctx}/addDepartment')">
-                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加部门
-                                    </a>
-                                </li>
-                            </shiro:hasRole>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" aria-expanded="false">
-                            <span class="sidebar-nav-item-icon fa fa-keyboard-o fa-lg"></span>
-                            职位管理<span class="fa arrow"></span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li>
-                                <a href="#" onclick="showAtRight('${ctx}/jobPage')">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>职位查询
-                                </a>
-                            </li>
-                            <shiro:hasRole name="boss">
-                                <li>
-                                    <a href="#" onclick="showAtRight('${ctx}/addJob')">
-                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加职位
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" aria-expanded="false"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>
-                                        小功能<span class="fa plus-times"></span></a>
+                <c:forEach var="menu" items="${permissions}" varStatus="status">
+                    <shiro:hasPermission name="${menu.pCode}">
+                        <li <c:if test="${status.count == 1}">class="active"</c:if> >
+                            <a href="javascript:void(0);" aria-expanded="true">
+                                <span class="sidebar-nav-item-icon fa ${menu.picon} fa-lg"></span>
+                                <span class="sidebar-nav-item">${menu.name}</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <c:if test="${not empty menu.child}">
+                                <c:forEach var="subMenu" items="${menu.child}">
                                     <ul aria-expanded="false" class="collapse">
-                                        <li><a href="#" onclick="showAtRight('${ctx}/sendMail')"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>发邮件</a></li>
-                                        <li><a href="#" onclick="showAtRight('${ctx}/search')"><span class="sidebar-nav-item-icon fa fa-search fa-fw"></span>搜索</a></li>
-                                        <li><a href="#"><span class="sidebar-nav-item-icon fa fa-tag fa-fw"></span>公众号配置</a></li>
+                                        <li>
+                                            <a href="javascript:void(0);" <c:if test="${not empty subMenu.purl}">onclick="showAtRight('${ctx}${subMenu.purl}')"</c:if> >
+                                                <span class="sidebar-nav-item-icon fa ${subMenu.picon} fa-fw"></span>${subMenu.name}
+                                                <c:if test="${empty subMenu.purl}"><span class="fa plus-times"></span></c:if>
+                                            </a>
+                                            <ul aria-expanded="false" class="collapse">
+                                                <c:forEach var="subMenu2" items="${subMenu.child}">
+                                                    <li><a href="javascript:void(0);" onclick="showAtRight('${ctx}${subMenu2.purl}')">
+                                                        <span class="sidebar-nav-item-icon fa ${subMenu2.picon} fa-fw"></span>${subMenu2.name}</a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </li>
                                     </ul>
-                                </li>
-                            </shiro:hasRole>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" aria-expanded="false">
-                            <span class="sidebar-nav-item-icon fa fa-user-o fa-lg"></span>员工管理<span class="fa arrow"></span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li>
-                                <a href="#" onclick="showAtRight('${ctx}/employeePage')">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>员工查询
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加员工
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" aria-expanded="false">
-                            <span class="sidebar-nav-item-icon fa fa-map-o fa-lg"></span>
-                            公告管理<span class="fa arrow"></span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <shiro:hasRole name="boss">
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>查询公告</a></li>
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>添加公告</a></li>
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>删除公告</a></li>
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>修改公告</a></li>
-                            </shiro:hasRole>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" aria-expanded="false">
-                            <span class="sidebar-nav-item-icon fa fa-cog fa-lg"></span>
-                            系统设置<span class="fa arrow"></span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <shiro:hasRole name="boss">
-                                <li>
-                                    <a href="#" onclick="showAtRight('${ctx}/rolePage')">
-                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>角色管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="showAtRight('${ctx}/permissionPage')">
-                                        <span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>菜单管理
-                                    </a>
-                                </li>
-                                <li><a href="#"><span class="sidebar-nav-item-icon fa fa-circle-o fa-fw"></span>系统字典</a></li>
-                            </shiro:hasRole>
-                        </ul>
-                    </li>
-                </shiro:hasAnyRoles>
+                                </c:forEach>
+                            </c:if>
+                        </li>
+                    </shiro:hasPermission>
+                </c:forEach>
             </ul>
         </nav>
     </aside>
@@ -345,7 +245,7 @@
                 </a>
             </div>
             <h2>创建模态框（Modal）</h2>
-            <shiro:hasPermission name="delegate">
+            <shiro:hasPermission name="manager_users">
                 <h3>具有代表公司权限</h3>
             </shiro:hasPermission>
             <shiro:hasPermission name="manager">
@@ -612,10 +512,12 @@
     });
     //在右侧显示
     function showAtRight(url) {
-        NProgress.start();
-        $("#rightContent").load(url,function () {
-            NProgress.done();
-        });
+        if (url != "${ctx}" && url != "${ctx}/") {
+            NProgress.start();
+            $("#rightContent").load(url,function () {
+                NProgress.done();
+            });
+        }
     }
     $("#datetime").datetimepicker({
         format: "yyyy年mm月dd日 - hh:ii:ss",

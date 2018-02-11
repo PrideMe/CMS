@@ -5,11 +5,11 @@
     <select id="selectByLoginname" resultType="com.wangjikai.domain.User">
         SELECT * FROM `user` WHERE loginname = #{loginname};
     </select>
-    <select id="selectUserRolePermission" resultMap="getUserRole">
+    <select id="selectUserRolePermission" resultMap="getUserRolePermission">
         SELECT
         u.id,u.loginname,u.username,u.`password`,u.`status`,u.createdate,
         r.id AS rId,r.roleName,r.roleCode,r.description AS rDescription,
-        p.id AS pId,p.`name` AS pName,p.description AS pDescription,p.url
+        p.id AS pId,p.pCode,p.`name` AS pName,p.description AS pDescription,p.purl
         FROM
         `user` AS u,
         role AS r,
@@ -27,7 +27,7 @@
         AND
         u.loginname = #{loginname} AND u.password = #{password};
     </select>
-    <resultMap id="getUserRole" type="com.wangjikai.domain.User">
+    <resultMap id="getUserRolePermission" type="com.wangjikai.domain.User">
         <id property="id" column="id"/>
         <result property="loginname" column="loginname"/>
         <result property="username" column="username"/>
@@ -41,17 +41,34 @@
             <result property="description" column="rDescription"/>
             <collection property="permissions" ofType="com.wangjikai.domain.Permission">
                 <id property="id" column="pId"/>
+                <result property="pId" column="pId"/>
+                <result property="pCode" column="pCode"/>
                 <result property="name" column="pName"/>
                 <result property="description" column="pDescription"/>
-                <result property="url" column="url"/>
+                <result property="purl" column="purl"/>
             </collection>
         </collection>
     </resultMap>
+    <resultMap id="getUserRole" type="com.wangjikai.domain.User">
+        <id property="id" column="uid"/>
+        <result property="loginname" column="loginname"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="createdate" column="createdate"/>
+        <collection property="roles" ofType="com.wangjikai.domain.Role">
+            <id property="id" column="rId"/>
+            <result property="name" column="roleName"/>
+            <result property="roleCode" column="roleCode"/>
+            <result property="description" column="rDescription"/>
+        </collection>
+    </resultMap>
     <select id="selectById" resultType="com.wangjikai.domain.User" parameterType="Integer">
-        SELECT * FROM user WHERE id = #{id};
+        SELECT * FROM `user` WHERE `user`.id = #{id}
     </select>
     <delete id="deleteById">
         DELETE FROM user WHERE id = #{id};
+        DELETE FROM user_role WHERE userId = #{id};
     </delete>
     <update id="update" parameterType="com.wangjikai.domain.User">
         UPDATE user
@@ -63,21 +80,39 @@
         </set>
         WHERE id = #{id};
     </update>
-    <select id="selectByPage" parameterType="map" resultType="com.wangjikai.domain.User">
-        SELECT * FROM user
+    <select id="selectByPage" parameterType="map" resultMap="getUserRole">
+        SELECT
+        u.id uId,
+        u.loginname,
+        u.`password`,
+        u.`status`,
+        u.createdate,
+        u.username,
+        ur.id urId,
+        ur.userId,
+        ur.roleId,
+        r.id rId,
+        r.roleName,
+        r.roleCode,
+        r.description
+        FROM
+        (`user` AS u LEFT JOIN user_role AS ur ON u.id = ur.userId)
+        LEFT JOIN role AS r
+        ON (ur.roleId = r.id)
         <if test="user != null">
             <where>
                 <if test="user.loginname != null and user.loginname != ''">
-                    loginname LIKE CONCAT('%',#{user.loginname},'%')
+                    AND u.loginname LIKE CONCAT('%',#{user.loginname},'%')
                 </if>
                 <if test="user.username != null and user.username != ''">
-                    AND username LIKE CONCAT('%',#{user.username},'%')
+                    AND u.username LIKE CONCAT('%',#{user.username},'%')
                 </if>
                 <if test="user.status != null and user.status != ''">
-                    AND status LIKE CONCAT('%',#{user.status},'%')
+                    AND u.`status` LIKE CONCAT('%',#{user.status},'%')
                 </if>
             </where>
         </if>
+        ORDER BY u.id,r.id
         <if test="page != null">
             LIMIT #{page.current},#{page.rowCount};
         </if>
@@ -130,4 +165,18 @@
             </if>
         </trim>
     </insert>
+
+    <!--插入中间表-->
+    <insert id="insertUserRole" parameterType="com.wangjikai.domain.po.UserRole" useGeneratedKeys="true" flushCache="true">
+        INSERT INTO user_role(userId,roleId) VALUES (#{userId},#{roleId});
+    </insert>
+    <!--根据用户id获取中间表的关联关系-->
+    <select id="selectUserRoleRelationByUserId" parameterType="Integer" resultType="Integer">
+        SELECT
+            user_role.roleId
+        FROM
+            user_role
+        WHERE
+            userId = #{id};
+    </select>
 </mapper>

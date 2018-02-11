@@ -248,6 +248,16 @@
             <artifactId>cxf-rt-transports-http-jetty</artifactId>
             <version>3.2.1</version>
         </dependency>
+        <!--ECharts实体对象类-->
+        <dependency>
+            <groupId>com.github.abel533</groupId>
+            <artifactId>ECharts</artifactId>
+            <version>3.0.0.2</version>
+        </dependency>
+        <!--工作流activiti-->
+
+        <!--工作流与spring的整合-->
+
         <!--消息activemq-all -->
         <!--<dependency>-->
             <!--<groupId>org.apache.activemq</groupId>-->

@@ -60,10 +60,10 @@ public class SimpleJob {
                 strBuf.append(line + " ");
             reader.close();
         }catch(MalformedURLException e) {
-            log.info(simpleDateFormat.format(date)+"定时任务发送失败，原因：URL错误");
+            log.error(simpleDateFormat.format(date)+"定时任务发送失败，原因：URL错误");
             return;
         }catch(IOException e){
-            log.info(simpleDateFormat.format(date)+"定时任务发送失败，原因：IO流错误");
+            log.error(simpleDateFormat.format(date)+"定时任务发送失败，原因：IO流错误");
             return;
         }
         JSONObject jsonData = JSONObject.parseObject(strBuf.toString());

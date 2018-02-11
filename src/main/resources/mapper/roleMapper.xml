@@ -78,4 +78,8 @@
             </where>
         </if>
     </select>
+    <select id="selectRolesByUserId" parameterType="Integer" resultType="com.wangjikai.domain.Role">
+        SELECT r.id,r.roleName AS 'name',r.roleCode,r.description FROM user_role AS ur ,role AS r
+        WHERE ur.userId = #{id} AND ur.roleId = r.id
+    </select>
 </mapper>

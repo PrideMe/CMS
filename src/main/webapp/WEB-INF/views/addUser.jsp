@@ -34,28 +34,15 @@
             <label>状态</label>
             <input class="form-control" id="status" name="status" placeholder="请输入状态">
         </div>
-        <div class="form-group">
-            <label>角色</label>
-            <select id="lunch" class="selectpicker" data-live-search="true" title="Please select a lunch ...">
-                <option>Hot Dog, Fries and a Soda</option>
-                <option>Burger, Shake and a Smile</option>
-                <option>Sugar, Spice and all things nice</option>
-                <option>中</option>
-                <option>美国</option>
-                <option>日本</option>
-                <option>Baby Back Ribs</option>
-                <option>A really really long option made to illustrate an issue with the live search in an inline form</option>
-            </select>
-        </div>
         <button type="submit" class="btn btn-success">添加</button>
     </form>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.selectpicker').selectpicker({
-            size: 7
-        });
+//        $('.selectpicker').selectpicker({
+//            size: 7
+//        });
     });
 </script>
 </body>

@@ -1,6 +1,7 @@
 package com.wangjikai.dao;
 
 import com.wangjikai.domain.User;
+import com.wangjikai.domain.po.UserRole;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +31,8 @@ public interface UserDao {
     void insertUser(User user);
     //查询用户的角色权限信息
     User selectUserRolePermission(User user);
+    //插入中间表user_role
+    void insertUserRole(UserRole userRole);
+    //根据用户id去查关联表的角色集合
+    List<Integer> selectUserRoleRelationByUserId(Integer integer);
 }

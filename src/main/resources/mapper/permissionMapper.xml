@@ -72,8 +72,8 @@
                 <if test="permission.description != null and permission.description != ''">
                     AND description LIKE CONCAT('%',#{permission.description},'%')
                 </if>
-                <if test="permission.url != null and permission.url != ''">
-                    AND url LIKE CONCAT('%',#{permission.url},'%')
+                <if test="permission.purl != null and permission.purl != ''">
+                    AND url LIKE CONCAT('%',#{permission.purl},'%')
                 </if>
             </where>
         </if>

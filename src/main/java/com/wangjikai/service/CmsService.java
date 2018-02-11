@@ -280,6 +280,13 @@ public interface CmsService<T> {
      */
     Page<T> findRole(Role role, Page<T> page);
 
+
+    /**
+     * 获取所有角色，用于用户添加角色
+     * @return
+     */
+    List<Role> findAllRoles();
+
     /**
      * 根据id查找权限
      * @param id
@@ -312,4 +319,17 @@ public interface CmsService<T> {
      * @return
      */
     Page<T> findPermission(Permission permission, Page<T> page);
+
+    /**
+     * 获取全部权限，用于菜单显示，shiro控制展示
+     * @return
+     */
+    List<Permission> getAllPermission();
+
+    /**
+     * 根据用户id查找关联表中的角色集合数据
+     * @param id
+     * @return
+     */
+    List<Integer> selectUserRoleRelationByUserId(Integer id);
 }

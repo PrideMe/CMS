@@ -20,32 +20,7 @@
     </tr>
     </thead>
 </table>
-<ul id="treeDemo" class="ztree"></ul>
 <script type="text/javascript">
-    var setting = {
-        check : {
-            chkStyle:"checkbox",
-            enable : true   //是否复选框
-        },
-        data: {
-            simpleData: {
-                enable: true
-            }
-        }
-    };
-    $(document).ready(function(){
-        $.ajax({
-            type:'POST',
-            url:'${ctx}/tests',
-            dataType:'JSON',
-            success:function(data){
-                /*成功后的处理*/
-                zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);
-                //默认展开全部节点
-                zTreeObj.expandAll(true);
-            }
-        });
-    });
     var formatters = {
         "operation" :function (column,row) {
             var info = "";
@@ -57,6 +32,9 @@
     //主动加载请求，填充表格数据
     $(function () {
         $("#permissionList").bootgrid({
+            searchSettings: {
+                delay: 1000 //每一秒执行一次搜索
+            },
             ajax: true,
             url: "${ctx}/permissionData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
