@@ -32,39 +32,19 @@
         <property name="realm" ref="permissionsRealm"/>
     </bean>
 
+    <!--shiro缓存，密码错误锁定功能-->
+    <bean id="shiroCache" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="ehcacheManager"/>
+    </bean>
+
     <bean id="permissionsRealm" class="com.wangjikai.shiro.PermissionsRealm">
         <property name="credentialsMatcher">
-            <bean class="com.wangjikai.shiro.CustomCredentialsMatcher"/>
+            <bean class="com.wangjikai.shiro.CustomCredentialsMatcher">
+                <constructor-arg ref="shiroCache"/>
+            </bean>
         </property>
     </bean>
 
     <!--保证实现了Shiro内部lifecycle函数的bean执行-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 </beans>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

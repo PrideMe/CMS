@@ -22,6 +22,7 @@
 
     <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache.xml"/>
+        <property name="shared" value="true"/>
     </bean>
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
@@ -34,6 +35,32 @@
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
+
+        <property name = "filters" value = "${jdbc.filters}" />
+        <!-- 初始化连接数量 -->
+        <property name = "initialSize" value = "${jdbc.initialSize}" />
+        <!-- 最小空闲连接数 -->
+        <property name = "minIdle" value = "${jdbc.minIdle}" />
+        <!-- 最大并发连接数 -->
+        <property name = "maxActive" value = "${jdbc.maxActive}" />
+        <!-- 这里建议配置为TRUE，防止取到的连接不可用。获取链接的时候，不校验是否可用，开启会有损性能-->
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+        <!-- 归还链接到连接池的时候校验链接是否可用 -->
+        <property name="testOnReturn" value="${jdbc.testOnReturn}" />
+        <!-- 此项配置为true即可，不影响性能，并且保证安全性。意义为：申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效 -->
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name = "maxWait" value = "${jdbc.maxWait}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name = "timeBetweenEvictionRunsMillis" value ="${jdbc.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name = "minEvictableIdleTimeMillis" value ="${jdbc.minEvictableIdleTimeMillis}" />
+        <!-- 打开 removeAbandoned 功能 -->
+        <property name = "removeAbandoned" value = "${jdbc.removeAbandoned}" />
+        <!-- 1800 秒，也就是 30 分钟 -->
+        <property name = "removeAbandonedTimeout" value ="${jdbc.removeAbandonedTimeout}" />
+        <!-- 关闭 abanded 连接时输出错误日志 -->
+        <property name = "logAbandoned" value = "${jdbc.logAbandoned}" />
     </bean>
     <!-- 配置SqlSessionFactory -->
     <bean id="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

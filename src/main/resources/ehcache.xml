@@ -35,4 +35,13 @@
            timeToLiveSeconds="1800"
            overflowToDisk="false"
            memoryStoreEvictionPolicy="LRU"/>
+
+    <!-- 登录记录缓存 锁定10分钟 -->
+    <cache name="passwordRetryCache"
+           eternal="false"
+           maxElementsInMemory="1000"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="600"
+           statistics="true"
+           overflowToDisk="false"/>
 </ehcache>

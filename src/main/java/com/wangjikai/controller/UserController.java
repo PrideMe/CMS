@@ -54,8 +54,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.System.out;
-
 /**
  * Created by 22717 on 2017/11/4.
  * 处理用户请求控制器
@@ -85,9 +83,9 @@ public class UserController {
     public ModelAndView login(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
-        HttpSession session = request.getSession();
-        if (null != session.getAttribute("currentUser")){
-            modelAndView.setViewName("redirect:/index");
+        Subject currentUser = SecurityUtils.getSubject();
+        if (currentUser.isAuthenticated()){
+            modelAndView.setViewName("index");
             return modelAndView;
         }
         return modelAndView;
@@ -150,13 +148,13 @@ public class UserController {
                 return modelAndView;
             }
         }catch (UnknownAccountException e){
-            out.println("用户名/密码错误");
+            System.out.println("用户名/密码错误");
             return modelAndView;
         }catch (ExcessiveAttemptsException e){
-            out.println("失败次数过多，锁定");
+            System.out.println("失败次数过多，锁定");
             return modelAndView;
         }catch (AuthenticationException e){
-            out.println(e.getMessage());
+            System.out.println(e.getMessage());
             return modelAndView;
         }
         //User user = cmsService.login(username,password);

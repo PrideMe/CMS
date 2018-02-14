@@ -257,7 +257,12 @@
         <!--工作流activiti-->
 
         <!--工作流与spring的整合-->
-
+        <!--shiro的ehcache缓存-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>1.4.0</version>
+        </dependency>
         <!--消息activemq-all -->
         <!--<dependency>-->
             <!--<groupId>org.apache.activemq</groupId>-->
