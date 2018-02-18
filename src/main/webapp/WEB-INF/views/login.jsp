@@ -28,8 +28,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-4 col-sm-7 col-md-6 col-xs-12 vertical-center">
-            <form action="${ctx}/login" method="post" class="fh5co-form loginbody animate-box fadeInRight animated-fast"
-                  id="loginForm">
+            <form class="fh5co-form loginbody animate-box fadeInRight animated-fast" id="loginForm">
                 <h2 style="margin-bottom: 20px;">登陆</h2>
                 <div class="form-group">
                     <div class="input-group">
@@ -60,7 +59,7 @@
                     <p><a href="${ctx}/register">注册账号</a> | <a href="${ctx}/forgot3.html">忘记密码</a></p>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">登陆</button>
+                <input type="button" class="btn btn-primary" style="width: 61%" id="loginBtn" value="登陆"/>
             </form>
             <%--<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInRight">--%>
                 <%--<h2>登陆</h2>--%>
@@ -124,6 +123,43 @@
     </div>
 </div>
 <script type="text/javascript">
+    $("#loginBtn").click(function () {
+        $.ajax({
+            type:'POST',
+            url:'${ctx}/login',
+            dataType:'text',
+            data:$("#loginForm").serialize(),
+            success:function(data){
+                if (data == '0') {
+                    window.location.href="${ctx}/index";
+                } else if (data == '1'){
+                    window.location.href="${ctx}/login";
+                    alert("验证码错误！");
+                } else if (data == '2'){
+                    window.location.href="${ctx}/login";
+                    alert("账户不存在！");
+                } else if (data == '3'){
+                    window.location.href="${ctx}/login";
+                    alert("失败次数过多，锁定10分钟！");
+                } else if (data == '4'){
+                    alert("密码错误！");
+                    $("#form-password").val("");
+                } else if (data == '5'){
+                    window.location.href="${ctx}/login";
+                    alert("帐号被锁定！");
+                } else if (data == '6'){
+                    window.location.href="${ctx}/login";
+                    alert("帐号被禁用！");
+                } else {
+                    window.location.href="${ctx}/login";
+                    alert("未知错误！");
+                }
+            },
+            error:function (data) {
+                window.location.href="${ctx}/login";
+            }
+        });
+    });
     $(function(){
         if (window.history && window.history.pushState) {
             $(window).on('popstate', function () {
@@ -139,7 +175,7 @@
     $(function () {
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
-                $("#loginBtn").click();
+                $("#loginBtn").trigger("click")
             }
         });
         $('#kaptchaImage').click(function() {

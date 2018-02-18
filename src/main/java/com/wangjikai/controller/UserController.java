@@ -16,7 +16,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -120,8 +123,10 @@ public class UserController {
     //请求登陆数据
     //1、通过request.getParameter()
     //2、通过反射
+    //ModelAndView与ajax通信问题
     @RequestMapping(value = {"/login"},method = RequestMethod.POST)
-    public ModelAndView loginData(HttpServletRequest request){
+    public void loginData(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/login");
         HttpSession session = request.getSession();
@@ -142,20 +147,35 @@ public class UserController {
                 modelAndView.setViewName("redirect:/");
                 session.removeAttribute("session_code");
                 log.info("用户："+username+"登入成功");
-                return modelAndView;
+                response.getWriter().write("0");
+                //return modelAndView;
             } else {
                 log.info("用户："+username+"登入失败");
-                return modelAndView;
+                response.getWriter().write("1");
+                //response.getWriter().write("验证码输入错误！");
+                //return modelAndView;
             }
         }catch (UnknownAccountException e){
-            System.out.println("用户名/密码错误");
-            return modelAndView;
+            //modelAndView.addObject("error","用户名/密码错误");
+            //response.getWriter().write("账户不存在");
+            response.getWriter().write("2");
+            //return modelAndView;
         }catch (ExcessiveAttemptsException e){
-            System.out.println("失败次数过多，锁定");
-            return modelAndView;
-        }catch (AuthenticationException e){
-            System.out.println(e.getMessage());
-            return modelAndView;
+            response.getWriter().write("3");
+            //response.getWriter().write("失败次数过多，锁定10分钟！");
+            //return modelAndView;
+        }catch (IncorrectCredentialsException e) {
+            response.getWriter().write("4");
+            //response.getWriter().write("密码错误!");
+        } catch (LockedAccountException e) {
+            response.getWriter().write("5");
+            //response.getWriter().write("帐号被锁定!");
+        } catch (DisabledAccountException e) {
+            response.getWriter().write("6");
+            //response.getWriter().write("帐号被禁用!");
+        } catch (AuthenticationException e){
+            response.getWriter().write("未知错误！");
+            //return modelAndView;
         }
         //User user = cmsService.login(username,password);
         //request.setAttribute("",user);
