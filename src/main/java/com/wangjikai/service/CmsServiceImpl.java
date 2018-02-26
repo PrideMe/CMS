@@ -16,6 +16,7 @@ import com.wangjikai.domain.Notice;
 import com.wangjikai.domain.Permission;
 import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
+import com.wangjikai.domain.po.RolePermission;
 import com.wangjikai.domain.po.UserRole;
 import com.wangjikai.util.Page;
 import org.springframework.cache.annotation.CacheEvict;
@@ -482,6 +483,25 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     @Override
     public List<Role> findAllRoles() {
         return roleDao.selectByPage(null);
+    }
+
+    /**
+     * 根据id查找角色所有的权限
+     * @param id
+     * @return
+     */
+    @Override
+    public Role getRoleRelationPermission(Integer id) {
+        return roleDao.getRoleRelationPermission(id);
+    }
+
+    /**
+     * 插入角色权限中间表
+     * @param rolePermission
+     */
+    @Override
+    public void insertRolePermission(RolePermission rolePermission) {
+        roleDao.insertRolePermission(rolePermission);
     }
 
     /**

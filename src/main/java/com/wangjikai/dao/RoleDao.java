@@ -1,6 +1,7 @@
 package com.wangjikai.dao;
 
 import com.wangjikai.domain.Role;
+import com.wangjikai.domain.po.RolePermission;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +27,8 @@ public interface RoleDao {
     Integer count(Map<String,Object> params);
     //根据用户的id拿到当前用户的角色信息
     List<Role> selectRolesByUserId(Integer id);
+    //根据角色查找关联的权限
+    Role getRoleRelationPermission(Integer id);
+    //插入中间表role_permission
+    void insertRolePermission(RolePermission rolePermission);
 }

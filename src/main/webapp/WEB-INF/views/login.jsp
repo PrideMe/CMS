@@ -49,7 +49,7 @@
                 <div class="form-inline">
                     <div class="form-group" style="width: 45%;float: left">
                         <div class="input-group">
-                            <input type="text" name="verifyCode" class="form-control" placeholder="请输入验证码">
+                            <input type="text" id="verifyCode" name="verifyCode" class="form-control" placeholder="请输入验证码">
                         </div>
                     </div>
                     <img id="kaptchaImage" class="verify-code" style="float: right" src="${ctx}/code">
@@ -61,69 +61,14 @@
                 <br>
                 <input type="button" class="btn btn-primary" style="width: 61%" id="loginBtn" value="登陆"/>
             </form>
-            <%--<form action="#" class="fh5co-form animate-box" data-animate-effect="fadeInRight">--%>
-                <%--<h2>登陆</h2>--%>
-                <%--<div class="form-group">--%>
-                    <%--<label for="username" class="sr-only">用户名</label>--%>
-                    <%--<input type="text" class="form-control" id="username" placeholder="用户名" autocomplete="off">--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<label for="password" class="sr-only">密码</label>--%>
-                    <%--<input type="password" class="form-control" id="password" placeholder="密码" autocomplete="off">--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<label for="remember"><input type="checkbox" id="remember">记住我</label>--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<p><a href="sign-up3.html">登陆</a> | <a href="forgot3.html">忘记密码</a></p>--%>
-                <%--</div>--%>
-                <%--<div class="form-group">--%>
-                    <%--<input type="submit" value="登陆" class="btn btn-primary">--%>
-                <%--</div>--%>
-            <%--</form>--%>
         </div>
-        <%--<div class="col-lg-4 col-sm-7 col-md-6 col-xs-10 col-center-block">--%>
-            <%--<div class="form-top">--%>
-                <%--<form action="${ctx}/login" method="post" class="loginbody animate-box fadeInRight animated-fast" id="loginForm" style="margin-top: 2em;--%>
-    <%---webkit-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%---moz-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%---o-box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%--box-shadow: -4px 7px 46px 2px rgba(0, 0, 0, 0.1);--%>
-    <%--background: #e4e4e4;">--%>
-                    <%--<div class="form-group">--%>
-                        <%--<div class="input-group">--%>
-                            <%--<div class="input-group-addon">--%>
-                                <%--<i class="fa fa-user fa-fw"></i>--%>
-                            <%--</div>--%>
-                            <%--<input type="text" name="username" placeholder="用户名" class="form-control" id="form-username">--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-group">--%>
-                        <%--<div class="input-group">--%>
-                            <%--<div class="input-group-addon">--%>
-                                <%--<i class="fa fa-lock fa-fw"></i>--%>
-                            <%--</div>--%>
-                            <%--<input type="password" name="password" placeholder="密码" class="form-control" id="form-password">--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-inline">--%>
-                        <%--<div class="form-group" style="width: 41%;float: left">--%>
-                            <%--<div class="input-group">--%>
-                                <%--<input type="text" name="verifyCode" class="form-control" placeholder="请输入验证码">--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                        <%--<img id="kaptchaImage" class="verify-code" style="float: right" src="${ctx}/code">--%>
-                    <%--</div>--%>
-                    <%--<div class="clearfix"></div>--%>
-                    <%--<br>--%>
-                    <%--<button type="submit" class="btn btn-primary" style="width: 61%" id="loginBtn">登陆</button>--%>
-                <%--</form>--%>
-            <%--</div>--%>
-        <%--</div>--%>
     </div>
 </div>
 <script type="text/javascript">
     $("#loginBtn").click(function () {
+        login();
+    });
+    function login() {
         $.ajax({
             type:'POST',
             url:'${ctx}/login',
@@ -133,22 +78,25 @@
                 if (data == '0') {
                     window.location.href="${ctx}/index";
                 } else if (data == '1'){
-                    window.location.href="${ctx}/login";
+                    $("#verifyCode").val("");
                     alert("验证码错误！");
+                    $("#kaptchaImage").attr('src','${ctx}/code?'+Math.random());
                 } else if (data == '2'){
-                    window.location.href="${ctx}/login";
+                    $("#form-username").val("");
+                    $("#form-password").val("");
                     alert("账户不存在！");
                 } else if (data == '3'){
-                    window.location.href="${ctx}/login";
                     alert("失败次数过多，锁定10分钟！");
                 } else if (data == '4'){
                     alert("密码错误！");
                     $("#form-password").val("");
                 } else if (data == '5'){
-                    window.location.href="${ctx}/login";
+                    $("#form-username").val("");
+                    $("#form-password").val("");
                     alert("帐号被锁定！");
                 } else if (data == '6'){
-                    window.location.href="${ctx}/login";
+                    $("#form-username").val("");
+                    $("#form-password").val("");
                     alert("帐号被禁用！");
                 } else {
                     window.location.href="${ctx}/login";
@@ -159,23 +107,24 @@
                 window.location.href="${ctx}/login";
             }
         });
-    });
-    $(function(){
-        if (window.history && window.history.pushState) {
-            $(window).on('popstate', function () {
-                //当点击浏览器的 后退和前进按钮 时才会被触发，
-                window.history.pushState('forward', null, '');
-                window.history.forward(1);
-            });
-        }
-        window.history.pushState('forward', null, '');  //在IE中必须得有这两行
-        window.history.forward(1);
-
-    });
-    $(function () {
+    }
+//    $(function(){
+//        if (window.history && window.history.pushState) {
+//            $(window).on('popstate', function () {
+//                //当点击浏览器的 后退和前进按钮 时才会被触发，
+//                window.history.pushState('forward', null, '');
+//                window.history.forward(1);
+//            });
+//        }
+//        window.history.pushState('forward', null, '');  //在IE中必须得有这两行
+//        window.history.forward(1);
+//
+//    });
+    $(function() {
         $(document).keydown(function (event) {
             if (event.keyCode == 13) {
-                $("#loginBtn").trigger("click")
+                login();
+                return false;
             }
         });
         $('#kaptchaImage').click(function() {

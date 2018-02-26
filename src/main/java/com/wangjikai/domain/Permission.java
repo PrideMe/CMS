@@ -16,6 +16,7 @@ public class Permission implements Serializable{
     private String description;
     private String picon; //图标
     private String purl;
+    private boolean checked; //ztree 是否选中
     private Set<Role> roles; //权限持有角色信息
     private List<Permission> child; //父级菜单拥有的子级菜单集合
 
@@ -75,6 +76,14 @@ public class Permission implements Serializable{
         this.purl = purl;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -101,6 +110,7 @@ public class Permission implements Serializable{
                 ", description='" + description + '\'' +
                 ", picon='" + picon + '\'' +
                 ", purl='" + purl + '\'' +
+                ", checked=" + checked +
                 ", roles=" + roles +
                 ", child=" + child +
                 '}';

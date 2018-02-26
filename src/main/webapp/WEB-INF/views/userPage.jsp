@@ -124,6 +124,21 @@
             multiSelect: true,
             keepSelection: true,
             formatters: formatters,  //格式化
+            templates:{
+                header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\"><div class=\"col-sm-12 actionBar\">" +
+                "<button class=\"btn btn-primary\" style='float: left' type=\"button\">" +
+                "<span class=\"fa fa-download fa-fw\"></span>"+"\n"+"批量导出</button>"+"\n"+
+                "<p class=\"{{css.search}}\"></p><p class=\"{{css.actions}}\"></p></div></div></div>"
+                //表头左边显示提示信息
+//                header : "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\">"
+//                + "<p class=\"{{css.infos}}\"></p></div></div>",
+                //表脚右边显示分页
+//                footer : "<div id=\"{{ctx.id}}\" class=\"{{css.footer}} text-right\"><div class=\"row\">"
+//                + "<p class=\"{{css.pagination}}\"></p></div></div>"
+                //对表头的每个项目添加的图标
+//                icon : "<div id=\"{{ctx.iconCss}}\" class=\"{{css.icon}} table-color text-right\">"
+//                + "<span class=\"glyphicon glyphicon-sort\"></span></div>"
+            },
             labels: {
                 all: "全部",
                 infos: "显示{{ctx.start}}～{{ctx.end}}条， 共{{ctx.total}}条",

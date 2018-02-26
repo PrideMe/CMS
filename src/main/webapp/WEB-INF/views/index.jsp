@@ -190,21 +190,25 @@
                             </a>
                             <c:if test="${not empty menu.child}">
                                 <c:forEach var="subMenu" items="${menu.child}">
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li>
-                                            <a href="javascript:void(0);" <c:if test="${not empty subMenu.purl}">onclick="showAtRight('${ctx}${subMenu.purl}')"</c:if> >
-                                                <span class="sidebar-nav-item-icon fa ${subMenu.picon} fa-fw"></span>${subMenu.name}
-                                                <c:if test="${empty subMenu.purl}"><span class="fa plus-times"></span></c:if>
-                                            </a>
-                                            <ul aria-expanded="false" class="collapse">
-                                                <c:forEach var="subMenu2" items="${subMenu.child}">
-                                                    <li><a href="javascript:void(0);" onclick="showAtRight('${ctx}${subMenu2.purl}')">
-                                                        <span class="sidebar-nav-item-icon fa ${subMenu2.picon} fa-fw"></span>${subMenu2.name}</a>
-                                                    </li>
-                                                </c:forEach>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                    <shiro:hasPermission name="${subMenu.pCode}">
+                                        <ul aria-expanded="false" class="collapse">
+                                            <li>
+                                                <a href="javascript:void(0);" <c:if test="${not empty subMenu.purl}">onclick="showAtRight('${ctx}${subMenu.purl}')"</c:if> >
+                                                    <span class="sidebar-nav-item-icon fa ${subMenu.picon} fa-fw"></span>${subMenu.name}
+                                                    <c:if test="${empty subMenu.purl}"><span class="fa plus-times"></span></c:if>
+                                                </a>
+                                                <ul aria-expanded="false" class="collapse">
+                                                    <c:forEach var="subMenu2" items="${subMenu.child}">
+                                                        <shiro:hasPermission name="${subMenu2.pCode}">
+                                                            <li><a href="javascript:void(0);" onclick="showAtRight('${ctx}${subMenu2.purl}')">
+                                                                <span class="sidebar-nav-item-icon fa ${subMenu2.picon} fa-fw"></span>${subMenu2.name}</a>
+                                                            </li>
+                                                        </shiro:hasPermission>
+                                                    </c:forEach>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </shiro:hasPermission>
                                 </c:forEach>
                             </c:if>
                         </li>
@@ -320,10 +324,10 @@
             </div>
             <br/>
 
-            <div>
-                <ul id="treeDemo" class="ztree"></ul>
-            </div>
-            <br/>
+            <%--<div>--%>
+                <%--<ul id="treeDemo" class="ztree"></ul>--%>
+            <%--</div>--%>
+            <%--<br/>--%>
 
             <div id="toolbar" class="btn-group">
                 <button id="btn_add" type="button" class="btn btn-default">
@@ -389,32 +393,32 @@
 </div>
 
 <script type="text/javascript">
-    var zTreeObj;
-    // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
-    var setting = {
-        check : {
-            chkStyle:"checkbox",
-            enable : true //是否复选框
-        },
-        data: {
-            simpleData: {
-                enable: true
-            }
-        }
-    };
-    $(document).ready(function(){
-        $.ajax({
-            type:'POST',
-            url:'${ctx}/tests',
-            dataType:'JSON',
-            success:function(data){
-                /*成功后的处理*/
-                zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);
-                //默认展开全部节点
-                zTreeObj.expandAll(true);
-            }
-        });
-    });
+    <%--var zTreeObj;--%>
+    <%--// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）--%>
+    <%--var setting = {--%>
+        <%--check : {--%>
+            <%--chkStyle:"checkbox",--%>
+            <%--enable : true //是否复选框--%>
+        <%--},--%>
+        <%--data: {--%>
+            <%--simpleData: {--%>
+                <%--enable: true--%>
+            <%--}--%>
+        <%--}--%>
+    <%--};--%>
+    <%--$(document).ready(function(){--%>
+        <%--$.ajax({--%>
+            <%--type:'POST',--%>
+            <%--url:'${ctx}/tests',--%>
+            <%--dataType:'JSON',--%>
+            <%--success:function(data){--%>
+                <%--/*成功后的处理*/--%>
+                <%--zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);--%>
+                <%--//默认展开全部节点--%>
+                <%--zTreeObj.expandAll(true);--%>
+            <%--}--%>
+        <%--});--%>
+    <%--});--%>
 
         //触发事件
         var active = {

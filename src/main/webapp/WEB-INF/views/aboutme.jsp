@@ -30,28 +30,58 @@
                     <label>用户名</label>
                     <input class="form-control" name="remark" placeholder="请输入用户名" value="${currentUser.username}">
                 </div>
+                <div class="form-group">
+                    <label>当前角色</label><br>
+                    <c:forEach var="roles" items="${currentUser.roles}">
+                        <label class='btn btn-warning btn-xs'>${roles.name}</label>
+                    </c:forEach>
+                </div>
 
-                <button type="submit" class="btn btn-success">更新</button>
+                <input type="button" class="btn btn-success" value="更新"/>
             </form>
         </div>
         <div class="tab-pane fade" id="password" style="margin-top: 10px;">
-            <form role="form" action="${ctx}/addJob" method="post">
+            <form id="updatePassword">
                 <div class="form-group">
                     <label>原密码</label>
-                    <input class="form-control" name="name" placeholder="请输入登陆名" value="${currentUser.loginname}">
+                    <input class="form-control" type="password" name="old_password" placeholder="请输入原密码">
                 </div>
                 <div class="form-group">
                     <label>新密码</label>
-                    <input class="form-control" name="remark" placeholder="请输入用户名" value="${currentUser.username}">
+                    <input class="form-control" type="password" name="new_password" placeholder="请输入新密码">
                 </div>
 
-                <button type="submit" class="btn btn-success">更新</button>
+                <input type="button" onclick="updatePassword()" class="btn btn-success" value="更新"/>
             </form>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
+    function updatePassword() {
+        $.ajax({
+            dataType:"JSON",
+            url:"${ctx}/updatePassword",
+            type:"POST",
+            data:$("#updatePassword").serialize(),
+            success:function (data) {
+                if (data == '1'){
+                    bootbox.alert("更新成功！");
+                }else if (data == '2'){
+                    bootbox.alert("更新失败！");
+                }
+            },
+            error:function () {
+                bootbox.alert("更新失败！");
+            }
+        });
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/deletePermission",
+            type: "POST",
+            data: {"id": id}
+        });
+    }
 </script>
 </body>
 </html>

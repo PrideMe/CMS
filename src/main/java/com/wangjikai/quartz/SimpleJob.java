@@ -41,11 +41,11 @@ public class SimpleJob {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(simpleDateFormat.format(date)+"简单任务执行中···");
 
-        String Url = "http://www.sojson.com/open/api/weather/json.shtml?city=济南";
+        String Url = "";
         StringBuffer strBuf;
         try {
             //Url = "https://free-api.heweather.com/s6/weather/now?location="+ URLEncoder.encode("济南", "utf-8")+"&key=6e56fae9eb8e4e5f8fbbc13d1f15c292";
-            Url = "http://www.sojson.com/open/api/weather/json.shtml?city="+ URLEncoder.encode("济南", "utf-8");
+            Url = "https://www.sojson.com/open/api/weather/json.shtml?city="+ URLEncoder.encode("济南", "utf-8");
         } catch (UnsupportedEncodingException e1) {
             log.info(simpleDateFormat.format(date)+"定时任务发送失败，原因：URL错误");
             return;

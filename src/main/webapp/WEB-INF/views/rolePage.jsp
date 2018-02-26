@@ -54,7 +54,22 @@
         </div>
     </div>
 </div>
-<ul id="treeDemo" class="ztree"></ul>
+<div class="modal fade" id="updatePermission" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="modalLabel2">修改权限</h4>
+                <input class="hidden" id="rolePermissionId">
+            </div>
+            <ul style="margin-left: 2em" id="treeDemo" class="ztree"></ul>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="updateRolePermission()" class="btn btn-success">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var setting = {
         check : {
@@ -67,24 +82,13 @@
             }
         }
     };
-    $(document).ready(function(){
-        $.ajax({
-            type:'POST',
-            url:'${ctx}/tests',
-            dataType:'JSON',
-            success:function(data){
-                /*成功后的处理*/
-                zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);
-                //默认展开全部节点
-                zTreeObj.expandAll(true);
-            }
-        });
-    });
+    var zTreeObj;
     var formatters = {
         "operation" :function (column,row) {
             var info = "";
-            info += "<button onclick=\"showRoleById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i>修改</button>&nbsp;&nbsp;";
-            info += "<button onclick=\"deleteRole('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash fa-fw\"></i>删除</button>";
+            info += "<button onclick=\"showRoleById('"+row.id+"')\" class=\"btn btn-info btn-xs\"><i class=\"fa fa-pencil fa-fw\"></i> 修改</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"deleteRole('"+row.id+"')\" class=\"btn btn-danger btn-xs\"><i class=\"fa fa-trash fa-fw\"></i> 删除</button>&nbsp;&nbsp;";
+            info += "<button onclick=\"showPermission('"+row.id+"','"+row.name+"')\" class=\"btn btn-primary btn-xs\"><i class=\"fa fa-vcard fa-fw\"></i> 分配权限</button>&nbsp;&nbsp;";
             return info;
         }
     };
@@ -97,12 +101,20 @@
             ajax: true,
             url: "${ctx}/roleData",
             navigation:3, //0代表没有，1、3正常，2隐藏头部
-            rowCount:[10,15,20],
+            rowCount:[15,20,25],
             //rowSelect: true,   //点击项目选择
             selection: true,  //点击选择按钮选择
             multiSelect: true,
             keepSelection: true,
             formatters: formatters,  //格式化
+            templates:{
+                header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\"><div class=\"col-sm-12 actionBar\">" +
+                "<p style='float: left'><button class=\"btn btn-primary\" type=\"button\">"+
+                "<span class=\"fa fa-plus fa-fw\"></span>"+"\n"+"添加角色</button>"+"\n"+
+                "<button class=\"btn btn-danger\" type=\"button\">"+
+                "<span class=\"fa fa-trash fa-fw\"></span>"+"\n"+"删除角色</button></p>"+
+                "<p class=\"{{css.search}}\"></p><p class=\"{{css.actions}}\"></p></div></div></div>"
+            },
             labels: {
                 all: "全部",
                 infos: "显示{{ctx.start}}～{{ctx.end}}条， 共{{ctx.total}}条",
@@ -187,6 +199,49 @@
             },
             error: function () {
                 bootbox.alert("请求失败");
+            }
+        });
+    }
+    //显示修改权限
+    function showPermission(id,name) {
+        $.ajax({
+            type:'POST',
+            url:'${ctx}/getRolePermission',
+            dataType:'JSON',
+            data:{"roleId":id},
+            success:function(data){
+                /*成功后的处理*/
+                zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, data);
+                //默认展开全部节点
+                zTreeObj.expandAll(true);
+                $("#rolePermissionId").val(id);
+
+                $("#modalLabel2").text("修改【"+name+"】权限");
+                //显示模态框
+                $('#updatePermission').modal({backdrop:'static'}).on("hidden.bs.modal", function() {
+                    $(this).removeData("bs.modal");
+                });
+            }
+        });
+    }
+    //修改角色对应的权限
+    function updateRolePermission() {
+        var checkedNodes = zTreeObj.getCheckedNodes(true);
+        //console.log(checkedNodes);
+        var array = new Array();
+        for(var i=0;i<checkedNodes.length;i++){
+            if (!checkedNodes[i].id == 0){
+                array.push(checkedNodes[i].id);
+            }
+        }
+        var rolePermissionId = $("#rolePermissionId").val();
+        $.ajax({
+            type:'POST',
+            url:'${ctx}/updateRolePermission',
+            dataType:'JSON',
+            data:{"rolePermissionId":rolePermissionId,"ids":array},
+            success:function(data){
+                bootbox.alert("修改成功！");
             }
         });
     }

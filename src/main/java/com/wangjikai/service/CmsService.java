@@ -8,6 +8,7 @@ import com.wangjikai.domain.Notice;
 import com.wangjikai.domain.Permission;
 import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
+import com.wangjikai.domain.po.RolePermission;
 import com.wangjikai.util.Page;
 
 import java.util.List;
@@ -286,6 +287,20 @@ public interface CmsService<T> {
      * @return
      */
     List<Role> findAllRoles();
+
+    /**
+     * 获取角色持有的权限
+     * @param id
+     * @return
+     */
+    Role getRoleRelationPermission(Integer id);
+
+
+    /**
+     * 插入角色权限中间表
+     * @param rolePermission
+     */
+    void insertRolePermission(RolePermission rolePermission);
 
     /**
      * 根据id查找权限

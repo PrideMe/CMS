@@ -9,6 +9,7 @@ import com.wangjikai.domain.Job;
 import com.wangjikai.domain.Permission;
 import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
+import com.wangjikai.domain.po.RolePermission;
 import com.wangjikai.service.CmsService;
 import com.wangjikai.util.MD5Util;
 import com.wangjikai.util.Page;
@@ -88,7 +89,7 @@ public class UserController {
         modelAndView.setViewName("login");
         Subject currentUser = SecurityUtils.getSubject();
         if (currentUser.isAuthenticated()){
-            modelAndView.setViewName("index");
+            modelAndView.setViewName("redirect:/index");
             return modelAndView;
         }
         return modelAndView;
@@ -200,7 +201,8 @@ public class UserController {
         modelAndView.setViewName("aboutme");
         Subject subject = SecurityUtils.getSubject();
         User session_user = (User) subject.getSession().getAttribute("currentUser");
-        modelAndView.addObject("currentUser",session_user);
+        User user = cmsService.findUserById(session_user.getId());
+        modelAndView.addObject("currentUser",user);
         return modelAndView;
     }
 
@@ -472,6 +474,13 @@ public class UserController {
     @ResponseBody
     public String deleteJob(String id){
         cmsService.removeJobById(Integer.valueOf(id));
+        return "1";
+    }
+
+    @RequestMapping(value = "/deletePermission",method = RequestMethod.POST)
+    @ResponseBody
+    public String deletePermission(String id){
+        cmsService.deletePermissionById(Integer.valueOf(id));
         return "1";
     }
 
@@ -780,14 +789,74 @@ public class UserController {
         return map;
     }
 
-    @RequestMapping("/tests")
+    //ztree树。显示某个角色具有什么权限，有权限则在ztree上打勾
+    @RequestMapping("/getRolePermission")
     @ResponseBody
-    public List<Permission> ztree(){
+    public List<Permission> getRolePermission(HttpServletRequest request,Integer roleId){
         Page<Permission> page = new Page<>();
         page.setCurrent(1);
         page.setRowCount(100);
         page = cmsService.findPermission(null,page);
+        Permission permission = new Permission();
+        permission.setId(0);
+        permission.setName("角色权限");
+        permission.setChecked(true);
         List<Permission> permissions = page.getRows();
+        Role role = cmsService.getRoleRelationPermission(roleId);//当前角色以及对应的权限集合
+        for (Permission permission1 : permissions) {
+            for (Permission permission2 : role.getPermissions()) {
+                if (permission1.getpCode().equals(permission2.getpCode())) {
+                    permission1.setChecked(true);
+                }
+            }
+        }
+        permissions.add(permission);
         return permissions;
+    }
+
+    //通过ztree的选择，修改角色对应的权限
+    @RequestMapping(value = "updateRolePermission",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateRolePermission(HttpServletRequest request){
+        String[] ids = request.getParameterValues("ids[]");
+        String rolePermissionId = request.getParameter("rolePermissionId");
+        if (!StringUtils.isEmpty(rolePermissionId)){
+            Integer id = Integer.valueOf(rolePermissionId);
+            //Role role = cmsService.getRoleRelationPermission(id);//当前角色以及对应的权限集合
+            Integer[] integers = new Integer[ids.length];
+            //角色权限关联表，避免重复
+//            for (Permission permission : role.getPermissions()) {
+//                //判断树形菜单增加还是减少。现在只处理增加的
+//                integers
+//            }
+            RolePermission rolePermission = new RolePermission();
+            rolePermission.setRoleId(id);
+            for (String s : ids) {
+                rolePermission.setPermissionId(Integer.valueOf(s));
+                cmsService.insertRolePermission(rolePermission);
+            }
+        }
+        return "0";
+    }
+
+    //更改密码
+    //需要对前台传递进来的密码进行判断，否则空指针！此时省略
+    @RequestMapping(value = "updatePassword",method = RequestMethod.POST)
+    @ResponseBody
+    public String updatePassword(String old_password,String new_password){
+        Subject currentUser = SecurityUtils.getSubject();
+        if (currentUser != null && currentUser.isAuthenticated()){
+            //currentUser
+            User session_user = (User) currentUser.getSession().getAttribute("currentUser");
+            //如果输入的旧密码与session中的一致，则可以对密码进行更改
+            if (MD5Util.verify(old_password,session_user.getPassword())){
+                session_user.setPassword(MD5Util.generateMD5(new_password));
+                session_user.setRoles(null);
+                cmsService.modifyUser(session_user);
+                return "1";
+            } else
+                return "2";
+        }
+        return "0";
     }
 }
