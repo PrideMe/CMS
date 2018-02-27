@@ -241,7 +241,19 @@
             dataType:'JSON',
             data:{"rolePermissionId":rolePermissionId,"ids":array},
             success:function(data){
-                bootbox.alert("修改成功！");
+                if (data == "0"){
+                    bootbox.alert("修改成功！");
+                } else if (data == "1") {
+                    bootbox.alert("无法找到具体角色！");
+                } else if (data == "2") {
+                    bootbox.alert("该角色权限已经置空！");
+                } else if (data == "3") {
+                    bootbox.alert("没有修改！");
+                } else if (data == "4") {
+                    bootbox.alert("无变化！");
+                } else {
+                    bootbox.alert("未知错误！");
+                }
             }
         });
     }

@@ -11,6 +11,7 @@ import com.wangjikai.domain.Role;
 import com.wangjikai.domain.User;
 import com.wangjikai.domain.po.RolePermission;
 import com.wangjikai.service.CmsService;
+import com.wangjikai.util.CollectionsUtil;
 import com.wangjikai.util.MD5Util;
 import com.wangjikai.util.Page;
 import org.apache.logging.log4j.LogManager;
@@ -55,8 +56,10 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by 22717 on 2017/11/4.
@@ -803,10 +806,12 @@ public class UserController {
         permission.setChecked(true);
         List<Permission> permissions = page.getRows();
         Role role = cmsService.getRoleRelationPermission(roleId);//当前角色以及对应的权限集合
-        for (Permission permission1 : permissions) {
-            for (Permission permission2 : role.getPermissions()) {
-                if (permission1.getpCode().equals(permission2.getpCode())) {
-                    permission1.setChecked(true);
+        if (role != null) {
+            for (Permission permission1 : permissions) {
+                for (Permission permission2 : role.getPermissions()) {
+                    if (permission1.getpCode().equals(permission2.getpCode())) {
+                        permission1.setChecked(true);
+                    }
                 }
             }
         }
@@ -819,22 +824,126 @@ public class UserController {
     @ResponseBody
     public String updateRolePermission(HttpServletRequest request){
         String[] ids = request.getParameterValues("ids[]");
+        if (ids == null) {
+            ids = new String[]{};
+        }
         String rolePermissionId = request.getParameter("rolePermissionId");
-        if (!StringUtils.isEmpty(rolePermissionId)){
-            Integer id = Integer.valueOf(rolePermissionId);
-            //Role role = cmsService.getRoleRelationPermission(id);//当前角色以及对应的权限集合
-            Integer[] integers = new Integer[ids.length];
-            //角色权限关联表，避免重复
-//            for (Permission permission : role.getPermissions()) {
-//                //判断树形菜单增加还是减少。现在只处理增加的
-//                integers
-//            }
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setRoleId(id);
+        if (StringUtils.isEmpty(rolePermissionId)) {
+            return "1";//失败,rolePermissionId为空，无法找到具体角色
+        }
+        Integer id = Integer.valueOf(rolePermissionId);
+        Role role = cmsService.getRoleRelationPermission(id);//当前角色以及对应的权限集合
+        Set<Permission> permissions = new HashSet<>();
+        if (role != null) {
+            permissions = role.getPermissions();
+        }
+        List<Integer> idsList = new ArrayList<>();        //前台传递进来的权限集合
+        List<Integer> permissionsList = new ArrayList<>();//数据库查询出来的权限集合
+        //判断ids是否为空，为空则代表前台权限树清空了
+        //此时判断后台数据库中是否存在权限，有则删除。无则无操作
+        if (ids.length == 0 && permissions.size()!=0) {
+            cmsService.deleteRolePermissionByRoleId(id);
+            return "2";//该角色权限已经置空
+        } else if (ids.length == 0 && permissions.size() == 0) {
+            return "3";//没有修改
+        } else if (ids.length != 0 && permissions.size() != 0){
+            //ids存在，开始判断与后台数据库中的关系：同、增、减、乱
             for (String s : ids) {
-                rolePermission.setPermissionId(Integer.valueOf(s));
-                cmsService.insertRolePermission(rolePermission);
+                idsList.add(Integer.valueOf(s));
             }
+            for (Permission permission : permissions) {
+                permissionsList.add(permission.getId());
+            }
+            //判断前台输入与数据库已经存在的是否相同。不同则继续对比
+            if (CollectionsUtil.compareList(idsList,permissionsList)){
+                return "4";//无变化
+            } else {
+                List<Integer> compare = new ArrayList<>();
+                List<RolePermission> rolePermissions = new ArrayList<>();
+                List<RolePermission> delRolePermissions = new ArrayList<>();
+                //前台数据与后台数据对比
+                if (idsList.size() > permissionsList.size()){
+                    compare.clear();
+                    compare.addAll(idsList);
+                    compare.removeAll(permissionsList);
+                    //需要添加的
+                    for (Integer integer : compare) {
+                        RolePermission rolePermission = new RolePermission();
+                        rolePermission.setRoleId(id);
+                        rolePermission.setPermissionId(integer);
+                        rolePermissions.add(rolePermission);
+                    }
+                    cmsService.insertRolePermission(rolePermissions);
+                    //需要删除的
+                    permissionsList.removeAll(idsList);
+                    for (Integer integer : permissionsList) {
+                        RolePermission subRolePermission = new RolePermission();
+                        subRolePermission.setPermissionId(integer);
+                        delRolePermissions.add(subRolePermission);
+                    }
+                    if (delRolePermissions.size() != 0) {
+                        cmsService.deleteRolePermission(id,delRolePermissions);
+                    }
+                } else if (idsList.size() < permissionsList.size()){
+                    compare.clear();
+                    compare.addAll(permissionsList);
+                    compare.removeAll(idsList);
+                    //需要删除的
+                    for (Integer integer : compare) {
+                        RolePermission rolePermission = new RolePermission();
+                        rolePermission.setPermissionId(integer);
+                        delRolePermissions.add(rolePermission);
+                    }
+                    cmsService.deleteRolePermission(id,delRolePermissions);
+                    //需要添加的
+                    idsList.removeAll(permissionsList);
+                    for (Integer integer : idsList) {
+                        RolePermission subRolePermission = new RolePermission();
+                        subRolePermission.setRoleId(id);
+                        subRolePermission.setPermissionId(integer);
+                        rolePermissions.add(subRolePermission);
+                    }
+                    if (rolePermissions.size() != 0) {
+                        cmsService.insertRolePermission(rolePermissions);
+                    }
+                } else {
+                    compare.clear();
+                    compare.addAll(idsList);
+                    compare.removeAll(permissionsList);
+                    //需要添加的
+                    for (Integer integer : compare) {
+                        RolePermission rolePermission = new RolePermission();
+                        rolePermission.setRoleId(id);
+                        rolePermission.setPermissionId(integer);
+                        rolePermissions.add(rolePermission);
+                    }
+                    cmsService.insertRolePermission(rolePermissions);
+                    //需要删除的
+                    permissionsList.removeAll(idsList);
+                    for (Integer integer : permissionsList) {
+                        RolePermission subRolePermission = new RolePermission();
+                        subRolePermission.setPermissionId(integer);
+                        delRolePermissions.add(subRolePermission);
+                    }
+                    if (delRolePermissions.size() != 0) {
+                        cmsService.deleteRolePermission(id,delRolePermissions);
+                    }
+                }
+            }
+        } else {
+            //前台传递来的有值，后台数据库没有该角色对应的权限，直接添加
+            List<RolePermission> rolePermissions = new ArrayList<>();
+            for (String s : ids) {
+                idsList.add(Integer.valueOf(s));
+            }
+            for (Integer integer : idsList) {
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setRoleId(id);
+                rolePermission.setPermissionId(integer);
+                rolePermissions.add(rolePermission);
+            }
+            //批量插入
+            cmsService.insertRolePermission(rolePermissions);
         }
         return "0";
     }

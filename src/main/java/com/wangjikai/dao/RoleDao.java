@@ -2,6 +2,7 @@ package com.wangjikai.dao;
 
 import com.wangjikai.domain.Role;
 import com.wangjikai.domain.po.RolePermission;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,5 +31,9 @@ public interface RoleDao {
     //根据角色查找关联的权限
     Role getRoleRelationPermission(Integer id);
     //插入中间表role_permission
-    void insertRolePermission(RolePermission rolePermission);
+    void insertRolePermission(List<RolePermission> rolePermissions);
+    //根据角色id删除关联表中的关系
+    void deleteRolePermissionByRoleId(Integer id);
+    //批量删除中间表信息
+    void deleteRolePermission(@Param("id") Integer id,@Param("permissionId") List<RolePermission> permissionId);
 }

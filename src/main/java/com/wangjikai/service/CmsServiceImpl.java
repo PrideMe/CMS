@@ -496,12 +496,26 @@ public class CmsServiceImpl<T> implements CmsService<T> {
     }
 
     /**
-     * 插入角色权限中间表
-     * @param rolePermission
+     * 批量插入角色权限中间表
+     * @param rolePermissions
      */
     @Override
-    public void insertRolePermission(RolePermission rolePermission) {
-        roleDao.insertRolePermission(rolePermission);
+    public void insertRolePermission(List<RolePermission> rolePermissions) {
+        roleDao.insertRolePermission(rolePermissions);
+    }
+
+    @Override
+    public void deleteRolePermission(Integer id, List<RolePermission> permissionId) {
+        roleDao.deleteRolePermission(id,permissionId);
+    }
+
+    /**
+     * 根据角色id删除关联表关联关系
+     * @param id
+     */
+    @Override
+    public void deleteRolePermissionByRoleId(Integer id) {
+        roleDao.deleteRolePermissionByRoleId(id);
     }
 
     /**

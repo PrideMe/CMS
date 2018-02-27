@@ -102,8 +102,22 @@
             <result property="pCode" column="pCode"/>
         </collection>
     </resultMap>
-    <!--插入中间表-->
-    <insert id="insertRolePermission" parameterType="com.wangjikai.domain.po.RolePermission" useGeneratedKeys="true" flushCache="true">
-        INSERT INTO role_permission(roleId,permissionId) VALUES (#{roleId},#{permissionId});
+    <!--批量插入中间表-->
+    <insert id="insertRolePermission" parameterType="java.util.List" useGeneratedKeys="true" flushCache="true">
+        INSERT INTO role_permission(roleId,permissionId) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roleId},#{item.permissionId})
+        </foreach>
     </insert>
+    <!--批量删除中间表-->
+    <delete id="deleteRolePermission" parameterType="java.util.List">
+        DELETE FROM role_permission WHERE roleId = #{id} AND permissionId in
+        <foreach collection="permissionId" item="item" index="index" open="(" close=")" separator=",">
+            #{item.permissionId}
+        </foreach>
+    </delete>
+    <!--删除中间表的关联关系-->
+    <delete id="deleteRolePermissionByRoleId" parameterType="Integer">
+        DELETE FROM role_permission WHERE roleId = #{id};
+    </delete>
 </mapper>

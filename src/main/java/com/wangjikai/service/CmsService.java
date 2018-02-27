@@ -297,10 +297,23 @@ public interface CmsService<T> {
 
 
     /**
-     * 插入角色权限中间表
-     * @param rolePermission
+     * 批量插入角色权限中间表
+     * @param rolePermissions
      */
-    void insertRolePermission(RolePermission rolePermission);
+    void insertRolePermission(List<RolePermission> rolePermissions);
+
+    /**
+     * 批量删除角色权限中间表。角色id，需要删除的权限id
+     * @param id
+     * @param permissionId
+     */
+    void deleteRolePermission(Integer id,List<RolePermission> permissionId);
+
+    /**
+     * 根据角色id删除关联表关联关系
+     * @param id
+     */
+    void deleteRolePermissionByRoleId(Integer id);
 
     /**
      * 根据id查找权限
