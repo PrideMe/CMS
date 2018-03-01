@@ -10,10 +10,11 @@
                 <ref bean="cronTriggerBean"/>
             </list>
         </property>
-        <!--<property name="dataSource" ref="dataSource"/>-->
+        <property name="dataSource" ref="dataSource"/>
         <!--使用applicationContextKey这个key在quartz中获取spring的上下文-->
         <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
-        <!--<property name="configLocation" value=""/>-->
+        <property name="configLocation" value="classpath:quartz.properties"/>
+        <property name="jobFactory" ref="jobFactory"/>
     </bean>
     <!--调度触发器，一个触发器只能与一个任务绑定-->
     <bean id="cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -21,9 +22,14 @@
         <property name="cronExpression" value="0 0 0/1 * * ? *"/>
     </bean>
     <!--任务，具体的任务执行-->
-    <bean id="simpleJob" class="com.wangjikai.quartz.SimpleJob"/>
-    <bean id="simpleJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="simpleJob" />
-        <property name="targetMethod" value="out" />
+    <!--<bean id="simpleJob" class="com.wangjikai.quartz.SimpleJob"/>-->
+    <!--<bean id="simpleJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="simpleJob" />-->
+        <!--<property name="targetMethod" value="out" />-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+    <bean id="simpleJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.wangjikai.quartz.SimpleJob"/>
+        <property name="durability" value="true"/>
     </bean>
 </beans>

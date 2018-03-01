@@ -2,12 +2,15 @@ package com.wangjikai.quartz;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.wangjikai.util.SpringContextUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
@@ -25,21 +28,23 @@ import java.util.Map;
 
 /**
  * Created by 22717 on 2017/12/20.
- * 一个简单任务
+ * 一个简单任务,在quartz中实例化
  */
-@Component
-public class SimpleJob {
+//@Component
+public class SimpleJob implements Job{
     private Logger log = LogManager.getLogger(SimpleJob.class);
     @Resource
     private JavaMailSender mailSender;
 
     @Value("${mail.username}")
-    private String mailFrom; //不适用于在controller中使用，因为spring与springMVC不属于同一个容器
+    private String mailFrom = "15314006321@163.com"; //不适用于在controller中使用，因为spring与springMVC不属于同一个容器
 
     public void out(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(simpleDateFormat.format(date)+"简单任务执行中···");
+        //
+        mailSender = SpringContextUtil.getBean(JavaMailSender.class);
 
         String Url = "";
         StringBuffer strBuf;
@@ -105,6 +110,11 @@ public class SimpleJob {
         email.setSubject(simpleDateFormat.format(date));
         email.setText(weatherInfo.toString());
         mailSender.send(email);
+    }
+
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        new SimpleJob().out();
     }
 
     public static void main(String[] args) {

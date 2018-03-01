@@ -26,10 +26,13 @@
                     <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
                         <property name="serializerFeatures">
                             <array>
-                                <value>WriteMapNullValue</value>
-                                <value>WriteNullNumberAsZero</value>
-                                <value>WriteNullListAsEmpty</value>
-                                <value>WriteNullBooleanAsFalse</value>
+                                <value>QuoteFieldNames</value>
+                                <!--默认不输出null字段，若开启以下任何一个，则都会输出null字段-->
+                                <!--因为项目使用了Echarts的一个java工具包，有一些字段采用了Object类型,echarts无法对值进行判断-->
+                                <!--<value>WriteNullNumberAsZero</value>-->
+                                <!--<value>WriteNullListAsEmpty</value>-->
+                                <!--<value>WriteNullStringAsEmpty</value>-->
+                                <!--<value>WriteNullBooleanAsFalse</value>-->
                             </array>
                         </property>
                         <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>

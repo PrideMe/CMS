@@ -348,6 +348,7 @@
             </div>
 
 
+            <div id="tubiao" style="width:600px;height:400px;margin-top: 30px"></div>
             <div id="echarts" style="width: 600px;height:400px;margin-top: 30px"></div>
             <div id="echarts_zhuzhuang" style="width:600px;height:400px;margin-top: 30px"></div>
             <div id="echarts_zhexian" style="width:600px;height:400px;margin-top: 30px"></div>
@@ -536,6 +537,25 @@
     var myChart = echarts.init($("#echarts")[0]);
     var zhuzhuangtu = echarts.init($("#echarts_zhuzhuang")[0]);
     var zhexiantu = echarts.init($("#echarts_zhexian")[0]);
+    var tubiao = echarts.init($("#tubiao")[0]);
+    $(function () {
+        tubiao.showLoading({
+            text : '数据获取中',
+            effect: 'whirling'
+        });
+        $.ajax({
+            dataType: "JSON",
+            url: "${ctx}/tubiao",
+            type: "POST",
+            success: function (data) {
+                tubiao.setOption(data);
+                tubiao.hideLoading();
+            },
+            error: function () {
+                alert("无法加载图表！");
+            }
+        });
+    });
 
     // 指定图表的配置项和数据
     var option = {
@@ -620,7 +640,7 @@
                 ]
             }
         ]
-    })
+    });
     zhuzhuangtu.setOption({
         color: ['#3398DB'],
         tooltip : {
@@ -657,7 +677,7 @@
                 data:[10, 52, 200, 334, 390, 330, 220]
             }
         ]
-    })
+    });
     zhexiantu.setOption({
         title: {
             text: '未来一周气温变化',

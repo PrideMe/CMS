@@ -126,8 +126,12 @@
             formatters: formatters,  //格式化
             templates:{
                 header: "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\"><div class=\"col-sm-12 actionBar\">" +
-                "<button class=\"btn btn-primary\" style='float: left' type=\"button\">" +
+                "<p style='float: left'><button class=\"btn btn-primary\" type=\"button\">" +
                 "<span class=\"fa fa-download fa-fw\"></span>"+"\n"+"批量导出</button>"+"\n"+
+                "<button class=\"btn btn-primary\" type=\"button\">"+
+                "<span class=\"fa fa-plus fa-fw\"></span>"+"\n"+"添加用户</button>"+"\n"+
+                "<button class=\"btn btn-danger\" type=\"button\">"+
+                "<span class=\"fa fa-trash fa-fw\"></span>"+"\n"+"删除用户</button></p>"+
                 "<p class=\"{{css.search}}\"></p><p class=\"{{css.actions}}\"></p></div></div></div>"
                 //表头左边显示提示信息
 //                header : "<div id=\"{{ctx.id}}\" class=\"{{css.header}}\"><div class=\"row\">"

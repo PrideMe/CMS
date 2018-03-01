@@ -19,6 +19,10 @@
     </context:component-scan>
     <!-- 数据库配置信息 -->
     <context:property-placeholder location="classpath:db.properties,classpath:mail.properties"/>
+    <!--spring工具类，获取spring的上下文-->
+    <bean class="com.wangjikai.util.SpringContextUtil"/>
+    <!--spring托管的对象注入到job中-->
+    <bean id="jobFactory" class="com.wangjikai.quartz.JobFactory"/>
 
     <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache.xml"/>
