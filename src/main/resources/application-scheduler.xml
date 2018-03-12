@@ -19,7 +19,7 @@
     <!--调度触发器，一个触发器只能与一个任务绑定-->
     <bean id="cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="simpleJobDetail"/>
-        <property name="cronExpression" value="0 0 0/1 * * ? *"/>
+        <property name="cronExpression" value="0 0/2 * * * ? *"/>
     </bean>
     <!--任务，具体的任务执行-->
     <!--<bean id="simpleJob" class="com.wangjikai.quartz.SimpleJob"/>-->

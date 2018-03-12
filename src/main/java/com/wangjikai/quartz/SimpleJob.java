@@ -2,7 +2,6 @@ package com.wangjikai.quartz;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wangjikai.util.SpringContextUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
@@ -37,14 +36,14 @@ public class SimpleJob implements Job{
     private JavaMailSender mailSender;
 
     @Value("${mail.username}")
-    private String mailFrom = "15314006321@163.com"; //不适用于在controller中使用，因为spring与springMVC不属于同一个容器
+    private String mailFrom; //不适用于在controller中使用，因为spring与springMVC不属于同一个容器
 
     public void out(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(simpleDateFormat.format(date)+"简单任务执行中···");
         //
-        mailSender = SpringContextUtil.getBean(JavaMailSender.class);
+        //mailSender = SpringContextUtil.getBean(JavaMailSender.class);
 
         String Url = "";
         StringBuffer strBuf;
@@ -114,10 +113,6 @@ public class SimpleJob implements Job{
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        new SimpleJob().out();
-    }
-
-    public static void main(String[] args) {
-        new SimpleJob().out();
+        out();
     }
 }

@@ -22,6 +22,7 @@ import com.wangjikai.service.CmsService;
 import com.wangjikai.util.CollectionsUtil;
 import com.wangjikai.util.MD5Util;
 import com.wangjikai.util.Page;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -38,6 +39,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
@@ -55,6 +60,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -62,7 +68,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -92,6 +100,9 @@ public class UserController {
 
     @Value("${mail.username}")
     private String mailFrom;
+
+    @Value("${file.path}")
+    private String filePath;  //保存文件路径，从配置文件中获得
 
     //请求登陆页面
     @RequestMapping(value = {"login"},method = RequestMethod.GET)
@@ -1013,5 +1024,57 @@ public class UserController {
 //        Option option = new Option();
 //        option
 //    }
+    //文件上传
+//    @RequestMapping(path = {"/file/updateHeadPicture.action"}, method = {RequestMethod.GET, RequestMethod.POST})
+//    public void index(@RequestParam("imagefile") MultipartFile file, HttpServletResponse response) {
+//        try {
+//            UploadPictureResponse uploadPictureResponse = uploadService.updateHeadPicture(file);
+//                 /*
+//                 设置编码格式，返回结果json结果，注意其中的对象转化为json字符串格式为:
+//                 {"message":"上传图片成功!","success":1,"url":"C:\\\\home\\\\myblog\\\\pic\\\\2f1b63bc4b654a27a7e0c1b1a0fb9270.png"}
+//                 所以前端可以直接读取success，message等信息
+//                 */
+//            response.setContentType( "application/json;charset=UTF-8");
+//            response.getWriter().write( JSON.toJSONString(uploadPictureResponse));
+//        } catch (IOException e1) {
+//            e1.printStackTrace();
+//        }
+//    }
+//
+//    @RequestMapping(value = "",method = RequestMethod.POST)
+//    public void uploadImage() {
+//    }
 
+    //文件下载
+    @RequestMapping(value = "/download")
+    public ResponseEntity<byte[]> download(HttpServletRequest request){
+        String filename = "手机是三鸡-逆天仙尊.txt";
+        File file = new File(filePath+File.separator+filename);
+        HttpHeaders headers = new HttpHeaders();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String downloadFielName = format.format(new Date())+"手机是三鸡-逆天仙尊.txt";
+        String agent = request.getHeader("USER-AGENT");
+        String name = "";
+        try {
+            if (null != agent && (agent.contains("Edge"))) {
+                name = URLEncoder.encode(downloadFielName, "UTF8");
+                downloadFielName = name.replaceAll("\\+", "%20"); //将加号还原为空格
+            } else if (agent.contains("Safari") || agent.contains("Chrome") || agent.contains("Firefox")) {
+                downloadFielName = new String(downloadFielName.getBytes("UTF-8"), "iso-8859-1");
+            } else { // IE
+                name = URLEncoder.encode(downloadFielName, "UTF-8");
+                downloadFielName = name.replaceAll("\\+", "%20"); //将加号还原为空格
+            }
+        } catch (UnsupportedEncodingException e) {
+            downloadFielName = "file";
+            System.out.println(filename+"字符转换错误，已使用默认名");
+        }
+        headers.setContentDispositionFormData("attachment",downloadFielName);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        try {
+            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
